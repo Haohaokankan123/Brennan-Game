@@ -101,7 +101,7 @@ export const LEVELS = [
     ],
     traps: [
       spears(0, -12, 5.4, 4, 2.0, 0.7, 0.0, true),
-      axis(0, -26, 5.6, 1.6, 0, true),
+      axis(0, -26, 5.6, 1.2, 0, true),     // was 1.6 — too fast for an early level
       spears(0, -38, 5.4, 4, 1.9, 0.65, 0.5, true),  // right before the turn
       cube(15, -44, 33, -44, 2.6, 1.5, 0.2),         // patrol on the +X leg
       axis(31, -66, 5.6, -1.5, 0.4, true),
@@ -225,7 +225,7 @@ export const LEVELS = [
       pit(0, -37, 4.5, 6, 2.6, 0.8, 0.0),  // -34 .. -40
       leg(0, -40, 18, 4.5, 0),             // -40 .. -58
       tile(-9, -58, 26, 4.5, 0),           // band left (x -22..4, z -55.75..-60.25)
-      leg(-18, -58, 20, 4.5, 0),           // -Z leg (x -20.25..-15.75, z -58..-78)
+      leg(-18, -58, 20, 5.0, 0),           // -Z leg WIDENED to 5.0 for the cross-axe (x -20.5..-15.5)
       tile(-9, -78, 26, 4.5, 0),           // band right (x -22..4, z -75.75..-80.25)
       tile(14, -78, 28, 4.5, 0),           // +X leg (x 0..28, z -75.75..-80.25)
       finishPad(24, -78, 12),              // x 18..30, z -71..-85
@@ -234,7 +234,7 @@ export const LEVELS = [
       saw(0, 20, 3.7, 1.9),
       cannon(4, -12, -1, 0, 1.7, 10, 0.0, true),
       cannon(-4, -22, 1, 0, 1.7, 10, 0.6, true),
-      crossAxis(-18, -68, 4.0, 1.1, 0, true),        // cross-axe on the -Z leg
+      crossAxis(-18, -68, 3.0, 0.8, 0, true),        // cross-axe (shorter/slower so it's passable on the 5.0 leg)
       cannon(-15, -78, 1, 0, 1.6, 10, 0.3, true),    // crossfire on the band
       cube(8, -78, 24, -78, 2.4, 1.4, 0.2),          // patrol on the +X leg
     ],
@@ -253,7 +253,7 @@ export const LEVELS = [
       ...ramp(0, -60, 12, 4.6, 0, 0.9),    // -60 .. -72 hill up
       leg(0, -72, 16, 4.6, 0),             // -72 .. -88 drop to 0  (axis)
       tile(-9, -88, 24, 4.6, 0),           // band left (x -21..3, z -85.7..-90.3)
-      leg(-18, -88, 18, 4.6, 0),           // -Z leg (x -20.3..-15.7, z -88..-106)
+      leg(-18, -88, 18, 5.2, 0),           // -Z leg WIDENED to 5.2 for the cross-axe (x -20.6..-15.4)
       leg(-18, -106, 14, 4.6, -1.3),       // valley drop (-106..-120)
       ...ramp(-18, -120, 12, 4.6, -1.3, 0),// climb out (-120..-132)
       tile(-26, -132, 22, 4.6, 0),         // band left (x -37..-15, z -129.7..-134.3)
@@ -265,8 +265,8 @@ export const LEVELS = [
       axis(0, -22, 4.2, 1.0, 0, true),
       cannon(4, -30, -1, 0, 1.6, 10, 0.0, true),
       cube(-1.4, -50, 1.4, -50, 2.0, 1.4),
-      axis(0, -80, 4.2, -1.4, 0.4, true),
-      crossAxis(-18, -97, 3.8, 1.3, 0, true),        // cross-axe on the -Z leg
+      axis(0, -80, 4.2, -1.0, 0.4, true),            // was -1.4 — eased before the cross-axe
+      crossAxis(-18, -97, 3.0, 0.8, 0, true),        // cross-axe (shorter/slower; passable on the 5.2 leg)
       cube(-19.4, -101, -16.6, -101, 2.2, 1.4, 0.3), // on the -Z leg
       axis(-26, -132, 4.0, 1.2, 0.2, true),          // guarding the last corner
     ],

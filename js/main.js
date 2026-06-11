@@ -242,33 +242,40 @@ function readInput() {
   return { x, z };
 }
 
-// ---------------- camera follow (fixed isometric-style 3/4 view) ----------------
-// High + pulled back + steep so the path AND the sides are always visible — this is
-// what lets winding turns read. Controls stay world-aligned (camera never rotates).
-const camOffset = new THREE.Vector3(0, 27, 21);
+// ---------------- camera follow (FIXED 3/4 view — never rotates) ----------------
+// The camera sits at a constant offset above/behind the marble and always looks in
+// the SAME world direction (down -Z). It only TRANSLATES with the marble; it never
+// rotates with input. (A previous velocity-based "look-ahead" rotated the view on
+// every left/right press, which made the track spin — removed.)
+const camOffset = new THREE.Vector3(0, 24, 19);
+// Aim is taken RELATIVE TO THE CAMERA (not the marble), so the camera's orientation
+// is IDENTICAL every frame — zero yaw, ever — even while it lags the marble during
+// lateral moves. This is the constant 3/4 "isometric" look. Derived so that when the
+// camera is centered on the marble it points at ~(marble + (0,1,-6)).
+const aimFromCamera = new THREE.Vector3(0, 1 - camOffset.y, -6 - camOffset.z); // (0,-23,-25)
 const lookTarget = new THREE.Vector3();
-const lead = new THREE.Vector3();
+const _desired = new THREE.Vector3();          // reused each frame (no per-frame GC)
+const _origin = new THREE.Vector3();           // null-marble fallback
 let shakeAmt = 0; // screen-shake magnitude, decays each frame
 function addShake(a) { shakeAmt = Math.min(1.4, shakeAmt + a); }
 function followCamera(dt, instant = false) {
-  const m = world.marble ? world.marble.pos : new THREE.Vector3();
-  const desired = new THREE.Vector3(m.x + camOffset.x, m.y + camOffset.y, m.z + camOffset.z);
+  const m = world.marble ? world.marble.pos : _origin;
+  _desired.set(m.x + camOffset.x, m.y + camOffset.y, m.z + camOffset.z);
   const k = instant ? 1 : 1 - Math.exp(-6 * dt);
-  camera.position.lerp(desired, k);
-  // screen shake
+  camera.position.lerp(_desired, k);
+  // screen shake (small, decays fast)
   if (shakeAmt > 0.001) {
     camera.position.x += (Math.random() * 2 - 1) * shakeAmt;
     camera.position.y += (Math.random() * 2 - 1) * shakeAmt;
     camera.position.z += (Math.random() * 2 - 1) * shakeAmt;
     shakeAmt *= Math.exp(-9 * dt);
   }
-  // look a little ahead in the marble's travel direction so turns read early
-  const v = world.marble ? world.marble.vel : null;
-  if (v) {
-    const s = Math.hypot(v.x, v.z);
-    if (s > 0.5) lead.set((v.x / s) * 3, 0, (v.z / s) * 3); else lead.multiplyScalar(0.9);
-  }
-  lookTarget.set(m.x + lead.x, m.y + 1, m.z + lead.z);
+  // fixed-orientation aim: target = camera.position + constant vector → never rotates
+  lookTarget.set(
+    camera.position.x + aimFromCamera.x,
+    camera.position.y + aimFromCamera.y,
+    camera.position.z + aimFromCamera.z
+  );
   camera.lookAt(lookTarget);
 }
 
@@ -277,7 +284,7 @@ let menuAngle = 0;
 function menuCamera(dt) {
   menuAngle += dt * 0.18;
   const r = 26;
-  const m = world.marble ? world.marble.pos : new THREE.Vector3();
+  const m = world.marble ? world.marble.pos : _origin;
   camera.position.set(Math.sin(menuAngle) * r + m.x, 14, Math.cos(menuAngle) * r + m.z + 6);
   camera.lookAt(m.x, 1, m.z - 6);
 }
@@ -302,8 +309,8 @@ function loop(now) {
     world.idleUpdate(dt);
     menuCamera(dt);
   } else if (state === STATE.PAUSED) {
-    // freeze the world; just hold the camera steady on the marble
-    followCamera(dt);
+    // freeze the world AND snap the camera (instant=true) so it doesn't keep lerping
+    followCamera(dt, true);
   } else {
     // overlays up (complete/dead/finish): keep traps animating, hold camera
     world.idleUpdate(dt);
@@ -383,6 +390,7 @@ if (location.search.includes("test")) {
   window.__brennan = {
     get state() { return state; },
     get world() { return world; },
+    get camera() { return camera; },
     start: (i) => { runTotal = 0; startLevel(i); },
     // teleport the marble next to the finish gate to verify the win flow
     toFinish: () => {
