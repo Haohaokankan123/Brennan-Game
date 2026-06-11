@@ -29833,9 +29833,26 @@ void main() {
             this.status = "won";
             return this.status;
           }
+          this._updateTrapOpacity();
           this._rollMarble(dt);
           this._syncMarble();
           return this.status;
+        }
+        _updateTrapOpacity() {
+          const px = this.marble.pos.x, pz = this.marble.pos.z;
+          for (const t of this.traps) {
+            const dx = px - t.group.position.x;
+            const dz = pz - t.group.position.z;
+            const near = dx * dx + dz * dz < 64;
+            t.group.traverse((o) => {
+              if (!o.isMesh) return;
+              const mats = Array.isArray(o.material) ? o.material : [o.material];
+              for (const m of mats) {
+                m.transparent = near;
+                m.opacity = near ? 0.18 : 1;
+              }
+            });
+          }
         }
         // Animate traps/scenery without running physics or death checks (menu backdrop).
         idleUpdate(dt) {
