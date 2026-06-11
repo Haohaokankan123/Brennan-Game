@@ -102,26 +102,38 @@ export function buildFinish(level) {
   const [x, , z] = level.finish;
   group.position.set(x, 0, z);
 
+  // big glowing landing disc you roll onto
   const pad = new THREE.Mesh(
-    new THREE.CylinderGeometry(1.6, 1.6, 0.2, 28),
-    neon(COL.yellow, 1.6)
+    new THREE.CylinderGeometry(2.4, 2.4, 0.2, 36),
+    neon(COL.yellow, 1.7)
   );
-  pad.position.y = 0.11;
+  pad.position.y = 0.12;
   group.add(pad);
 
-  // two glowing posts + arch
+  // a bright ring around the disc so it reads as the goal from far away
+  const ring = new THREE.Mesh(
+    new THREE.TorusGeometry(2.7, 0.18, 12, 40),
+    neon(COL.cyan, 2.2)
+  );
+  ring.rotation.x = Math.PI / 2;
+  ring.position.y = 0.2;
+  group.add(ring);
+
+  // two tall glowing posts + a double arch (a clear gateway)
   for (const s of [-1, 1]) {
-    const post = new THREE.Mesh(new THREE.BoxGeometry(0.3, 3, 0.3), neon(COL.cyan, 1.8));
-    post.position.set(s * 1.5, 1.5, 0);
+    const post = new THREE.Mesh(new THREE.BoxGeometry(0.34, 4.2, 0.34), neon(COL.cyan, 1.9));
+    post.position.set(s * 2.6, 2.1, 0);
     group.add(post);
   }
-  const arch = new THREE.Mesh(new THREE.BoxGeometry(3.3, 0.3, 0.3), neon(COL.magenta, 1.8));
-  arch.position.y = 3;
-  group.add(arch);
+  for (const ay of [4.0, 4.6]) {
+    const arch = new THREE.Mesh(new THREE.BoxGeometry(5.6, 0.3, 0.3), neon(COL.magenta, 1.9));
+    arch.position.y = ay;
+    group.add(arch);
+  }
 
-  // a soft point light so the goal reads as "the destination"
-  const light = new THREE.PointLight(COL.yellow, 18, 16, 2);
-  light.position.set(0, 2, 0);
+  // a strong point light so the goal glows as "the destination"
+  const light = new THREE.PointLight(COL.yellow, 26, 22, 2);
+  light.position.set(0, 2.5, 0);
   group.add(light);
 
   group.userData.spin = pad;

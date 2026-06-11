@@ -130,7 +130,7 @@ export class World {
     const f = this.level.finish;
     const dx = this.marble.pos.x - f[0];
     const dz = this.marble.pos.z - f[2];
-    if (dx * dx + dz * dz < 1.7 * 1.7 && this.marble.pos.y < 2.0) {
+    if (dx * dx + dz * dz < 2.4 * 2.4 && this.marble.pos.y < 3.0) {
       this.status = "won";
       return this.status;
     }

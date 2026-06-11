@@ -1,33 +1,49 @@
 // Level definitions for Brennan Game (Marble Trap).
-// The track runs mostly in the -Z direction (away from camera). +X is right, -X is left.
-// All platforms are flat boxes with their TOP surface at y = 0 unless noted.
+// The track runs STRAIGHT in the -Z direction (away from the camera). +X is right.
+// Platforms are flat boxes; topY sets the top surface height (0 = ground).
 //
-// BIG WINDING COURSES: each level is a long multi-leg path — straights, L-turns,
-// S-curves, jogs, narrow bridges, and wide arenas — roughly 4x the size of the
-// original straights. Traps are RANDOMIZED ({ random:true }) so the same spot is
-// sometimes fast, sometimes slow. Tuned hard-but-fair: every chokepoint leaves a
-// readable safe window, beatable by a human in ~30 tries.
+// DESIGN RULES (learned the hard way):
+//  - Levels run straight ahead so the fixed camera always shows the path AND the
+//    finish. No hidden-corner turns (those caused "can't find the finish / fall off"
+//    bugs). Variety comes from WIDTH changes and UP/DOWN elevation, not turns.
+//  - Every level ENDS on a wide, flat, obvious FINISH PAD with the finish gate on it.
+//  - Terrain: the marble can climb steps up to ~0.35 and fall down any drop. So
+//    "hills" = gentle up-stairs then a drop ledge; "valleys" = a drop then up-stairs.
+//  - Traps assume floor y=0 (their hit tests are floor-relative), so trap zones stay
+//    FLAT at topY 0. Elevation features live on the trap-free connector stretches.
+//  - Traps are randomized ({random:true}) so timing varies; still human-beatable.
 
-// ---- small authoring helpers -------------------------------------------------
+// ---- authoring helpers -------------------------------------------------------
 
-// A flat floor tile centered at (cx,cz), width w (x) and depth d (z), top surface at topY.
+// Flat tile centered at (cx,cz), width w (x), depth d (z), top surface at topY.
 function tile(cx, cz, w, d, topY = 0) {
   return { pos: [cx, topY - 0.5, cz], size: [w, 1, d] };
 }
 
-// A pit-trap tile: a floor tile that periodically drops away, leaving a deadly gap.
+// Pit-trap tile: drops away on a cycle, leaving a deadly gap. Always at floor 0.
 function pit(cx, cz, w, d, period, downTime, offset = 0) {
   return { pos: [cx, -0.5, cz], size: [w, 1, d], drop: { period, down: downTime, offset } };
 }
 
-// A straight run of tiles along -Z from z0 down `len` units, width w, centered at cx.
-// Returns one tile (boxes can be long); kept as a helper for readability.
+// Straight run along -Z: a single tile from z0 (near) to z0-len (far), top at topY.
 function leg(cx, z0, len, w, topY = 0) {
   return tile(cx, z0 - len / 2, w, len, topY);
 }
 
+// A staircase from topY a to topY b over depth `len` (z0 near -> z0-len far).
+// Each step rises <= 0.3 so the marble can roll UP it; descending is always fine.
+// Spread into the platforms array with `...ramp(...)`.
+function ramp(cx, z0, len, w, a, b, topYsuppress) {
+  const n = Math.max(1, Math.ceil(Math.abs(b - a) / 0.3));
+  const seg = len / n, out = [];
+  for (let i = 0; i < n; i++) {
+    const ty = a + (b - a) * (i + 1) / n;
+    out.push(tile(cx, z0 - seg * (i + 0.5), w, seg + 0.12, ty));
+  }
+  return out;
+}
+
 // ---- traps -------------------------------------------------------------------
-// Pass random=true on any trap to make it vary speed/timing each cycle.
 
 const axis = (x, z, length, speed, phase = 0, random = false) =>
   ({ type: "axis", pos: [x, z], length, thickness: 0.7, speed, phase,
@@ -47,254 +63,246 @@ const saw = (x, z, speed, size = 1.9) =>
 
 const finishAt = (x, z) => [x, 0, z];
 
+// A wide flat finish pad centered at (0, z). Returned as a tile; pair with finishAt.
+const finishPad = (z, w = 11) => tile(0, z, w, 16, 0);
+
 // ---- the 8 levels ------------------------------------------------------------
 
 export const LEVELS = [
-  // 1 — WARM UP : long straight that bends into an L, wide forgiving track.
+  // 1 — WARM UP : wide rolling hills, a couple of gentle traps. Easy intro.
   {
     name: "WARM UP",
     start: [0, 1, 6],
-    finish: finishAt(40, -180),
-    killY: -12,
+    finish: finishAt(0, -158),
+    killY: -14,
     platforms: [
-      leg(0, 9, 205, 8),              // long first straight: z 9 .. -196 (covers spawn)
-      tile(20, -180, 48, 8),          // turn right (+X) along z=-180
+      leg(0, 9, 30, 9, 0),                 //   9 .. -21  flat wide
+      leg(0, -21, 18, 9, 0),               // -21 .. -39  flat
+      ...ramp(0, -39, 12, 9, 0, 0.9),      // -39 .. -51  hill UP to 0.9
+      leg(0, -51, 10, 9, 0.9),             // -51 .. -61  peak
+      leg(0, -61, 20, 9, 0),               // -61 .. -81  DROP back to 0
+      leg(0, -81, 18, 9, 0),               // -81 .. -99  flat
+      leg(0, -99, 16, 9, -1.1),            // -99 .. -115 valley floor (drop)
+      ...ramp(0, -115, 12, 9, -1.1, 0),    // -115 .. -127 climb back UP
+      leg(0, -127, 23, 9, 0),              // -127 .. -150 flat run-in
+      finishPad(-158),                     // -150 .. -166 finish pad
     ],
     traps: [
-      axis(0, -10, 7.4, 0.9, 0, false),
-      cube(-3, -26, 3, -26, 3.0, 1.5),
-      axis(0, -42, 7.4, -0.7, 0, true),
-      cube(-3, -60, 3, -60, 3.2, 1.5, 0.4),
-      axis(0, -80, 7.4, 0.8, 0.5, true),
-      cube(-3, -100, 3, -100, 3.0, 1.5),
-      axis(0, -122, 7.4, -0.8, 0.2, true),
-      spears(0, -142, 6.5, 4, 2.0, 0.7, 0.0, true),
-      axis(0, -164, 7.4, 0.8, 0.3, true),
-      // the +X turn leg
-      cube(12, -180, 12, -180, 3.0, 1.5),
-      cannon(28, -176, 0, -1, 1.9, 9, 0.2, true),
-      cube(34, -180, 34, -180, 3.2, 1.5, 0.4),
+      axis(0, -10, 8.0, 0.9, 0, false),
+      cube(-3.2, -30, 3.2, -30, 3.0, 1.5),
+      axis(0, -72, 8.0, -0.8, 0, true),
+      cube(-3.2, -88, 3.2, -88, 3.2, 1.5, 0.4),
+      spears(0, -136, 7.0, 4, 2.0, 0.7, 0.0, true),
     ],
   },
 
-  // 2 — SPIKE FIELD : S-curve through spear bands and sweeping axes.
+  // 2 — SPIKE FIELD : medium width, spear bands + axes, one hill. Flat trap zones.
   {
     name: "SPIKE FIELD",
     start: [0, 1, 6],
-    finish: finishAt(0, -210),
-    killY: -12,
+    finish: finishAt(0, -176),
+    killY: -14,
     platforms: [
-      leg(0, 9, 75, 6),               // straight down (covers spawn)
-      tile(-12, -66, 30, 6),          // jog left
-      leg(-24, -66, 70, 6),           // down again (left lane)
-      tile(-12, -136, 30, 6),         // jog back right
-      leg(0, -136, 80, 6),            // final straight down to finish
+      leg(0, 9, 56, 6, 0),                 //   9 .. -47  flat (spears+axis)
+      ...ramp(0, -47, 10, 6, 0, 0.6),      // -47 .. -57  small hill up
+      leg(0, -57, 12, 6, 0.6),             // -57 .. -69  raised flat
+      leg(0, -69, 18, 6, 0),               // -69 .. -87  drop to 0
+      leg(0, -87, 50, 6, 0),               // -87 .. -137 flat (spears+axis)
+      leg(0, -137, 16, 4.2, 0),            // -137 .. -153 NARROW bridge
+      leg(0, -153, 15, 6, 0),              // -153 .. -168 widen run-in
+      finishPad(-176),                     // -168 .. -184 finish pad
     ],
     traps: [
       spears(0, -12, 5.4, 4, 2.0, 0.7, 0.0, true),
       axis(0, -26, 5.6, 1.6, 0, true),
-      spears(0, -44, 5.4, 4, 1.9, 0.65, 0.5, true),
-      axis(0, -58, 5.6, -1.5, 0.4, true),
-      cannon(-12, -62, 0, -1, 1.8, 9, 0.3, true),  // across the left jog
-      spears(-24, -84, 5.4, 4, 1.9, 0.65, 0.2, true),
-      axis(-24, -100, 5.6, 1.5, 0, true),
-      spears(-24, -120, 5.4, 5, 1.8, 0.65, 0.7, true),
-      cannon(-12, -132, 0, -1, 1.8, 9, 0.5, true), // across the right jog
-      axis(0, -156, 5.6, -1.4, 0.3, true),
-      spears(0, -176, 5.4, 4, 1.9, 0.65, 0.1, true),
-      axis(0, -196, 5.6, 1.4, 0.5, true),
+      spears(0, -40, 5.4, 4, 1.9, 0.65, 0.5, true),
+      axis(0, -92, 5.6, -1.5, 0.4, true),
+      spears(0, -108, 5.4, 4, 1.9, 0.65, 0.2, true),
+      axis(0, -124, 5.6, 1.5, 0, true),
+      spears(0, -145, 3.6, 4, 1.8, 0.65, 0.7, true), // on the narrow bridge
     ],
   },
 
-  // 3 — PIT STOP : long alternating solid/pit terrain with side cannons + a turn.
+  // 3 — PIT STOP : dropping pit tiles + side cannons, narrow/wide mix. Flat (pits).
   {
     name: "PIT STOP",
     start: [0, 1, 6],
-    finish: finishAt(-36, -150),
-    killY: -12,
+    finish: finishAt(0, -153),
+    killY: -14,
     platforms: [
-      tile(0, 1, 6, 12),
-      pit(0, -8, 6, 6, 2.6, 0.8, 0.0),
-      tile(0, -16, 6, 10),
-      pit(0, -24, 6, 6, 2.6, 0.8, 0.6),
-      tile(0, -32, 6, 10),
-      pit(0, -40, 6, 6, 2.5, 0.8, 1.1),
-      tile(0, -52, 6, 18),
-      pit(0, -64, 6, 6, 2.6, 0.8, 0.3),
-      tile(0, -72, 6, 10),
-      pit(0, -80, 6, 6, 2.5, 0.8, 0.9),
-      tile(0, -92, 6, 18),            // arena before the turn
-      tile(-18, -100, 42, 6),         // turn left (-X): z -97..-103
-      pit(-36, -106, 6, 6, 2.4, 0.8, 0.2),   // -103..-109, meets turn tile
-      tile(-36, -114, 6, 10),                // -109..-119
-      pit(-36, -122, 6, 6, 2.4, 0.8, 0.7),   // -119..-125
-      tile(-36, -139, 6, 28),                // -125..-153, covers finish at -150
+      tile(0, 1, 6, 12),                   //   7 .. -5
+      pit(0, -8, 6, 6, 2.6, 0.8, 0.0),     //  -5 .. -11
+      tile(0, -16, 6, 10),                 // -11 .. -21
+      pit(0, -24, 6, 6, 2.6, 0.8, 0.6),    // -21 .. -27
+      tile(0, -34, 6, 14),                 // -27 .. -41
+      pit(0, -44, 6, 6, 2.5, 0.8, 1.1),    // -41 .. -47
+      tile(0, -52, 4.2, 10),               // -47 .. -57  NARROW
+      pit(0, -60, 4.2, 6, 2.5, 0.8, 0.3),  // -57 .. -63  narrow pit
+      tile(0, -70, 6, 14),                 // -63 .. -77
+      pit(0, -80, 6, 6, 2.6, 0.8, 0.9),    // -77 .. -83
+      tile(0, -92, 9, 18),                 // -83 .. -101 WIDE arena
+      pit(0, -104, 6, 6, 2.5, 0.8, 0.5),   // -101 .. -107
+      tile(0, -114, 6, 14),                // -107 .. -121
+      pit(0, -124, 6, 6, 2.4, 0.8, 0.2),   // -121 .. -127
+      tile(0, -136, 6, 18),                // -127 .. -145
+      finishPad(-153),                     // -145 .. -161 finish pad
     ],
     traps: [
       cannon(5, -16, -1, 0, 1.8, 8, 0.0, true),
-      cannon(-5, -32, 1, 0, 1.8, 8, 0.8, true),
-      cannon(5, -52, -1, 0, 1.7, 9, 0.3, true),
-      cannon(-5, -72, 1, 0, 1.7, 9, 0.5, true),
-      cube(-2, -92, 2, -92, 2.4, 1.5),
-      cannon(-18, -96, 0, -1, 1.8, 9, 0.2, true),   // across the turn
-      cube(-30, -100, -30, -100, 2.6, 1.5, 0.3),
-      cannon(-31, -120, 1, 0, 1.7, 9, 0.4, true),
-      cannon(-41, -142, 1, 0, 1.6, 9, 0.6, true),
+      cannon(-5, -34, 1, 0, 1.8, 8, 0.8, true),
+      cannon(5, -70, -1, 0, 1.7, 9, 0.3, true),
+      cannon(-5, -92, 1, 0, 1.7, 9, 0.5, true),
+      cannon(5, -114, -1, 0, 1.7, 9, 0.2, true),
+      cannon(-5, -136, 1, 0, 1.6, 9, 0.6, true),
     ],
   },
 
-  // 4 — CROSSFIRE : big U-shape, crossfiring cannons + patrol cubes on every leg.
+  // 4 — CROSSFIRE : wide<->narrow, crossfiring cannons + patrol cubes. Flat.
   {
     name: "CROSSFIRE",
     start: [0, 1, 6],
-    finish: finishAt(0, -8),
-    killY: -12,
+    finish: finishAt(0, -172),
+    killY: -14,
     platforms: [
-      leg(0, 9, 105, 5),              // down the right side: z 9 .. -96 (covers spawn)
-      tile(-25, -98, 56, 5),          // bottom of the U (-X)
-      leg(-50, -96, 100, 5),          // up the left side: z -96 .. back toward start
+      leg(0, 9, 40, 7, 0),                 //   9 .. -31
+      leg(0, -31, 26, 4.2, 0),             // -31 .. -57  NARROW
+      leg(0, -57, 34, 8, 0),               // -57 .. -91  WIDE
+      leg(0, -91, 26, 4.2, 0),             // -91 .. -117 NARROW
+      leg(0, -117, 47, 7, 0),              // -117 .. -164
+      finishPad(-172),                     // -164 .. -180 finish pad
     ],
     traps: [
-      cannon(4.5, -8, -1, 0, 1.8, 9, 0.0, true),
-      cube(-2, -22, 2, -22, 2.0, 1.5),
-      cannon(-4.5, -36, 1, 0, 1.8, 9, 0.7, true),
-      cube(-2, -52, 2, -52, 2.2, 1.5, 0.3),
-      cannon(4.5, -68, -1, 0, 1.7, 9, 0.4, true),
-      cube(-2, -84, 2, -84, 2.4, 1.5),
-      // bottom leg
-      cube(-14, -98, -14, -98, 2.4, 1.5, 0.5),
-      cannon(-25, -90, 0, -1, 1.8, 9, 0.2, true),
-      cube(-36, -98, -36, -98, 2.6, 1.5, 0.4),
-      // left leg going up
-      cannon(-45.5, -80, 1, 0, 1.7, 9, 0.1, true),
-      cube(-52, -64, -48, -64, 2.4, 1.5, 0.2),
-      cannon(-54.5, -48, 1, 0, 1.7, 9, 0.5, true),
-      cube(-52, -32, -48, -32, 2.6, 1.5, 0.3),
-      cannon(-45.5, -16, 1, 0, 1.7, 9, 0.2, true),
+      cannon(6, -10, -1, 0, 1.8, 9, 0.0, true),
+      cube(-2.2, -24, 2.2, -24, 2.0, 1.5),
+      cube(-1.4, -44, 1.4, -44, 2.2, 1.4, 0.3), // narrow
+      cannon(7, -64, -1, 0, 1.8, 9, 0.4, true),
+      cube(-3, -78, 3, -78, 2.4, 1.5, 0.2),     // wide patrol
+      cannon(-7, -84, 1, 0, 1.7, 9, 0.7, true),
+      cube(-1.4, -104, 1.4, -104, 2.4, 1.4, 0.5), // narrow
+      cannon(6, -130, -1, 0, 1.7, 9, 0.1, true),
+      cube(-2.4, -148, 2.4, -148, 2.6, 1.5, 0.3),
     ],
   },
 
-  // 5 — THE SAW : a chasing chainsaw forces motion through a long winding gauntlet.
+  // 5 — THE SAW : chasing chainsaw forces motion past axes; one valley.
   {
     name: "THE SAW",
     start: [0, 1, 8],
-    finish: finishAt(30, -190),
-    killY: -12,
+    finish: finishAt(0, -176),
+    killY: -14,
     platforms: [
-      leg(0, 10, 124, 5),             // long straight (covers spawn)
-      tile(15, -114, 36, 5),          // jog right
-      leg(30, -114, 80, 5),           // final straight down
+      leg(0, 10, 60, 5, 0),                //  10 .. -50  flat (axes)
+      leg(0, -50, 16, 5, -1.2),            // -50 .. -66  valley drop
+      ...ramp(0, -66, 14, 5, -1.2, 0),     // -66 .. -80  climb out
+      leg(0, -80, 56, 5, 0),               // -80 .. -136 flat (axes)
+      leg(0, -136, 16, 4, 0),              // -136 .. -152 NARROW
+      leg(0, -152, 16, 5, 0),              // -152 .. -168
+      finishPad(-176),                     // -168 .. -184 finish pad
     ],
     traps: [
-      saw(0, 19, 3.35, 1.9),
-      axis(0, -8, 4.8, 0.6, 0, true),
-      axis(0, -22, 4.8, -0.7, 0.7, true),
-      cube(-1.6, -36, 1.6, -36, 3.0, 1.4),
-      axis(0, -52, 4.8, 0.8, 0.3, true),
-      axis(0, -68, 4.8, -0.7, 0, true),
-      cube(-1.6, -84, 1.6, -84, 3.0, 1.4, 0.4),
-      axis(0, -100, 4.8, 0.8, 0.5, true),
-      cannon(15, -110, 0, -1, 1.7, 10, 0.2, true),  // at the jog
-      axis(30, -134, 4.8, -0.7, 0.2, true),
-      cube(28.4, -152, 31.6, -152, 3.0, 1.4, 0.3),
-      axis(30, -170, 4.8, 0.8, 0.4, true),
+      saw(0, 19, 3.4, 1.9),
+      axis(0, -10, 4.8, 0.6, 0, true),
+      axis(0, -26, 4.8, -0.7, 0.7, true),
+      cube(-1.6, -40, 1.6, -40, 3.0, 1.4),
+      axis(0, -90, 4.8, 0.8, 0.3, true),
+      axis(0, -106, 4.8, -0.7, 0, true),
+      cube(-1.6, -122, 1.6, -122, 3.0, 1.4, 0.4),
+      axis(0, -144, 4.0, 0.9, 0.3, true),   // on narrow
     ],
   },
 
-  // 6 — GAUNTLET : narrow winding bridge, every-trap, long, all random.
+  // 6 — GAUNTLET : narrow winding-feel via width pulses, every trap, a hill.
   {
     name: "GAUNTLET",
     start: [0, 1, 6],
-    finish: finishAt(-30, -200),
-    killY: -12,
+    finish: finishAt(0, -182),
+    killY: -14,
     platforms: [
-      leg(0, 9, 107, 4.5),            // narrow straight (covers spawn): 9..-98
-      tile(-15, -100, 36, 4.5),       // jog left: z -97.75..-102.25
-      leg(-30, -100, 104, 4.5),       // narrow straight to finish
+      leg(0, 9, 49, 4.5, 0),               //   9 .. -40  narrow (spears/cube/cannons)
+      ...ramp(0, -40, 12, 4.5, 0, 0.8),    // -40 .. -52  hill up
+      leg(0, -52, 10, 4.5, 0.8),           // -52 .. -62  peak
+      leg(0, -62, 18, 4.5, 0),             // -62 .. -80  drop to 0
+      leg(0, -80, 52, 4.5, 0),             // -80 .. -132 flat (axis/spears/cube)
+      leg(0, -132, 14, 3.6, 0),            // -132 .. -146 EXTRA NARROW
+      leg(0, -146, 28, 4.5, 0),            // -146 .. -174
+      finishPad(-182),                     // -174 .. -190 finish pad
     ],
     traps: [
       spears(0, -8, 4.0, 3.5, 1.8, 0.6, 0.0, true),
       cube(-1.0, -18, 1.0, -18, 2.5, 1.4),
-      cannon(4, -28, -1, 0, 1.7, 10, 0.0, true),
-      cannon(-4, -28, 1, 0, 1.7, 10, 0.85, true),
-      axis(0, -42, 4.3, 1.3, 0, true),
-      spears(0, -56, 4.0, 4, 1.7, 0.6, 0.5, true),
-      cube(-1.0, -70, 1.0, -70, 2.6, 1.4, 0.4),
-      axis(0, -86, 4.3, -1.3, 0.3, true),
-      cannon(-15, -96, 0, -1, 1.7, 10, 0.2, true),  // at the jog
-      spears(-30, -116, 4.0, 4, 1.7, 0.6, 0.1, true),
-      cube(-31, -132, -29, -132, 2.6, 1.4, 0.2),
-      axis(-30, -148, 4.3, 1.3, 0.4, true),
-      cannon(-26, -162, -1, 0, 1.7, 10, 0.3, true),
-      cannon(-34, -162, 1, 0, 1.7, 10, 0.7, true),
-      spears(-30, -178, 4.0, 4, 1.7, 0.6, 0.6, true),
-      axis(-30, -192, 4.3, -1.3, 0.2, true),
+      cannon(4, -30, -1, 0, 1.7, 10, 0.0, true),
+      cannon(-4, -30, 1, 0, 1.7, 10, 0.85, true),
+      axis(0, -90, 4.3, 1.3, 0, true),
+      spears(0, -104, 4.0, 4, 1.7, 0.6, 0.5, true),
+      cube(-1.0, -118, 1.0, -118, 2.6, 1.4, 0.4),
+      axis(0, -139, 3.2, 1.2, 0.3, true),  // on extra-narrow
+      cannon(4, -158, -1, 0, 1.7, 10, 0.3, true),
+      cannon(-4, -158, 1, 0, 1.7, 10, 0.7, true),
     ],
   },
 
-  // 7 — CHASE : chainsaw + pits + crossfire across a big zig-zag with 3 turns.
+  // 7 — CHASE : chainsaw + pits + cannons, wide<->narrow, a valley.
   {
     name: "CHASE",
     start: [0, 1, 8],
-    finish: finishAt(40, -160),
-    killY: -12,
+    finish: finishAt(0, -178),
+    killY: -14,
     platforms: [
-      leg(0, 10, 64, 4.5),            // down (covers spawn): 10..-54
-      pit(0, -56, 4.5, 6, 2.6, 0.8, 0.0),    // -53..-59
-      leg(0, -59, 33, 4.5),           // -59..-92, meets the pit edge
-      tile(15, -92, 34, 4.5),         // jog right
-      leg(30, -92, 30, 4.5),          // down
-      pit(30, -122, 4.5, 6, 2.5, 0.8, 0.4),  // -119..-125
-      tile(35, -126, 14, 9),          // jog right: z -121.5..-130.5, bridges pit + final leg
-      leg(40, -128, 36, 4.5),         // final down: -128..-164
+      leg(0, 10, 44, 5, 0),                //  10 .. -34  flat
+      pit(0, -37, 5, 6, 2.6, 0.8, 0.0),    // -34 .. -40
+      leg(0, -40, 20, 5, 0),               // -40 .. -60
+      leg(0, -60, 16, 5, -1.2),            // -60 .. -76  valley
+      ...ramp(0, -76, 14, 5, -1.2, 0),     // -76 .. -90  climb out
+      leg(0, -90, 22, 4.2, 0),             // -90 .. -112 NARROW
+      pit(0, -115, 4.2, 6, 2.5, 0.8, 0.4), // -112 .. -118 narrow pit
+      leg(0, -118, 24, 5, 0),              // -118 .. -142
+      leg(0, -142, 28, 5, 0),              // -142 .. -170
+      finishPad(-178),                     // -170 .. -186 finish pad
     ],
     traps: [
-      saw(0, 20, 3.65, 1.9),
-      cannon(4, -10, -1, 0, 1.7, 10, 0.0, true),
-      cannon(-4, -18, 1, 0, 1.7, 10, 0.6, true),
-      cube(-1.4, -34, 1.4, -34, 2.2, 1.4),
-      axis(0, -48, 4.0, 1.2, 0, true),
-      cube(-1.4, -70, 1.4, -70, 2.2, 1.4, 0.4),
-      cannon(15, -88, 0, -1, 1.6, 10, 0.3, true),   // at first jog
-      axis(30, -104, 4.0, -1.2, 0.3, true),
-      cube(28.6, -118, 31.4, -118, 2.2, 1.4, 0.2),
-      cannon(35, -124, 0, -1, 1.6, 10, 0.4, true),  // at second jog
-      axis(40, -140, 4.0, 1.2, 0.4, true),
-      cube(38.6, -152, 41.4, -152, 2.4, 1.4, 0.3),
+      saw(0, 20, 3.7, 1.9),
+      cannon(4, -12, -1, 0, 1.7, 10, 0.0, true),
+      cannon(-4, -22, 1, 0, 1.7, 10, 0.6, true),
+      cube(-1.6, -48, 1.6, -48, 2.2, 1.4),
+      axis(0, -100, 3.6, 1.2, 0, true),    // on narrow
+      cannon(4, -126, -1, 0, 1.6, 10, 0.3, true),
+      cube(-1.8, -134, 1.8, -134, 2.4, 1.4, 0.2),
+      axis(0, -154, 4.4, -1.2, 0.4, true),
     ],
   },
 
-  // 8 — FINALE : the longest, a full circuit of turns + every trap, all random.
+  // 8 — FINALE : longest, every trap, a hill AND a valley, big width swings.
   {
     name: "FINALE",
     start: [0, 1, 8],
-    finish: finishAt(-40, -220),
-    killY: -12,
+    finish: finishAt(0, -226),
+    killY: -14,
     platforms: [
-      leg(0, 10, 94, 4.4),                      // leg 1 down (covers spawn): 10..-84
-      pit(0, -84, 4.4, 6, 2.4, 0.75, 0.0),      // -81..-87
-      leg(0, -87, 33, 4.4),                     // -87..-120, meets the pit edge
-      tile(-20, -120, 44, 4.4),                 // turn left
-      leg(-40, -120, 60, 4.4),                  // leg 2 down (left lane)
-      pit(-40, -180, 4.4, 6, 2.3, 0.7, 0.3),
-      leg(-40, -183, 43, 4.4),                  // spans -183..-226, meets the pit edge
+      leg(0, 10, 46, 4.6, 0),              //  10 .. -36  flat (spears/axis/cannon)
+      pit(0, -39, 4.6, 6, 2.4, 0.75, 0.0), // -36 .. -42
+      leg(0, -42, 22, 4.6, 0),             // -42 .. -64  (cube/axis)
+      ...ramp(0, -64, 12, 4.6, 0, 0.9),    // -64 .. -76  hill up
+      leg(0, -76, 10, 4.6, 0.9),           // -76 .. -86  peak
+      leg(0, -86, 18, 4.6, 0),             // -86 .. -104 drop to 0
+      leg(0, -104, 40, 4.6, 0),            // -104 .. -144 flat (spears/cube/axis)
+      leg(0, -144, 16, 3.6, 0),            // -144 .. -160 EXTRA NARROW
+      leg(0, -160, 14, 4.6, -1.3),         // -160 .. -174 valley drop
+      ...ramp(0, -174, 14, 4.6, -1.3, 0),  // -174 .. -188 climb out
+      pit(0, -191, 4.6, 6, 2.3, 0.7, 0.5), // -188 .. -194
+      leg(0, -194, 24, 4.6, 0),            // -194 .. -218
+      finishPad(-226),                     // -218 .. -234 finish pad
     ],
     traps: [
       saw(0, 20, 3.95, 1.9),
-      spears(0, -8, 3.6, 3, 1.7, 0.6, 0.0, true),
-      axis(0, -20, 3.9, 1.0, 0, true),
-      cannon(3.6, -32, -1, 0, 1.6, 10, 0.0, true),
-      cube(-1.0, -48, 1.0, -48, 2.0, 1.3),
-      axis(0, -64, 3.9, -1.4, 0.4, true),
-      spears(0, -78, 3.6, 4, 1.6, 0.6, 0.3, true),
-      cube(-1.0, -98, 1.0, -98, 2.2, 1.3, 0.6),
-      cannon(-20, -116, 0, -1, 1.6, 10, 0.2, true), // at the turn
-      axis(-40, -134, 3.9, 1.3, 0, true),
-      spears(-40, -150, 3.6, 4, 1.6, 0.6, 0.5, true),
-      cube(-41, -166, -39, -166, 2.2, 1.3, 0.3),
-      axis(-40, -198, 3.9, -1.3, 0.4, true),
-      cannon(-36, -210, -1, 0, 1.6, 10, 0.3, true),
-      cannon(-44, -210, 1, 0, 1.6, 10, 0.7, true),
+      spears(0, -10, 4.0, 3, 1.7, 0.6, 0.0, true),
+      axis(0, -22, 4.2, 1.0, 0, true),
+      cannon(4, -30, -1, 0, 1.6, 10, 0.0, true),
+      cube(-1.4, -52, 1.4, -52, 2.0, 1.4),
+      axis(0, -114, 4.2, -1.4, 0.4, true),
+      spears(0, -128, 4.0, 4, 1.6, 0.6, 0.3, true),
+      axis(0, -150, 3.2, 1.3, 0, true),     // extra-narrow
+      cube(-1.8, -204, 1.8, -204, 2.4, 1.4, 0.3),
+      cannon(4, -212, -1, 0, 1.6, 10, 0.3, true),
     ],
   },
 ];
