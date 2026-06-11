@@ -81,15 +81,23 @@ function makeAxis(def) {
   const group = new THREE.Group();
   group.position.set(x, FLOOR + 0.6, z);
 
+  const cross = !!def.cross; // a second perpendicular beam (4-arm "cross axe")
+
   const beam = new THREE.Mesh(new THREE.BoxGeometry(length, 1.1, thickness), mat(COL.magenta));
   group.add(beam);
+  if (cross) {
+    const beam2 = new THREE.Mesh(new THREE.BoxGeometry(length, 1.1, thickness), mat(COL.magenta));
+    beam2.rotation.y = Math.PI / 2;
+    group.add(beam2);
+  }
   // glowing hub
   const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.45, 1.4, 12), mat(COL.purple, 1.6));
   group.add(hub);
-  // end caps
-  for (const s of [-1, 1]) {
+  // end caps (all 4 arm tips when cross)
+  const caps = cross ? [[-1, 0], [1, 0], [0, -1], [0, 1]] : [[-1, 0], [1, 0]];
+  for (const [sx, sz] of caps) {
     const cap = new THREE.Mesh(new THREE.SphereGeometry(0.45, 12, 12), mat(COL.cyan, 1.6));
-    cap.position.x = s * length / 2;
+    cap.position.set(sx * length / 2, 0, sz * length / 2);
     group.add(cap);
   }
 
@@ -130,8 +138,11 @@ function makeAxis(def) {
       const c = Math.cos(curAngle), s = Math.sin(curAngle);
       const lx = dx * c - dz * s;          // along the beam
       const lz = dx * s + dz * c;          // across the beam
-      return Math.abs(lx) < length / 2 + r * 0.5 &&
-             Math.abs(lz) < thickness / 2 + r;
+      const onBeam = Math.abs(lx) < length / 2 + r * 0.5 && Math.abs(lz) < thickness / 2 + r;
+      if (onBeam) return true;
+      // the perpendicular arm (swap roles of lx/lz)
+      if (cross) return Math.abs(lz) < length / 2 + r * 0.5 && Math.abs(lx) < thickness / 2 + r;
+      return false;
     },
     reset() { curAngle = phase; group.rotation.y = curAngle; },
   };

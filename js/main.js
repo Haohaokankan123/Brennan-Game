@@ -41,10 +41,18 @@ try {
   composer = null;
 }
 
-import { buildEnvironment } from "./builder.js";
+import { buildEnvironment, makeParticles, makeTrail } from "./builder.js";
+import { audio } from "./audio.js";
 buildEnvironment(scene);
 
 const world = new World(scene);
+
+// juice: particle bursts (death/win) + a fading marble trail
+const particles = makeParticles(scene);
+const trail = makeTrail(scene);
+
+// start audio on the first user gesture (browser autoplay policy)
+audio.resumeOnGesture();
 
 // ---------------- UI references ----------------
 const el = (id) => document.getElementById(id);
@@ -57,6 +65,9 @@ const ui = {
   completeTime: el("complete-time"), completeBest: el("complete-best"), completeRecord: el("complete-record"),
   deadReason: el("dead-reason"), finishTotal: el("finish-total"),
   loading: el("loading"),
+  levelCard: el("level-card"), levelCardNum: el("level-card-num"), levelCardName: el("level-card-name"),
+  fade: el("fade"),
+  btnMute: el("btn-mute"), volSlider: el("vol-slider"),
 };
 
 // ---------------- game state ----------------
@@ -85,6 +96,7 @@ function showHud(show) {
 function pauseGame() {
   if (state !== STATE.PLAYING) return;
   state = STATE.PAUSED;
+  audio.rollStop();
   ui.btnPause.classList.add("hidden");
   ui.pause.classList.remove("hidden");
 }
@@ -115,6 +127,7 @@ function buildLevelSelect() {
 
 function goMenu() {
   state = STATE.MENU;
+  audio.rollStop();
   hideOverlays();
   showHud(false);
   buildLevelSelect();
@@ -132,13 +145,39 @@ function startLevel(i) {
   showHud(true);
   updateHud();
   // snap camera near the marble so the first frame isn't a fly-in
+  shakeAmt = 0;
   const m = world.marble.pos;
-  camera.position.set(m.x, m.y + 16, m.z + 22);
+  camera.position.set(m.x + camOffset.x, m.y + camOffset.y, m.z + camOffset.z);
+  trail.reset(m);
+  showLevelCard(i);
+  audio.levelStart();
+  flash();
+}
+
+// brief level-intro card ("LEVEL 5 — THE SAW")
+function showLevelCard(i) {
+  if (!ui.levelCard) return;
+  ui.levelCardNum.textContent = "LEVEL " + (i + 1);
+  ui.levelCardName.textContent = LEVELS[i].name;
+  ui.levelCard.classList.remove("show");
+  void ui.levelCard.offsetWidth; // restart the CSS animation
+  ui.levelCard.classList.add("show");
+}
+
+// quick screen flash (transition feel)
+function flash() {
+  if (!ui.fade) return;
+  ui.fade.classList.remove("show");
+  void ui.fade.offsetWidth;
+  ui.fade.classList.add("show");
 }
 
 function retryLevel() {
   deaths += 1;
+  audio.rollStop();
+  shakeAmt = 0;
   world.respawn();
+  trail.reset(world.marble.pos);
   state = STATE.PLAYING;
   hideOverlays();
   showHud(true);
@@ -147,6 +186,10 @@ function retryLevel() {
 
 function onWin() {
   const t = world.time;
+  particles.burst(world.marble.pos, 0xffe66d, 70, 11); // golden celebration
+  addShake(0.5);
+  audio.rollStop();
+  audio.win();
   runTotal += t;
   const record = setBest(currentLevel, t);
   unlock(Math.min(currentLevel + 1, LEVEL_COUNT - 1));
@@ -170,6 +213,11 @@ function onWin() {
 
 function onDead() {
   state = STATE.DEAD;
+  particles.burst(world.marble.pos, 0xff2e88, 64, 10); // magenta splat
+  addShake(1.1);
+  trail.hide();
+  audio.rollStop();
+  audio.death();
   showHud(false);
   hideOverlays();
   ui.deadReason.textContent = world.deathReason || "The trap got you.";
@@ -194,15 +242,33 @@ function readInput() {
   return { x, z };
 }
 
-// ---------------- camera follow ----------------
-const camOffset = new THREE.Vector3(0, 15, 18);
+// ---------------- camera follow (fixed isometric-style 3/4 view) ----------------
+// High + pulled back + steep so the path AND the sides are always visible — this is
+// what lets winding turns read. Controls stay world-aligned (camera never rotates).
+const camOffset = new THREE.Vector3(0, 27, 21);
 const lookTarget = new THREE.Vector3();
+const lead = new THREE.Vector3();
+let shakeAmt = 0; // screen-shake magnitude, decays each frame
+function addShake(a) { shakeAmt = Math.min(1.4, shakeAmt + a); }
 function followCamera(dt, instant = false) {
   const m = world.marble ? world.marble.pos : new THREE.Vector3();
   const desired = new THREE.Vector3(m.x + camOffset.x, m.y + camOffset.y, m.z + camOffset.z);
-  const k = instant ? 1 : 1 - Math.exp(-7 * dt);
+  const k = instant ? 1 : 1 - Math.exp(-6 * dt);
   camera.position.lerp(desired, k);
-  lookTarget.set(m.x, m.y + 1, m.z - 4); // look slightly ahead (into upcoming traps)
+  // screen shake
+  if (shakeAmt > 0.001) {
+    camera.position.x += (Math.random() * 2 - 1) * shakeAmt;
+    camera.position.y += (Math.random() * 2 - 1) * shakeAmt;
+    camera.position.z += (Math.random() * 2 - 1) * shakeAmt;
+    shakeAmt *= Math.exp(-9 * dt);
+  }
+  // look a little ahead in the marble's travel direction so turns read early
+  const v = world.marble ? world.marble.vel : null;
+  if (v) {
+    const s = Math.hypot(v.x, v.z);
+    if (s > 0.5) lead.set((v.x / s) * 3, 0, (v.z / s) * 3); else lead.multiplyScalar(0.9);
+  }
+  lookTarget.set(m.x + lead.x, m.y + 1, m.z + lead.z);
   camera.lookAt(lookTarget);
 }
 
@@ -227,6 +293,9 @@ function loop(now) {
     const status = world.update(readInput(), dt);
     ui.hudTime.textContent = fmt(world.time);
     followCamera(dt);
+    // juice: trail follows + rolling rumble scales with speed
+    trail.update(world.marble.pos);
+    audio.roll(Math.hypot(world.marble.vel.x, world.marble.vel.z));
     if (status === "won") onWin();
     else if (status === "dead") onDead();
   } else if (state === STATE.MENU) {
@@ -240,6 +309,8 @@ function loop(now) {
     world.idleUpdate(dt);
     followCamera(dt);
   }
+
+  particles.update(dt); // bursts keep animating across all states
 
   if (composer) composer.render();
   else renderer.render(scene, camera);
@@ -261,6 +332,25 @@ ui.btnPause.addEventListener("click", pauseGame);
 el("btn-resume").addEventListener("click", resumeGame);
 el("btn-restart-p").addEventListener("click", () => { hideOverlays(); startLevel(currentLevel); });
 el("btn-menu-p").addEventListener("click", goMenu);
+
+// audio settings: mute button + volume slider (persisted in audio.js)
+function refreshMuteBtn() {
+  if (ui.btnMute) ui.btnMute.textContent = audio.isMuted() ? "🔇" : "🔊";
+  if (ui.volSlider) ui.volSlider.value = String(audio.isMuted() ? 0 : Math.round(audio.getVolume() * 100));
+}
+if (ui.btnMute) {
+  refreshMuteBtn();
+  ui.btnMute.addEventListener("click", () => { audio.toggleMute(); refreshMuteBtn(); audio.uiClick(); });
+}
+if (ui.volSlider) {
+  refreshMuteBtn();
+  ui.volSlider.addEventListener("input", () => {
+    audio.setVolume(ui.volSlider.value / 100);
+    if (audio.isMuted() && ui.volSlider.value > 0) { audio.setMuted(false); refreshMuteBtn(); }
+  });
+}
+// a soft click on any overlay button press
+document.querySelectorAll(".btn").forEach((b) => b.addEventListener("click", () => audio.uiClick()));
 
 // keyboard actions
 onAction("restart", () => { if (state === STATE.PLAYING) retryLevel(); });

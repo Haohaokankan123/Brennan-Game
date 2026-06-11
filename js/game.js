@@ -116,6 +116,10 @@ export class World {
     // spin the finish pad
     if (this.finishGroup?.userData.spin) this.finishGroup.userData.spin.rotation.y += dt * 1.5;
 
+    // keep the rendered marble in sync with physics BEFORE any death/win early-return,
+    // so death/win particle bursts spawn exactly where the marble is shown.
+    this._syncMarble();
+
     // death checks
     if (fell) { this.status = "dead"; this.deathReason = "You fell into the void!"; return this.status; }
     for (const t of this.traps) {

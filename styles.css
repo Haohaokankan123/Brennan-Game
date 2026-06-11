@@ -90,6 +90,55 @@ html, body {
 }
 .corner-btn:active { transform: scale(0.97); }
 
+.corner-btn-right {
+  left: auto; right: 18px;
+  font-size: 16px;
+  padding: 8px 12px;
+}
+
+/* ===================== Screen flash / transition ===================== */
+#fade {
+  position: fixed; inset: 0; z-index: 30;
+  background: #ffffff;
+  opacity: 0; pointer-events: none;
+}
+#fade.show { animation: flashfade 0.45s ease-out; }
+@keyframes flashfade {
+  0% { opacity: 0.55; }
+  100% { opacity: 0; }
+}
+
+/* ===================== Level-intro card ===================== */
+#level-card {
+  position: fixed; top: 38%; left: 0; right: 0;
+  z-index: 14; text-align: center;
+  pointer-events: none; opacity: 0;
+}
+#level-card.show { animation: cardpop 1.6s ease-out; }
+#level-card-num {
+  font-size: 13px; letter-spacing: 3px; color: var(--cyan);
+  text-shadow: 0 0 14px rgba(0,240,255,0.9);
+}
+#level-card-name {
+  font-size: 26px; margin-top: 12px; color: var(--magenta);
+  text-shadow: 0 0 18px rgba(255,46,136,0.9);
+}
+@keyframes cardpop {
+  0%   { opacity: 0; transform: scale(0.85); }
+  15%  { opacity: 1; transform: scale(1); }
+  75%  { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.04); }
+}
+
+/* ===================== Pause settings ===================== */
+.settings {
+  margin-top: 18px; display: flex; flex-direction: column; align-items: center; gap: 10px;
+}
+.settings-label { font-size: 9px; letter-spacing: 2px; color: var(--cyan); opacity: 0.85; }
+#vol-slider {
+  width: 180px; accent-color: var(--magenta); cursor: pointer;
+}
+
 /* ===================== Overlays ===================== */
 .overlay {
   position: fixed;
