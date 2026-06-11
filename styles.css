@@ -52,6 +52,8 @@ html, body {
 #hud-time { font-size: 22px; color: var(--yellow); text-shadow: 0 0 10px rgba(255,230,109,0.8); }
 #hud-level, #hud-best { font-size: 16px; color: var(--ink); text-shadow: 0 0 8px rgba(0,240,255,0.6); }
 .hud-sub { font-size: 8px; color: var(--purple); }
+.hud-gems { font-size: 9px; color: var(--yellow); margin-top: 4px; }
+.complete-gems { margin-top: 12px; font-size: 10px; color: var(--yellow); letter-spacing: 1px; }
 
 #hint {
   position: fixed;

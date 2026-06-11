@@ -220,4 +220,10 @@ export const audio = {
     if (!ensureCtx() || ctx.state !== "running") return;
     blip(sfxGain, 660, ctx.currentTime, 0.06, "square", 0.06);
   },
+  gem() {
+    if (!ensureCtx() || ctx.state !== "running") return;
+    const t = ctx.currentTime; // bright two-note chime
+    blip(sfxGain, 880, t, 0.12, "triangle", 0.1, 1318.5);
+    blip(sfxGain, 1318.5, t + 0.07, 0.16, "triangle", 0.08);
+  },
 };

@@ -6,7 +6,7 @@ import * as THREE from "three";
 
 import { keys, onAction } from "./input.js";
 import { LEVELS, LEVEL_COUNT } from "./levels.js";
-import { World, getBest, setBest, getUnlocked, unlock } from "./game.js";
+import { World, getBest, setBest, getUnlocked, unlock, setGhost, getGemsBest, setGemsBest } from "./game.js";
 
 // ---------------- Three.js setup ----------------
 const mount = document.getElementById("scene");
@@ -27,7 +27,7 @@ let composer = null;
 
 import { buildEnvironment, makeParticles, makeTrail } from "./builder.js";
 import { audio } from "./audio.js";
-buildEnvironment(scene);
+const env = buildEnvironment(scene); // ocean + clouds + islands; env.update(dt) each frame
 
 const world = new World(scene);
 
@@ -43,6 +43,8 @@ const el = (id) => document.getElementById(id);
 const ui = {
   hud: el("hud"), hint: el("hint"),
   hudLevel: el("hud-level"), hudTime: el("hud-time"), hudBest: el("hud-best"), hudDeaths: el("hud-deaths"),
+  hudTotal: el("hud-total"), hudGems: el("hud-gems"),
+  completeGems: el("complete-gems"),
   menu: el("overlay-menu"), complete: el("overlay-complete"), dead: el("overlay-dead"), finish: el("overlay-finish"),
   pause: el("overlay-pause"), btnPause: el("btn-pause"),
   levelSelect: el("level-select"),
@@ -60,6 +62,7 @@ let state = STATE.MENU;
 let currentLevel = 0;
 let deaths = 0;
 let runTotal = 0; // cumulative winning time for this playthrough
+let lastGemCount = 0; // for detecting a gem pickup this frame (sound + burst)
 
 function fmt(s) { return s.toFixed(2); }
 
@@ -123,6 +126,7 @@ function goMenu() {
 function startLevel(i) {
   currentLevel = i;
   deaths = 0;
+  lastGemCount = 0;
   world.load(i);
   state = STATE.PLAYING;
   hideOverlays();
@@ -158,6 +162,7 @@ function flash() {
 
 function retryLevel() {
   deaths += 1;
+  lastGemCount = 0;
   _splashFired = false;
   audio.rollStop();
   shakeAmt = 0;
@@ -177,7 +182,12 @@ function onWin() {
   audio.win();
   runTotal += t;
   const record = setBest(currentLevel, t);
+  if (record) setGhost(currentLevel, world.getRunPath()); // save this best run as the replay ghost
+  setGemsBest(currentLevel, world.gemCount);
   unlock(Math.min(currentLevel + 1, LEVEL_COUNT - 1));
+
+  const totalGems = (world.level?.gems || []).length;
+  const perfect = totalGems > 0 && world.gemCount >= totalGems;
 
   if (currentLevel >= LEVEL_COUNT - 1) {
     state = STATE.FINISH;
@@ -191,6 +201,7 @@ function onWin() {
     hideOverlays();
     ui.completeTime.textContent = fmt(t);
     ui.completeBest.textContent = fmt(getBest(currentLevel));
+    if (ui.completeGems) ui.completeGems.textContent = (perfect ? "★ PERFECT ★  " : "") + "💎 " + world.gemCount + " / " + totalGems;
     ui.completeRecord.classList.toggle("hidden", !record);
     ui.complete.classList.remove("hidden");
   }
@@ -223,9 +234,12 @@ function onDead() {
 
 function updateHud() {
   ui.hudLevel.textContent = currentLevel + 1;
+  if (ui.hudTotal) ui.hudTotal.textContent = "/ " + LEVEL_COUNT;
   const best = getBest(currentLevel);
   ui.hudBest.textContent = best != null ? fmt(best) + "s" : "—";
   ui.hudDeaths.textContent = "DEATHS: " + deaths;
+  const total = (world.level?.gems || []).length;
+  if (ui.hudGems) ui.hudGems.textContent = "💎 " + world.gemCount + "/" + total;
 }
 
 // ---------------- input -> world axes ----------------
@@ -300,6 +314,13 @@ function loop(now) {
     // juice: trail follows + rolling rumble scales with speed
     trail.update(world.marble.pos);
     audio.roll(Math.hypot(world.marble.vel.x, world.marble.vel.z));
+    // gem pickup feedback (sound + sparkle) the frame the count rises
+    if (world.gemCount > lastGemCount) {
+      lastGemCount = world.gemCount;
+      particles.burst(world.marble.pos, 0x39e0ff, 24, 6);
+      audio.gem();
+      updateHud();
+    }
     if (status === "won") onWin();
     else if (status === "splash") onSplash();
     else if (status === "dead") onDead();
@@ -316,6 +337,7 @@ function loop(now) {
   }
 
   particles.update(dt); // bursts keep animating across all states
+  env.update(dt);       // ocean thrashes + clouds drift in every state
 
   if (composer) composer.render();
   else renderer.render(scene, camera);

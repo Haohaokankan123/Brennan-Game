@@ -25,9 +25,9 @@
 
   <!-- Heads-up display (in-game) -->
   <div id="hud" class="hidden">
-    <div class="hud-item"><span class="hud-label">LEVEL</span><span id="hud-level">1</span><span class="hud-sub">/ 8</span></div>
+    <div class="hud-item"><span class="hud-label">LEVEL</span><span id="hud-level">1</span><span id="hud-total" class="hud-sub">/ 13</span></div>
     <div class="hud-item hud-center"><span class="hud-label">TIME</span><span id="hud-time">0.00</span></div>
-    <div class="hud-item hud-right"><span class="hud-label">BEST</span><span id="hud-best">—</span></div>
+    <div class="hud-item hud-right"><span class="hud-label">BEST</span><span id="hud-best">—</span><span id="hud-gems" class="hud-gems">💎 0/3</span></div>
   </div>
 
   <!-- Pause / menu button (top-left, in-game) -->
@@ -62,7 +62,7 @@
     <div class="panel">
       <h1 class="title">BRENNAN<span class="title-accent">GAME</span></h1>
       <p class="subtitle">M A R B L E &nbsp; T R A P</p>
-      <p class="blurb">Roll the marble to the neon gate. Dodge the traps. Beat the clock.<br>8 levels. They get nasty.</p>
+      <p class="blurb">Roll the marble to the neon gate. Dodge the traps. Beat the clock.<br>13 levels. They get nasty.</p>
       <div id="level-select"></div>
       <button id="btn-start" class="btn btn-primary">▶ START</button>
       <p class="controls-line">ARROWS / WASD to roll &nbsp;·&nbsp; R to restart &nbsp;·&nbsp; ESC to menu</p>
@@ -77,6 +77,7 @@
       <p class="result-time">TIME <span id="complete-time">0.00</span></p>
       <p class="result-best">BEST <span id="complete-best">0.00</span></p>
       <p id="complete-record" class="record hidden">★ NEW RECORD ★</p>
+      <p id="complete-gems" class="complete-gems"></p>
       <button id="btn-next" class="btn btn-primary">NEXT LEVEL ▶</button>
       <button id="btn-retry-c" class="btn">RETRY</button>
       <button id="btn-menu-c" class="btn btn-ghost">MENU</button>
@@ -97,7 +98,7 @@
   <div id="overlay-finish" class="overlay hidden">
     <div class="panel">
       <h2 class="title">YOU WIN!</h2>
-      <p class="subtitle">ALL 8 LEVELS CLEARED</p>
+      <p class="subtitle">ALL 13 LEVELS CLEARED</p>
       <p class="blurb">Brandon, you survived the Marble Trap.<br>Total time below — try to beat it.</p>
       <p class="result-time">TOTAL <span id="finish-total">0.00</span></p>
       <button id="btn-replay" class="btn btn-primary">PLAY AGAIN ↻</button>

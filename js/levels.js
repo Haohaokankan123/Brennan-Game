@@ -40,6 +40,7 @@ function Path(start) {
   let hx = sx0, hz = sz0;
   let dir = "S", w = 6, curTy = 0;
   const tiles = [], traps = [];
+  const gems = [], boosts = [], ramps = []; // collectibles + speed/launch decorations
   let seg = { sx: hx, sz: hz, ex: hx, ez: hz, dir, ty: 0, w };
 
   function box(L, ty, pitArgs) {
@@ -88,6 +89,28 @@ function Path(start) {
     },
     saw(speed, behind = 12) { traps.push(tSaw(sx0, sz0 + behind, speed)); return P; },
 
+    // ---- addiction decorations (no kill; deterministic, applied in World.update) ----
+    // perpendicular unit vector for the current heading (lateral offset for gems)
+    _perp() { const [dx, dz] = DV[seg.dir]; return [-dz, dx]; },
+    // collectible gem at fraction f, offset `lateral` world-units sideways, floating at y.
+    gem(f, lateral = 0, y = 1.3) {
+      const [x, z] = P.at(f), [px, pz] = P._perp();
+      gems.push([x + px * lateral, y, z + pz * lateral]);
+      return P;
+    },
+    // speed pad: a brief surge that aligns + over-caps the marble along the track heading.
+    boost(f, strength = 9) {
+      const [x, z] = P.at(f), [dx, dz] = DV[seg.dir];
+      boosts.push({ pos: [x, z], dir: [dx, dz], strength });
+      return P;
+    },
+    // jump ramp: launches the marble up + forward when crossed grounded along the heading.
+    jump(f, power = 13) {
+      const [x, z] = P.at(f), [dx, dz] = DV[seg.dir];
+      ramps.push({ pos: [x, z], dir: [dx, dz], power });
+      return P;
+    },
+
     finish(padW = 12) {
       const [dx, dz] = DV[dir];
       const nx = hx - dx * OVER, nz = hz - dz * OVER;
@@ -101,7 +124,7 @@ function Path(start) {
       return P;
     },
     build(name, killY = -14) {
-      return { name, start: [sx0, 1, sz0], finish: P._finish, killY, platforms: tiles, traps };
+      return { name, start: [sx0, 1, sz0], finish: P._finish, killY, platforms: tiles, traps, gems, boosts, ramps };
     },
   };
   return P;
@@ -155,7 +178,7 @@ function breather(p, w) { p.width(w).run(22); return p; }  // trap-free rest str
 
 function L1() {
   const p = Path([0, 6]);
-  legAxis(p, 3, 8, 7.0, 0.8); breather(p, 8);
+  legAxis(p, 3, 8, 7.0, 0.8).gem(0.3, -2.4).gem(0.55, 2.4).gem(0.8, 0); breather(p, 8);
   p.turn("E"); legCubes(p, 3, 8, 3.2);
   p.turn("S"); p.hill(0.9); legSpears(p, 3, 7);
   p.turn("W"); legAxis(p, 3, 8, 7.0, 0.8);
@@ -168,7 +191,7 @@ function L1() {
 
 function L2() {
   const p = Path([0, 6]);
-  legSpears(p, 4, 6); p.turn("E"); legAxis(p, 3, 6, 5.4, 1.0);
+  legSpears(p, 4, 6).gem(0.3, -2).gem(0.6, 2).gem(0.85, 0); p.turn("E"); legAxis(p, 3, 6, 5.4, 1.0);
   p.turn("S"); legSpears(p, 4, 6); p.turn("W"); legCannons(p, 3, 6);
   p.turn("S"); p.hill(0.8); legAxis(p, 4, 6, 5.4, 1.0);
   p.turn("E"); legSpears(p, 3, 6); p.turn("S"); legAxis(p, 4, 6, 5.4, 1.0);
@@ -179,7 +202,7 @@ function L2() {
 
 function L3() {
   const p = Path([0, 6]);
-  legPits(p, 3, 6); legCannons(p, 2, 6);
+  legPits(p, 3, 6); legCannons(p, 2, 6).gem(0.3, -2).gem(0.6, 2).gem(0.85, 0);
   p.turn("E"); legPits(p, 3, 6); p.turn("S"); legCannons(p, 3, 6);
   p.turn("W"); legPits(p, 3, 6); p.turn("S"); legCubes(p, 3, 6, 2.4);
   p.turn("E"); legPits(p, 3, 6); p.turn("S"); legCannons(p, 3, 6);
@@ -190,7 +213,7 @@ function L3() {
 
 function L4() {
   const p = Path([0, 6]);
-  legCannons(p, 3, 7); breather(p, 4.4); legCubes(p, 3, 4.4, 1.4);
+  legCannons(p, 3, 7).gem(0.3, -2.6).gem(0.6, 2.6).gem(0.85, 0); breather(p, 4.4); legCubes(p, 3, 4.4, 1.4);
   p.turn("E"); legCannons(p, 3, 7); p.turn("S"); legCubes(p, 3, 8, 3.0);
   p.turn("W"); legCannons(p, 3, 7); p.turn("S"); legCubes(p, 3, 4.4, 1.4);
   p.turn("E"); legCannons(p, 3, 7); p.turn("S"); legCubes(p, 3, 6, 2.6);
@@ -201,7 +224,7 @@ function L4() {
 
 function L5() {
   const p = Path([0, 8]).saw(3.3);
-  legAxis(p, 4, 5, 4.6, 0.7); p.turn("E"); legAxis(p, 3, 5, 4.6, 0.7);
+  legAxis(p, 4, 5, 4.6, 0.7).gem(0.3, -1.6).gem(0.6, 1.6).gem(0.85, 0); p.turn("E"); legAxis(p, 3, 5, 4.6, 0.7);
   p.turn("S"); legCubes(p, 3, 5, 1.6); p.hill(0.8);
   p.turn("W"); legAxis(p, 4, 5, 4.6, 0.7); p.turn("S"); legAxis(p, 3, 5, 4.6, 0.7);
   p.turn("E"); legCubes(p, 3, 5, 1.6); p.turn("S"); legAxis(p, 4, 5, 4.6, 0.7);
@@ -212,7 +235,7 @@ function L5() {
 
 function L6() {
   const p = Path([0, 6]);
-  legMixed(p, 4, 4.6); p.turn("E"); legCannons(p, 3, 4.6);
+  legMixed(p, 4, 4.6).gem(0.3, -1.4).gem(0.6, 1.4).gem(0.85, 0); p.turn("E"); legCannons(p, 3, 4.6);
   p.turn("S"); p.hill(0.8); legSpears(p, 3, 4.6);
   p.turn("W"); legCross(p, 1); p.turn("S"); legMixed(p, 4, 4.6);
   p.turn("E"); legCubes(p, 3, 4.6, 1.0); p.turn("S"); legSpears(p, 3, 4.6);
@@ -223,7 +246,7 @@ function L6() {
 
 function L7() {
   const p = Path([0, 8]).saw(3.6);
-  legCannons(p, 3, 4.6); legPits(p, 2, 4.6);
+  legCannons(p, 3, 4.6).gem(0.3, -1.4).gem(0.6, 1.4).gem(0.85, 0); legPits(p, 2, 4.6);
   p.turn("E"); legAxis(p, 3, 4.6, 4.2, 1.0); p.turn("S"); legCross(p, 1);
   p.turn("W"); legCubes(p, 3, 4.6, 1.0); p.turn("S"); legPits(p, 2, 4.6);
   p.turn("E"); legCannons(p, 3, 4.6); p.turn("S"); legMixed(p, 4, 4.6);
@@ -234,7 +257,7 @@ function L7() {
 
 function L8() {
   const p = Path([0, 8]).saw(3.9);
-  legSpears(p, 3, 4.6); legAxis(p, 3, 4.6, 4.2, 1.0);
+  legSpears(p, 3, 4.6).gem(0.3, -1.4).gem(0.6, 1.4).gem(0.85, 0); legAxis(p, 3, 4.6, 4.2, 1.0);
   p.turn("E"); legPits(p, 2, 4.6); legCannons(p, 2, 4.6);
   p.turn("S"); p.hill(0.9); legCross(p, 1);
   p.turn("W"); legMixed(p, 4, 4.6); p.turn("S"); legCubes(p, 3, 4.6, 1.0);
@@ -245,5 +268,66 @@ function L8() {
   return p.build("FINALE");
 }
 
-export const LEVELS = [L1(), L2(), L3(), L4(), L5(), L6(), L7(), L8()];
+// ---- L9–L13: harder tier. Narrower corridors, denser obstacles, chasing saws,
+//      plus boost pads (surge) + jump ramps (launch) + 3 gems each. Escalates gradually.
+
+function L9() {
+  const p = Path([0, 8]).saw(4.0);
+  legMixed(p, 4, 4.4).gem(0.4, -1.3).gem(0.75, 1.3); p.boost(0.5, 11);
+  p.turn("E"); legCubes(p, 3, 4.4, 1.0); p.turn("S"); legCannons(p, 3, 4.4);
+  p.turn("W"); legCross(p, 1); p.turn("S"); legSpears(p, 3, 4.4).gem(0.6, 0);
+  p.turn("E"); legAxis(p, 3, 4.4, 4.0, 1.1); p.turn("S"); legPits(p, 2, 4.4); p.jump(0.5, 13);
+  p.turn("W"); legMixed(p, 3, 4.4); p.turn("S"); legCannons(p, 3, 4.4);
+  p.run(12); p.finish();
+  return p.build("OVERDRIVE");
+}
+
+function L10() {
+  const p = Path([0, 8]).saw(4.2);
+  legCannons(p, 3, 4.3); legPits(p, 2, 4.3).gem(0.5, 0); p.jump(0.5, 13);
+  p.turn("E"); legCross(p, 1); p.turn("S"); legMixed(p, 4, 4.3).gem(0.4, -1.2);
+  p.turn("W"); legAxis(p, 3, 4.3, 4.0, 1.1); p.boost(0.5, 11); p.turn("S"); legCubes(p, 3, 4.3, 1.0);
+  p.turn("E"); legSpears(p, 3, 4.3).gem(0.6, 1.2); p.turn("S"); legCross(p, -1);
+  p.turn("W"); legCannons(p, 3, 4.3); p.turn("S"); legMixed(p, 4, 4.3);
+  p.run(12); p.finish();
+  return p.build("CROSS HAIRS");
+}
+
+function L11() {
+  const p = Path([0, 8]).saw(4.4);
+  legSpears(p, 3, 4.2).gem(0.4, -1.1).gem(0.75, 1.1); legAxis(p, 3, 4.2, 4.0, 1.2);
+  p.turn("E"); legMixed(p, 4, 4.2); p.boost(0.5, 12); p.turn("S"); legPits(p, 3, 4.2); p.jump(0.5, 14);
+  p.turn("W"); legCannons(p, 3, 4.2); p.turn("S"); legCross(p, 1);
+  p.turn("E"); legCubes(p, 3, 4.2, 1.0).gem(0.6, 0); p.turn("S"); legSpears(p, 3, 4.2);
+  p.turn("W"); legMixed(p, 4, 4.2); p.turn("S"); legAxis(p, 3, 4.2, 4.0, 1.2);
+  p.run(12); p.finish();
+  return p.build("PRESSURE");
+}
+
+function L12() {
+  const p = Path([0, 8]).saw(4.6);
+  legMixed(p, 5, 4.1).gem(0.35, -1.0).gem(0.7, 1.0); legCross(p, 1);
+  p.turn("E"); legCannons(p, 4, 4.1); p.boost(0.5, 12); p.turn("S"); legPits(p, 3, 4.1); p.jump(0.5, 14);
+  p.turn("W"); legSpears(p, 4, 4.1); p.turn("S"); legAxis(p, 4, 4.1, 4.0, 1.2);
+  p.turn("E"); legCubes(p, 3, 4.1, 1.0).gem(0.6, 0); p.turn("S"); legCross(p, -1);
+  p.turn("W"); legMixed(p, 5, 4.1); p.turn("S"); legCannons(p, 4, 4.1);
+  p.turn("E"); legSpears(p, 4, 4.1); p.turn("S"); legAxis(p, 4, 4.1, 4.0, 1.2);
+  p.run(12); p.finish();
+  return p.build("MARATHON");
+}
+
+function L13() {
+  const p = Path([0, 8]).saw(5.0);
+  legMixed(p, 5, 4.0).gem(0.4, -0.9); p.boost(0.5, 12); legCross(p, 1);
+  p.turn("E"); legSpears(p, 4, 4.0); p.turn("S"); legPits(p, 3, 4.0); p.jump(0.5, 15);
+  p.turn("W"); legCannons(p, 4, 4.0); p.turn("S"); legAxis(p, 4, 4.0, 4.0, 1.3); p.boost(0.5, 13);
+  p.turn("E"); legCubes(p, 4, 4.0, 1.0).gem(0.6, 0); p.turn("S"); legCross(p, -1);
+  p.turn("W"); legMixed(p, 5, 4.0); p.turn("S"); legSpears(p, 4, 4.0).gem(0.5, 0.9);
+  p.turn("E"); legCannons(p, 4, 4.0); p.turn("S"); legCross(p, 1);
+  p.turn("W"); legAxis(p, 4, 4.0, 4.0, 1.3); p.turn("S"); legMixed(p, 5, 4.0);
+  p.run(12); p.finish();
+  return p.build("MARBLE TRAP");
+}
+
+export const LEVELS = [L1(), L2(), L3(), L4(), L5(), L6(), L7(), L8(), L9(), L10(), L11(), L12(), L13()];
 export const LEVEL_COUNT = LEVELS.length;

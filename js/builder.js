@@ -24,6 +24,20 @@ const COL = {
   marble_whi: 0xffffff,
   marble_blu: 0x3a7fd5,
   marble_red: 0xdd2222,
+  tuft:       0x6fc24a,  // bright grass tuft
+  tuft_dark:  0x4f9a32,
+  gem:        0x39e0ff,  // cyan collectible gem
+  gem_core:   0xffffff,
+  boost:      0xffd23d,  // yellow speed pad
+  boost_edge: 0xff8a1e,
+  ramp:       0xb0b6c4,  // light gray launch ramp
+  ramp_edge:  0xffd23d,
+  cloud:      0xffffff,
+  island_grass: 0x57b23e,
+  island_dirt:  0x9a6a3c,
+  sea:        0x1fb6c8,  // deep turquoise water
+  sea_lo:     0x179aae,  // trough shade
+  foam:       0xffffff,  // whitecap
 };
 
 // Build all platform meshes.
@@ -37,6 +51,12 @@ export function buildPlatforms(level) {
   const matGrassPit  = flat(COL.grass_pit);
   const matDirt      = flat(COL.dirt);
   const matDirtDark  = flat(COL.dirt_dark);
+  const matTuft      = flat(COL.tuft);
+  const matTuftDark  = flat(COL.tuft_dark);
+  const tuftGeo      = new THREE.ConeGeometry(0.16, 0.6, 5);
+
+  // deterministic [0,1) hash so tufts are placed the same way every load
+  const h01 = (n) => { const s = Math.sin(n * 91.7 + 13.3) * 43758.5; return s - Math.floor(s); };
 
   for (const p of level.platforms) {
     const [w, h, d] = p.size;
@@ -71,6 +91,23 @@ export function buildPlatforms(level) {
           -d / 2 + (ri + 0.5) * cr
         );
         tile.add(sq);
+      }
+    }
+
+    // --- grass tufts: small decorative blades scattered on solid grass tops ---
+    if (!isPit) {
+      const area = w * d;
+      const n = Math.min(10, Math.floor(area / 26));
+      for (let t = 0; t < n; t++) {
+        const seed = p.pos[0] * 7.1 + p.pos[2] * 3.7 + t * 17.3;
+        const gx = (h01(seed) - 0.5) * (w - 1.2);
+        const gz = (h01(seed + 5.5) - 0.5) * (d - 1.2);
+        const tuft = new THREE.Mesh(tuftGeo, h01(seed + 9.9) > 0.5 ? matTuft : matTuftDark);
+        const sc = 0.7 + h01(seed + 2.2) * 0.7;
+        tuft.scale.set(sc, sc, sc);
+        tuft.position.set(gx, yTop + 0.3 * sc, gz);
+        tuft.rotation.y = h01(seed + 3.3) * Math.PI;
+        tile.add(tuft);
       }
     }
 
@@ -168,24 +205,115 @@ export function buildMarble() {
   return group;
 }
 
-// Daylight environment — bright sky, sun, directional light. No neon, no fog.
+// Daylight environment — bright sky, sun, light, animated ocean, clouds, islands.
+// Returns an `env` object with update(dt) that THRASHES the ocean + drifts clouds
+// every frame (called from the main loop in all states). No neon, no fog, no bloom.
 export function buildEnvironment(scene) {
-  // clear sky background
-  scene.background = new THREE.Color(0x29bfbf); // turquoise water (Marble Trap style)
+  // turquoise sky fallback (stays in sync with CSS --bg + renderer.setClearColor)
+  scene.background = new THREE.Color(0x29bfbf);
   scene.fog = null;
 
   // bright daylight: strong ambient + angled sun
-  scene.add(new THREE.AmbientLight(0xffffff, 0.75));
-  const sun = new THREE.DirectionalLight(0xfff5e0, 1.3);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.78));
+  const sun = new THREE.DirectionalLight(0xfff5e0, 1.25);
   sun.position.set(12, 28, 14);
   scene.add(sun);
-
-  // soft fill from the opposite side (avoids pitch-black shadows)
   const fill = new THREE.DirectionalLight(0xc8dff0, 0.35);
   fill.position.set(-8, 10, -6);
   scene.add(fill);
 
-  return {};
+  // ---------------------------------------------------------- animated ocean
+  const SEA_Y = -18;                 // water sits far below the track
+  const SEG = 80;                    // grid resolution (SEG x SEG quads)
+  const SIZE = 1600;
+  const oceanGeo = new THREE.PlaneGeometry(SIZE, SIZE, SEG, SEG);
+  oceanGeo.rotateX(-Math.PI / 2);    // lie flat (normals point +Y)
+  const pos = oceanGeo.attributes.position;
+  const baseX = new Float32Array(pos.count);
+  const baseZ = new Float32Array(pos.count);
+  for (let i = 0; i < pos.count; i++) { baseX[i] = pos.getX(i); baseZ[i] = pos.getZ(i); }
+  // per-vertex colour: turquoise body, white foam on the crests
+  const colCount = pos.count * 3;
+  const oceanColors = new Float32Array(colCount);
+  oceanGeo.setAttribute("color", new THREE.BufferAttribute(oceanColors, 3));
+  const seaCol = new THREE.Color(COL.sea), seaLo = new THREE.Color(COL.sea_lo), foamCol = new THREE.Color(COL.foam);
+  const ocean = new THREE.Mesh(
+    oceanGeo,
+    new THREE.MeshLambertMaterial({ vertexColors: true, side: THREE.DoubleSide })
+  );
+  ocean.position.y = SEA_Y;
+  ocean.frustumCulled = false;
+  scene.add(ocean);
+
+  // ---------------------------------------------------------- drifting clouds
+  const clouds = new THREE.Group();
+  const cloudMat = new THREE.MeshLambertMaterial({ color: COL.cloud, transparent: true, opacity: 0.92 });
+  const ch = (n) => { const s = Math.sin(n * 53.7 + 7.1) * 9281.3; return s - Math.floor(s); };
+  for (let i = 0; i < 16; i++) {
+    const puff = new THREE.Group();
+    const blobs = 3 + Math.floor(ch(i) * 3);
+    for (let b = 0; b < blobs; b++) {
+      const r = 3 + ch(i * 3 + b) * 4;
+      const s = new THREE.Mesh(new THREE.SphereGeometry(r, 8, 6), cloudMat);
+      s.position.set((ch(i + b) - 0.5) * 14, (ch(i * 2 + b) - 0.5) * 3, (ch(i * 5 + b) - 0.5) * 8);
+      s.scale.y = 0.6;
+      puff.add(s);
+    }
+    puff.position.set((ch(i) - 0.5) * 460, 48 + ch(i * 7) * 36, -60 - ch(i * 9) * 420);
+    puff.userData.speed = 2 + ch(i * 11) * 3;
+    clouds.add(puff);
+  }
+  scene.add(clouds);
+
+  // ---------------------------------------------------------- distant islands
+  const islands = new THREE.Group();
+  const grassMat = new THREE.MeshLambertMaterial({ color: COL.island_grass });
+  const dirtMat = new THREE.MeshLambertMaterial({ color: COL.island_dirt });
+  const ih = (n) => { const s = Math.sin(n * 71.3 + 19.7) * 3771.9; return s - Math.floor(s); };
+  for (let i = 0; i < 10; i++) {
+    const isle = new THREE.Group();
+    const r = 8 + ih(i) * 16;
+    const base = new THREE.Mesh(new THREE.ConeGeometry(r, r * 1.3, 7), dirtMat);
+    base.position.y = -r * 0.2;
+    isle.add(base);
+    const cap = new THREE.Mesh(new THREE.SphereGeometry(r * 0.92, 8, 6, 0, Math.PI * 2, 0, Math.PI / 2), grassMat);
+    cap.position.y = r * 0.34;
+    isle.add(cap);
+    const ang = (i / 10) * Math.PI * 2 + ih(i * 2);
+    const dist = 230 + ih(i * 3) * 180;
+    isle.position.set(Math.cos(ang) * dist, SEA_Y + r * 0.6, -120 + Math.sin(ang) * dist);
+    islands.add(isle);
+  }
+  scene.add(islands);
+
+  let t = 0;
+  return {
+    ocean, clouds, islands,
+    update(dt) {
+      t += dt;
+      // ---- ocean: layered sine vertex displacement + foam colouring ----
+      for (let i = 0; i < pos.count; i++) {
+        const x = baseX[i], z = baseZ[i];
+        const h =
+          Math.sin(x * 0.045 + t * 1.6) * 1.5 +
+          Math.cos(z * 0.05 + t * 1.2) * 1.5 +
+          Math.sin((x + z) * 0.08 + t * 2.3) * 0.8;
+        pos.setY(i, h);
+        const f = Math.min(1, Math.max(0, (h + 1.3) / 3.8)); // crest factor
+        const c = seaLo.clone().lerp(seaCol, Math.min(1, f * 1.5));
+        if (f > 0.78) c.lerp(foamCol, (f - 0.78) / 0.22); // whitecaps on the peaks
+        oceanColors[i * 3] = c.r; oceanColors[i * 3 + 1] = c.g; oceanColors[i * 3 + 2] = c.b;
+      }
+      pos.needsUpdate = true;
+      oceanGeo.attributes.color.needsUpdate = true;
+      oceanGeo.computeVertexNormals();
+      // ---- clouds drift along +X and wrap ----
+      for (const puff of clouds.children) {
+        puff.position.x += puff.userData.speed * dt;
+        if (puff.position.x > 320) puff.position.x = -320;
+      }
+    },
+  };
 }
 
 // ---------------------------------------------------------------- Juice: particles
@@ -278,4 +406,93 @@ export function makeTrail(scene, len = 24, colorHex = 0xffffff) {
     },
     hide() { for (let i = 0; i < len; i++) positions[i * 3 + 1] = -9999; geo.attributes.position.needsUpdate = true; inited = false; },
   };
+}
+
+// ---------------------------------------------------------------- Collectible gems
+// Returns { group, items:[{pos:[x,y,z], mesh}] }. World handles collect + spin/bob.
+export function buildGems(level) {
+  const group = new THREE.Group();
+  const items = [];
+  const gemGeo = new THREE.OctahedronGeometry(0.55, 0);
+  const coreGeo = new THREE.OctahedronGeometry(0.24, 0);
+  for (const g of level.gems || []) {
+    const mesh = new THREE.Group();
+    const shell = new THREE.Mesh(gemGeo, new THREE.MeshLambertMaterial({
+      color: COL.gem, transparent: true, opacity: 0.85, emissive: new THREE.Color(COL.gem), emissiveIntensity: 0.25,
+    }));
+    const core = new THREE.Mesh(coreGeo, flat(COL.gem_core));
+    mesh.add(shell); mesh.add(core);
+    mesh.position.set(g[0], g[1], g[2]);
+    group.add(mesh);
+    items.push({ pos: [g[0], g[1], g[2]], mesh, baseY: g[1] });
+  }
+  return { group, items };
+}
+
+// ---------------------------------------------------------------- Boost pads
+// Flat glowing chevron pad that surges the marble along `dir`.
+export function buildBoostPads(level) {
+  const group = new THREE.Group();
+  const items = [];
+  for (const b of level.boosts || []) {
+    const pad = new THREE.Group();
+    const [x, z] = b.pos, [dx, dz] = b.dir;
+    const base = new THREE.Mesh(new THREE.BoxGeometry(3, 0.12, 3.4), flat(COL.boost_edge));
+    base.position.y = 0.06;
+    pad.add(base);
+    // three forward chevrons
+    for (let i = 0; i < 3; i++) {
+      const chev = new THREE.Mesh(new THREE.BoxGeometry(2, 0.08, 0.5), flat(COL.boost));
+      chev.position.set(0, 0.14, -0.9 + i * 0.9);
+      pad.add(chev);
+    }
+    pad.position.set(x, 0.02, z);
+    pad.rotation.y = Math.atan2(dx, dz); // point chevrons along travel dir
+    pad.userData.spinY = 0;
+    group.add(pad);
+    items.push({ def: b, mesh: pad });
+  }
+  return { group, items };
+}
+
+// ---------------------------------------------------------------- Jump ramps
+// A wedge the marble visibly rolls up; the launch impulse is applied in physics.
+export function buildRamps(level) {
+  const group = new THREE.Group();
+  const items = [];
+  for (const r of level.ramps || []) {
+    const [x, z] = r.pos, [dx, dz] = r.dir;
+    const ramp = new THREE.Group();
+    // wedge = a box tilted so its leading edge is low, trailing edge high
+    const wedge = new THREE.Mesh(new THREE.BoxGeometry(3.2, 0.4, 3.4), flat(COL.ramp));
+    wedge.rotation.x = -0.5;
+    wedge.position.y = 0.7;
+    ramp.add(wedge);
+    const lip = new THREE.Mesh(new THREE.BoxGeometry(3.2, 0.18, 0.4), flat(COL.ramp_edge));
+    lip.position.set(0, 1.35, -1.5);
+    ramp.add(lip);
+    ramp.position.set(x, 0, z);
+    ramp.rotation.y = Math.atan2(dx, dz);
+    group.add(ramp);
+    items.push({ def: r, mesh: ramp });
+  }
+  return { group, items };
+}
+
+// ---------------------------------------------------------------- Ghost marble
+// A translucent copy of the player marble that replays the best run.
+export function buildGhostMarble() {
+  const group = new THREE.Group();
+  const ghostMat = new THREE.MeshLambertMaterial({
+    color: 0x9fe9ff, transparent: true, opacity: 0.32, depthWrite: false,
+  });
+  const ball = new THREE.Mesh(new THREE.SphereGeometry(MARBLE_RADIUS, 20, 20), ghostMat);
+  group.add(ball);
+  const band = new THREE.Mesh(
+    new THREE.TorusGeometry(MARBLE_RADIUS * 1.002, MARBLE_RADIUS * 0.28, 6, 24),
+    new THREE.MeshLambertMaterial({ color: 0x4ab6ff, transparent: true, opacity: 0.32, depthWrite: false })
+  );
+  group.add(band);
+  group.visible = false;
+  return group;
 }

@@ -8,9 +8,9 @@ export const MARBLE_RADIUS = 0.6;
 
 // Tuning constants (units are world-units and seconds).
 const GRAVITY = 26;       // soft gravity — marble arcs naturally
-const ACCEL = 16;         // gentle acceleration — builds up gradually, no snap
-const AIR_ACCEL = 5;      // minimal air control
-const MAX_SPEED = 9;      // lower top speed — easier micro-movements and edge-walking
+const ACCEL = 22;         // snappier acceleration — reaches cruising speed faster (was 16)
+const AIR_ACCEL = 6;      // a touch more air control to match the higher ground accel
+const MAX_SPEED = 11;     // higher top speed — faster runs, momentum still coasts (was 9)
 const GROUND_DAMP = 1.0;  // momentum carries well — coasting feels real
 const AIR_DAMP = 0.03;    // nearly no air drag
 

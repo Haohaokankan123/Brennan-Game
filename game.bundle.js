@@ -579,7 +579,7 @@ var BrennanGame = (() => {
     }
     throw new Error(`Unknown texture type ${type}.`);
   }
-  var REVISION, CullFaceNone, CullFaceBack, CullFaceFront, PCFShadowMap, PCFSoftShadowMap, VSMShadowMap, FrontSide, BackSide, DoubleSide, NoBlending, NormalBlending, AdditiveBlending, SubtractiveBlending, MultiplyBlending, CustomBlending, AddEquation, SubtractEquation, ReverseSubtractEquation, MinEquation, MaxEquation, ZeroFactor, OneFactor, SrcColorFactor, OneMinusSrcColorFactor, SrcAlphaFactor, OneMinusSrcAlphaFactor, DstAlphaFactor, OneMinusDstAlphaFactor, DstColorFactor, OneMinusDstColorFactor, SrcAlphaSaturateFactor, ConstantColorFactor, OneMinusConstantColorFactor, ConstantAlphaFactor, OneMinusConstantAlphaFactor, NeverDepth, AlwaysDepth, LessDepth, LessEqualDepth, EqualDepth, GreaterEqualDepth, GreaterDepth, NotEqualDepth, MultiplyOperation, MixOperation, AddOperation, NoToneMapping, LinearToneMapping, ReinhardToneMapping, CineonToneMapping, ACESFilmicToneMapping, CustomToneMapping, AgXToneMapping, NeutralToneMapping, UVMapping, CubeReflectionMapping, CubeRefractionMapping, EquirectangularReflectionMapping, EquirectangularRefractionMapping, CubeUVReflectionMapping, RepeatWrapping, ClampToEdgeWrapping, MirroredRepeatWrapping, NearestFilter, NearestMipmapNearestFilter, NearestMipmapLinearFilter, LinearFilter, LinearMipmapNearestFilter, LinearMipmapLinearFilter, UnsignedByteType, ByteType, ShortType, UnsignedShortType, IntType, UnsignedIntType, FloatType, HalfFloatType, UnsignedShort4444Type, UnsignedShort5551Type, UnsignedInt248Type, UnsignedInt5999Type, UnsignedInt101111Type, AlphaFormat, RGBFormat, RGBAFormat, DepthFormat, DepthStencilFormat, RedFormat, RedIntegerFormat, RGFormat, RGIntegerFormat, RGBAIntegerFormat, RGB_S3TC_DXT1_Format, RGBA_S3TC_DXT1_Format, RGBA_S3TC_DXT3_Format, RGBA_S3TC_DXT5_Format, RGB_PVRTC_4BPPV1_Format, RGB_PVRTC_2BPPV1_Format, RGBA_PVRTC_4BPPV1_Format, RGBA_PVRTC_2BPPV1_Format, RGB_ETC1_Format, RGB_ETC2_Format, RGBA_ETC2_EAC_Format, R11_EAC_Format, SIGNED_R11_EAC_Format, RG11_EAC_Format, SIGNED_RG11_EAC_Format, RGBA_ASTC_4x4_Format, RGBA_ASTC_5x4_Format, RGBA_ASTC_5x5_Format, RGBA_ASTC_6x5_Format, RGBA_ASTC_6x6_Format, RGBA_ASTC_8x5_Format, RGBA_ASTC_8x6_Format, RGBA_ASTC_8x8_Format, RGBA_ASTC_10x5_Format, RGBA_ASTC_10x6_Format, RGBA_ASTC_10x8_Format, RGBA_ASTC_10x10_Format, RGBA_ASTC_12x10_Format, RGBA_ASTC_12x12_Format, RGBA_BPTC_Format, RGB_BPTC_SIGNED_Format, RGB_BPTC_UNSIGNED_Format, RED_RGTC1_Format, SIGNED_RED_RGTC1_Format, RED_GREEN_RGTC2_Format, SIGNED_RED_GREEN_RGTC2_Format, InterpolateDiscrete, InterpolateLinear, InterpolateSmooth, InterpolateBezier, ZeroCurvatureEnding, ZeroSlopeEnding, WrapAroundEnding, BasicDepthPacking, TangentSpaceNormalMap, ObjectSpaceNormalMap, NoColorSpace, SRGBColorSpace, LinearSRGBColorSpace, LinearTransfer, SRGBTransfer, KeepStencilOp, AlwaysStencilFunc, NeverCompare, LessCompare, EqualCompare, LessEqualCompare, GreaterCompare, NotEqualCompare, GreaterEqualCompare, AlwaysCompare, StaticDrawUsage, GLSL3, WebGLCoordinateSystem, WebGPUCoordinateSystem, _cache, _setConsoleFunction, ReversedDepthFuncs, EventDispatcher, _lut, DEG2RAD, RAD2DEG, Vector2, Quaternion, Vector3, _vector$c, _quaternion$5, Matrix3, _m3, LINEAR_REC709_TO_XYZ, XYZ_TO_LINEAR_REC709, ColorManagement, _canvas, ImageUtils, _sourceId, Source, _textureId, _tempVec3, Texture, Vector4, RenderTarget, WebGLRenderTarget, DataArrayTexture, Data3DTexture, Matrix4, _v1$7, _m1$2, _zero, _one, _x, _y, _z, _matrix$2, _quaternion$4, Euler, Layers, _object3DId, _v1$6, _q1, _m1$1, _target, _position$4, _scale$3, _quaternion$3, _xAxis, _yAxis, _zAxis, _addedEvent, _removedEvent, _childaddedEvent, _childremovedEvent, Object3D, Group, _moveEvent, WebXRController, _colorKeywords, _hslA, _hslB, Color, _color, Scene, _v0$2, _v1$5, _v2$4, _v3$2, _vab, _vac, _vbc, _vap, _vbp, _vcp, _v40, _v41, _v42, Triangle, Box3, _points, _vector$b, _box$4, _v0$1, _v1$4, _v2$3, _f0, _f1, _f2, _center, _extents, _triangleNormal, _testAxis, _vector$a, _vector2$1, _id$2, BufferAttribute, Uint16BufferAttribute, Uint32BufferAttribute, Float32BufferAttribute, _box$3, _v1$3, _v2$2, Sphere, _id$1, _m1, _obj, _offset, _box$2, _boxMorphTargets, _vector$9, BufferGeometry, _materialId, Material, _vector$7, _segCenter, _segDir, _diff, _edge1, _edge2, _normal$1, Ray, MeshBasicMaterial, _inverseMatrix$3, _ray$3, _sphere$6, _sphereHitAt, _vA, _vB, _vC, _tempA, _morphA, _intersectionPoint, _intersectionPointWorld, Mesh, DataTexture, _vector1, _vector2, _normalMatrix, Plane, _sphere$3, _defaultSpriteCenter, _vector$6, Frustum, LineBasicMaterial, _vStart, _vEnd, _inverseMatrix$1, _ray$1, _sphere$1, _intersectPointOnRay, _intersectPointOnSegment, Line, PointsMaterial, _inverseMatrix, _ray, _sphere, _position$3, Points, CubeTexture, DepthTexture, CubeDepthTexture, ExternalTexture, BoxGeometry, CylinderGeometry, ConeGeometry, PlaneGeometry, SphereGeometry, TorusGeometry, UniformsUtils, default_vertex, default_fragment, ShaderMaterial, RawShaderMaterial, MeshStandardMaterial, MeshLambertMaterial, MeshDepthMaterial, MeshDistanceMaterial, Interpolant, CubicInterpolant, LinearInterpolant, DiscreteInterpolant, BezierInterpolant, KeyframeTrack, BooleanKeyframeTrack, ColorKeyframeTrack, NumberKeyframeTrack, QuaternionLinearInterpolant, QuaternionKeyframeTrack, StringKeyframeTrack, VectorKeyframeTrack, LoadingManager, DefaultLoadingManager, Loader, Light, _projScreenMatrix, _lightPositionWorld, _lookTarget, LightShadow, _position$2, _quaternion$2, _scale$2, Camera, _v3$1, _minTarget, _maxTarget, PerspectiveCamera, PointLightShadow, PointLight, OrthographicCamera, DirectionalLightShadow, DirectionalLight, AmbientLight, fov, aspect, CubeCamera, ArrayCamera, _RESERVED_CHARS_RE, _reservedRe, _wordChar, _wordCharOrDot, _directoryRe, _nodeRe, _objectRe, _propertyRe, _trackRe, _supportedObjectNames, Composite, PropertyBinding, _controlInterpolantsResultBuffer, Matrix2;
+  var REVISION, CullFaceNone, CullFaceBack, CullFaceFront, PCFShadowMap, PCFSoftShadowMap, VSMShadowMap, FrontSide, BackSide, DoubleSide, NoBlending, NormalBlending, AdditiveBlending, SubtractiveBlending, MultiplyBlending, CustomBlending, AddEquation, SubtractEquation, ReverseSubtractEquation, MinEquation, MaxEquation, ZeroFactor, OneFactor, SrcColorFactor, OneMinusSrcColorFactor, SrcAlphaFactor, OneMinusSrcAlphaFactor, DstAlphaFactor, OneMinusDstAlphaFactor, DstColorFactor, OneMinusDstColorFactor, SrcAlphaSaturateFactor, ConstantColorFactor, OneMinusConstantColorFactor, ConstantAlphaFactor, OneMinusConstantAlphaFactor, NeverDepth, AlwaysDepth, LessDepth, LessEqualDepth, EqualDepth, GreaterEqualDepth, GreaterDepth, NotEqualDepth, MultiplyOperation, MixOperation, AddOperation, NoToneMapping, LinearToneMapping, ReinhardToneMapping, CineonToneMapping, ACESFilmicToneMapping, CustomToneMapping, AgXToneMapping, NeutralToneMapping, UVMapping, CubeReflectionMapping, CubeRefractionMapping, EquirectangularReflectionMapping, EquirectangularRefractionMapping, CubeUVReflectionMapping, RepeatWrapping, ClampToEdgeWrapping, MirroredRepeatWrapping, NearestFilter, NearestMipmapNearestFilter, NearestMipmapLinearFilter, LinearFilter, LinearMipmapNearestFilter, LinearMipmapLinearFilter, UnsignedByteType, ByteType, ShortType, UnsignedShortType, IntType, UnsignedIntType, FloatType, HalfFloatType, UnsignedShort4444Type, UnsignedShort5551Type, UnsignedInt248Type, UnsignedInt5999Type, UnsignedInt101111Type, AlphaFormat, RGBFormat, RGBAFormat, DepthFormat, DepthStencilFormat, RedFormat, RedIntegerFormat, RGFormat, RGIntegerFormat, RGBAIntegerFormat, RGB_S3TC_DXT1_Format, RGBA_S3TC_DXT1_Format, RGBA_S3TC_DXT3_Format, RGBA_S3TC_DXT5_Format, RGB_PVRTC_4BPPV1_Format, RGB_PVRTC_2BPPV1_Format, RGBA_PVRTC_4BPPV1_Format, RGBA_PVRTC_2BPPV1_Format, RGB_ETC1_Format, RGB_ETC2_Format, RGBA_ETC2_EAC_Format, R11_EAC_Format, SIGNED_R11_EAC_Format, RG11_EAC_Format, SIGNED_RG11_EAC_Format, RGBA_ASTC_4x4_Format, RGBA_ASTC_5x4_Format, RGBA_ASTC_5x5_Format, RGBA_ASTC_6x5_Format, RGBA_ASTC_6x6_Format, RGBA_ASTC_8x5_Format, RGBA_ASTC_8x6_Format, RGBA_ASTC_8x8_Format, RGBA_ASTC_10x5_Format, RGBA_ASTC_10x6_Format, RGBA_ASTC_10x8_Format, RGBA_ASTC_10x10_Format, RGBA_ASTC_12x10_Format, RGBA_ASTC_12x12_Format, RGBA_BPTC_Format, RGB_BPTC_SIGNED_Format, RGB_BPTC_UNSIGNED_Format, RED_RGTC1_Format, SIGNED_RED_RGTC1_Format, RED_GREEN_RGTC2_Format, SIGNED_RED_GREEN_RGTC2_Format, InterpolateDiscrete, InterpolateLinear, InterpolateSmooth, InterpolateBezier, ZeroCurvatureEnding, ZeroSlopeEnding, WrapAroundEnding, BasicDepthPacking, TangentSpaceNormalMap, ObjectSpaceNormalMap, NoColorSpace, SRGBColorSpace, LinearSRGBColorSpace, LinearTransfer, SRGBTransfer, KeepStencilOp, AlwaysStencilFunc, NeverCompare, LessCompare, EqualCompare, LessEqualCompare, GreaterCompare, NotEqualCompare, GreaterEqualCompare, AlwaysCompare, StaticDrawUsage, GLSL3, WebGLCoordinateSystem, WebGPUCoordinateSystem, _cache, _setConsoleFunction, ReversedDepthFuncs, EventDispatcher, _lut, DEG2RAD, RAD2DEG, Vector2, Quaternion, Vector3, _vector$c, _quaternion$5, Matrix3, _m3, LINEAR_REC709_TO_XYZ, XYZ_TO_LINEAR_REC709, ColorManagement, _canvas, ImageUtils, _sourceId, Source, _textureId, _tempVec3, Texture, Vector4, RenderTarget, WebGLRenderTarget, DataArrayTexture, Data3DTexture, Matrix4, _v1$7, _m1$2, _zero, _one, _x, _y, _z, _matrix$2, _quaternion$4, Euler, Layers, _object3DId, _v1$6, _q1, _m1$1, _target, _position$4, _scale$3, _quaternion$3, _xAxis, _yAxis, _zAxis, _addedEvent, _removedEvent, _childaddedEvent, _childremovedEvent, Object3D, Group, _moveEvent, WebXRController, _colorKeywords, _hslA, _hslB, Color, _color, Scene, _v0$2, _v1$5, _v2$4, _v3$2, _vab, _vac, _vbc, _vap, _vbp, _vcp, _v40, _v41, _v42, Triangle, Box3, _points, _vector$b, _box$4, _v0$1, _v1$4, _v2$3, _f0, _f1, _f2, _center, _extents, _triangleNormal, _testAxis, _vector$a, _vector2$1, _id$2, BufferAttribute, Uint16BufferAttribute, Uint32BufferAttribute, Float32BufferAttribute, _box$3, _v1$3, _v2$2, Sphere, _id$1, _m1, _obj, _offset, _box$2, _boxMorphTargets, _vector$9, BufferGeometry, _materialId, Material, _vector$7, _segCenter, _segDir, _diff, _edge1, _edge2, _normal$1, Ray, MeshBasicMaterial, _inverseMatrix$3, _ray$3, _sphere$6, _sphereHitAt, _vA, _vB, _vC, _tempA, _morphA, _intersectionPoint, _intersectionPointWorld, Mesh, DataTexture, _vector1, _vector2, _normalMatrix, Plane, _sphere$3, _defaultSpriteCenter, _vector$6, Frustum, LineBasicMaterial, _vStart, _vEnd, _inverseMatrix$1, _ray$1, _sphere$1, _intersectPointOnRay, _intersectPointOnSegment, Line, PointsMaterial, _inverseMatrix, _ray, _sphere, _position$3, Points, CubeTexture, DepthTexture, CubeDepthTexture, ExternalTexture, BoxGeometry, CylinderGeometry, ConeGeometry, PolyhedronGeometry, OctahedronGeometry, PlaneGeometry, SphereGeometry, TorusGeometry, UniformsUtils, default_vertex, default_fragment, ShaderMaterial, RawShaderMaterial, MeshStandardMaterial, MeshLambertMaterial, MeshDepthMaterial, MeshDistanceMaterial, Interpolant, CubicInterpolant, LinearInterpolant, DiscreteInterpolant, BezierInterpolant, KeyframeTrack, BooleanKeyframeTrack, ColorKeyframeTrack, NumberKeyframeTrack, QuaternionLinearInterpolant, QuaternionKeyframeTrack, StringKeyframeTrack, VectorKeyframeTrack, LoadingManager, DefaultLoadingManager, Loader, Light, _projScreenMatrix, _lightPositionWorld, _lookTarget, LightShadow, _position$2, _quaternion$2, _scale$2, Camera, _v3$1, _minTarget, _maxTarget, PerspectiveCamera, PointLightShadow, PointLight, OrthographicCamera, DirectionalLightShadow, DirectionalLight, AmbientLight, fov, aspect, CubeCamera, ArrayCamera, _RESERVED_CHARS_RE, _reservedRe, _wordChar, _wordCharOrDot, _directoryRe, _nodeRe, _objectRe, _propertyRe, _trackRe, _supportedObjectNames, Composite, PropertyBinding, _controlInterpolantsResultBuffer, Matrix2;
   var init_three_core = __esm({
     "node_modules/three/build/three.core.js"() {
       REVISION = "184";
@@ -13005,6 +13005,252 @@ var BrennanGame = (() => {
          */
         static fromJSON(data) {
           return new _ConeGeometry(data.radius, data.height, data.radialSegments, data.heightSegments, data.openEnded, data.thetaStart, data.thetaLength);
+        }
+      };
+      PolyhedronGeometry = class _PolyhedronGeometry extends BufferGeometry {
+        /**
+         * Constructs a new polyhedron geometry.
+         *
+         * @param {Array<number>} [vertices] - A flat array of vertices describing the base shape.
+         * @param {Array<number>} [indices] - A flat array of indices describing the base shape.
+         * @param {number} [radius=1] - The radius of the shape.
+         * @param {number} [detail=0] - How many levels to subdivide the geometry. The more detail, the smoother the shape.
+         */
+        constructor(vertices = [], indices = [], radius = 1, detail = 0) {
+          super();
+          this.type = "PolyhedronGeometry";
+          this.parameters = {
+            vertices,
+            indices,
+            radius,
+            detail
+          };
+          const vertexBuffer = [];
+          const uvBuffer = [];
+          subdivide(detail);
+          applyRadius(radius);
+          generateUVs();
+          this.setAttribute("position", new Float32BufferAttribute(vertexBuffer, 3));
+          this.setAttribute("normal", new Float32BufferAttribute(vertexBuffer.slice(), 3));
+          this.setAttribute("uv", new Float32BufferAttribute(uvBuffer, 2));
+          if (detail === 0) {
+            this.computeVertexNormals();
+          } else {
+            this.normalizeNormals();
+          }
+          function subdivide(detail2) {
+            const a = new Vector3();
+            const b = new Vector3();
+            const c = new Vector3();
+            for (let i = 0; i < indices.length; i += 3) {
+              getVertexByIndex(indices[i + 0], a);
+              getVertexByIndex(indices[i + 1], b);
+              getVertexByIndex(indices[i + 2], c);
+              subdivideFace(a, b, c, detail2);
+            }
+          }
+          function subdivideFace(a, b, c, detail2) {
+            const cols = detail2 + 1;
+            const v = [];
+            for (let i = 0; i <= cols; i++) {
+              v[i] = [];
+              const aj = a.clone().lerp(c, i / cols);
+              const bj = b.clone().lerp(c, i / cols);
+              const rows = cols - i;
+              for (let j = 0; j <= rows; j++) {
+                if (j === 0 && i === cols) {
+                  v[i][j] = aj;
+                } else {
+                  v[i][j] = aj.clone().lerp(bj, j / rows);
+                }
+              }
+            }
+            for (let i = 0; i < cols; i++) {
+              for (let j = 0; j < 2 * (cols - i) - 1; j++) {
+                const k = Math.floor(j / 2);
+                if (j % 2 === 0) {
+                  pushVertex(v[i][k + 1]);
+                  pushVertex(v[i + 1][k]);
+                  pushVertex(v[i][k]);
+                } else {
+                  pushVertex(v[i][k + 1]);
+                  pushVertex(v[i + 1][k + 1]);
+                  pushVertex(v[i + 1][k]);
+                }
+              }
+            }
+          }
+          function applyRadius(radius2) {
+            const vertex2 = new Vector3();
+            for (let i = 0; i < vertexBuffer.length; i += 3) {
+              vertex2.x = vertexBuffer[i + 0];
+              vertex2.y = vertexBuffer[i + 1];
+              vertex2.z = vertexBuffer[i + 2];
+              vertex2.normalize().multiplyScalar(radius2);
+              vertexBuffer[i + 0] = vertex2.x;
+              vertexBuffer[i + 1] = vertex2.y;
+              vertexBuffer[i + 2] = vertex2.z;
+            }
+          }
+          function generateUVs() {
+            const vertex2 = new Vector3();
+            for (let i = 0; i < vertexBuffer.length; i += 3) {
+              vertex2.x = vertexBuffer[i + 0];
+              vertex2.y = vertexBuffer[i + 1];
+              vertex2.z = vertexBuffer[i + 2];
+              const u = azimuth(vertex2) / 2 / Math.PI + 0.5;
+              const v = inclination(vertex2) / Math.PI + 0.5;
+              uvBuffer.push(u, 1 - v);
+            }
+            correctUVs();
+            correctSeam();
+          }
+          function correctSeam() {
+            for (let i = 0; i < uvBuffer.length; i += 6) {
+              const x0 = uvBuffer[i + 0];
+              const x1 = uvBuffer[i + 2];
+              const x2 = uvBuffer[i + 4];
+              const max = Math.max(x0, x1, x2);
+              const min = Math.min(x0, x1, x2);
+              if (max > 0.9 && min < 0.1) {
+                if (x0 < 0.2) uvBuffer[i + 0] += 1;
+                if (x1 < 0.2) uvBuffer[i + 2] += 1;
+                if (x2 < 0.2) uvBuffer[i + 4] += 1;
+              }
+            }
+          }
+          function pushVertex(vertex2) {
+            vertexBuffer.push(vertex2.x, vertex2.y, vertex2.z);
+          }
+          function getVertexByIndex(index, vertex2) {
+            const stride = index * 3;
+            vertex2.x = vertices[stride + 0];
+            vertex2.y = vertices[stride + 1];
+            vertex2.z = vertices[stride + 2];
+          }
+          function correctUVs() {
+            const a = new Vector3();
+            const b = new Vector3();
+            const c = new Vector3();
+            const centroid = new Vector3();
+            const uvA = new Vector2();
+            const uvB = new Vector2();
+            const uvC = new Vector2();
+            for (let i = 0, j = 0; i < vertexBuffer.length; i += 9, j += 6) {
+              a.set(vertexBuffer[i + 0], vertexBuffer[i + 1], vertexBuffer[i + 2]);
+              b.set(vertexBuffer[i + 3], vertexBuffer[i + 4], vertexBuffer[i + 5]);
+              c.set(vertexBuffer[i + 6], vertexBuffer[i + 7], vertexBuffer[i + 8]);
+              uvA.set(uvBuffer[j + 0], uvBuffer[j + 1]);
+              uvB.set(uvBuffer[j + 2], uvBuffer[j + 3]);
+              uvC.set(uvBuffer[j + 4], uvBuffer[j + 5]);
+              centroid.copy(a).add(b).add(c).divideScalar(3);
+              const azi = azimuth(centroid);
+              correctUV(uvA, j + 0, a, azi);
+              correctUV(uvB, j + 2, b, azi);
+              correctUV(uvC, j + 4, c, azi);
+            }
+          }
+          function correctUV(uv, stride, vector, azimuth2) {
+            if (azimuth2 < 0 && uv.x === 1) {
+              uvBuffer[stride] = uv.x - 1;
+            }
+            if (vector.x === 0 && vector.z === 0) {
+              uvBuffer[stride] = azimuth2 / 2 / Math.PI + 0.5;
+            }
+          }
+          function azimuth(vector) {
+            return Math.atan2(vector.z, -vector.x);
+          }
+          function inclination(vector) {
+            return Math.atan2(-vector.y, Math.sqrt(vector.x * vector.x + vector.z * vector.z));
+          }
+        }
+        copy(source) {
+          super.copy(source);
+          this.parameters = Object.assign({}, source.parameters);
+          return this;
+        }
+        /**
+         * Factory method for creating an instance of this class from the given
+         * JSON object.
+         *
+         * @param {Object} data - A JSON object representing the serialized geometry.
+         * @return {PolyhedronGeometry} A new instance.
+         */
+        static fromJSON(data) {
+          return new _PolyhedronGeometry(data.vertices, data.indices, data.radius, data.detail);
+        }
+      };
+      OctahedronGeometry = class _OctahedronGeometry extends PolyhedronGeometry {
+        /**
+         * Constructs a new octahedron geometry.
+         *
+         * @param {number} [radius=1] - Radius of the octahedron.
+         * @param {number} [detail=0] - Setting this to a value greater than `0` adds vertices making it no longer a octahedron.
+         */
+        constructor(radius = 1, detail = 0) {
+          const vertices = [
+            1,
+            0,
+            0,
+            -1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            -1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            -1
+          ];
+          const indices = [
+            0,
+            2,
+            4,
+            0,
+            4,
+            3,
+            0,
+            3,
+            5,
+            0,
+            5,
+            2,
+            1,
+            2,
+            5,
+            1,
+            5,
+            3,
+            1,
+            3,
+            4,
+            1,
+            4,
+            2
+          ];
+          super(vertices, indices, radius, detail);
+          this.type = "OctahedronGeometry";
+          this.parameters = {
+            radius,
+            detail
+          };
+        }
+        /**
+         * Factory method for creating an instance of this class from the given
+         * JSON object.
+         *
+         * @param {Object} data - A JSON object representing the serialized geometry.
+         * @return {OctahedronGeometry} A new instance.
+         */
+        static fromJSON(data) {
+          return new _OctahedronGeometry(data.radius, data.detail);
         }
       };
       PlaneGeometry = class _PlaneGeometry extends BufferGeometry {
@@ -27496,6 +27742,7 @@ void main() {
     let hx = sx0, hz = sz0;
     let dir = "S", w = 6, curTy = 0;
     const tiles = [], traps = [];
+    const gems = [], boosts = [], ramps = [];
     let seg = { sx: hx, sz: hz, ex: hx, ez: hz, dir, ty: 0, w };
     function box(L, ty, pitArgs) {
       const [dx, dz] = DV[dir];
@@ -27570,6 +27817,30 @@ void main() {
         traps.push(tSaw(sx0, sz0 + behind, speed));
         return P;
       },
+      // ---- addiction decorations (no kill; deterministic, applied in World.update) ----
+      // perpendicular unit vector for the current heading (lateral offset for gems)
+      _perp() {
+        const [dx, dz] = DV[seg.dir];
+        return [-dz, dx];
+      },
+      // collectible gem at fraction f, offset `lateral` world-units sideways, floating at y.
+      gem(f, lateral = 0, y = 1.3) {
+        const [x, z] = P.at(f), [px, pz] = P._perp();
+        gems.push([x + px * lateral, y, z + pz * lateral]);
+        return P;
+      },
+      // speed pad: a brief surge that aligns + over-caps the marble along the track heading.
+      boost(f, strength = 9) {
+        const [x, z] = P.at(f), [dx, dz] = DV[seg.dir];
+        boosts.push({ pos: [x, z], dir: [dx, dz], strength });
+        return P;
+      },
+      // jump ramp: launches the marble up + forward when crossed grounded along the heading.
+      jump(f, power = 13) {
+        const [x, z] = P.at(f), [dx, dz] = DV[seg.dir];
+        ramps.push({ pos: [x, z], dir: [dx, dz], power });
+        return P;
+      },
       finish(padW = 12) {
         const [dx, dz] = DV[dir];
         const nx = hx - dx * OVER, nz = hz - dz * OVER;
@@ -27584,7 +27855,7 @@ void main() {
         return P;
       },
       build(name, killY = -14) {
-        return { name, start: [sx0, 1, sz0], finish: P._finish, killY, platforms: tiles, traps };
+        return { name, start: [sx0, 1, sz0], finish: P._finish, killY, platforms: tiles, traps, gems, boosts, ramps };
       }
     };
     return P;
@@ -27641,7 +27912,7 @@ void main() {
   }
   function L1() {
     const p = Path2([0, 6]);
-    legAxis(p, 3, 8, 7, 0.8);
+    legAxis(p, 3, 8, 7, 0.8).gem(0.3, -2.4).gem(0.55, 2.4).gem(0.8, 0);
     breather(p, 8);
     p.turn("E");
     legCubes(p, 3, 8, 3.2);
@@ -27663,7 +27934,7 @@ void main() {
   }
   function L2() {
     const p = Path2([0, 6]);
-    legSpears(p, 4, 6);
+    legSpears(p, 4, 6).gem(0.3, -2).gem(0.6, 2).gem(0.85, 0);
     p.turn("E");
     legAxis(p, 3, 6, 5.4, 1);
     p.turn("S");
@@ -27688,7 +27959,7 @@ void main() {
   function L3() {
     const p = Path2([0, 6]);
     legPits(p, 3, 6);
-    legCannons(p, 2, 6);
+    legCannons(p, 2, 6).gem(0.3, -2).gem(0.6, 2).gem(0.85, 0);
     p.turn("E");
     legPits(p, 3, 6);
     p.turn("S");
@@ -27711,7 +27982,7 @@ void main() {
   }
   function L4() {
     const p = Path2([0, 6]);
-    legCannons(p, 3, 7);
+    legCannons(p, 3, 7).gem(0.3, -2.6).gem(0.6, 2.6).gem(0.85, 0);
     breather(p, 4.4);
     legCubes(p, 3, 4.4, 1.4);
     p.turn("E");
@@ -27736,7 +28007,7 @@ void main() {
   }
   function L5() {
     const p = Path2([0, 8]).saw(3.3);
-    legAxis(p, 4, 5, 4.6, 0.7);
+    legAxis(p, 4, 5, 4.6, 0.7).gem(0.3, -1.6).gem(0.6, 1.6).gem(0.85, 0);
     p.turn("E");
     legAxis(p, 3, 5, 4.6, 0.7);
     p.turn("S");
@@ -27760,7 +28031,7 @@ void main() {
   }
   function L6() {
     const p = Path2([0, 6]);
-    legMixed(p, 4, 4.6);
+    legMixed(p, 4, 4.6).gem(0.3, -1.4).gem(0.6, 1.4).gem(0.85, 0);
     p.turn("E");
     legCannons(p, 3, 4.6);
     p.turn("S");
@@ -27784,7 +28055,7 @@ void main() {
   }
   function L7() {
     const p = Path2([0, 8]).saw(3.6);
-    legCannons(p, 3, 4.6);
+    legCannons(p, 3, 4.6).gem(0.3, -1.4).gem(0.6, 1.4).gem(0.85, 0);
     legPits(p, 2, 4.6);
     p.turn("E");
     legAxis(p, 3, 4.6, 4.2, 1);
@@ -27808,7 +28079,7 @@ void main() {
   }
   function L8() {
     const p = Path2([0, 8]).saw(3.9);
-    legSpears(p, 3, 4.6);
+    legSpears(p, 3, 4.6).gem(0.3, -1.4).gem(0.6, 1.4).gem(0.85, 0);
     legAxis(p, 3, 4.6, 4.2, 1);
     p.turn("E");
     legPits(p, 2, 4.6);
@@ -27836,6 +28107,148 @@ void main() {
     p.finish();
     return p.build("FINALE");
   }
+  function L9() {
+    const p = Path2([0, 8]).saw(4);
+    legMixed(p, 4, 4.4).gem(0.4, -1.3).gem(0.75, 1.3);
+    p.boost(0.5, 11);
+    p.turn("E");
+    legCubes(p, 3, 4.4, 1);
+    p.turn("S");
+    legCannons(p, 3, 4.4);
+    p.turn("W");
+    legCross(p, 1);
+    p.turn("S");
+    legSpears(p, 3, 4.4).gem(0.6, 0);
+    p.turn("E");
+    legAxis(p, 3, 4.4, 4, 1.1);
+    p.turn("S");
+    legPits(p, 2, 4.4);
+    p.jump(0.5, 13);
+    p.turn("W");
+    legMixed(p, 3, 4.4);
+    p.turn("S");
+    legCannons(p, 3, 4.4);
+    p.run(12);
+    p.finish();
+    return p.build("OVERDRIVE");
+  }
+  function L10() {
+    const p = Path2([0, 8]).saw(4.2);
+    legCannons(p, 3, 4.3);
+    legPits(p, 2, 4.3).gem(0.5, 0);
+    p.jump(0.5, 13);
+    p.turn("E");
+    legCross(p, 1);
+    p.turn("S");
+    legMixed(p, 4, 4.3).gem(0.4, -1.2);
+    p.turn("W");
+    legAxis(p, 3, 4.3, 4, 1.1);
+    p.boost(0.5, 11);
+    p.turn("S");
+    legCubes(p, 3, 4.3, 1);
+    p.turn("E");
+    legSpears(p, 3, 4.3).gem(0.6, 1.2);
+    p.turn("S");
+    legCross(p, -1);
+    p.turn("W");
+    legCannons(p, 3, 4.3);
+    p.turn("S");
+    legMixed(p, 4, 4.3);
+    p.run(12);
+    p.finish();
+    return p.build("CROSS HAIRS");
+  }
+  function L11() {
+    const p = Path2([0, 8]).saw(4.4);
+    legSpears(p, 3, 4.2).gem(0.4, -1.1).gem(0.75, 1.1);
+    legAxis(p, 3, 4.2, 4, 1.2);
+    p.turn("E");
+    legMixed(p, 4, 4.2);
+    p.boost(0.5, 12);
+    p.turn("S");
+    legPits(p, 3, 4.2);
+    p.jump(0.5, 14);
+    p.turn("W");
+    legCannons(p, 3, 4.2);
+    p.turn("S");
+    legCross(p, 1);
+    p.turn("E");
+    legCubes(p, 3, 4.2, 1).gem(0.6, 0);
+    p.turn("S");
+    legSpears(p, 3, 4.2);
+    p.turn("W");
+    legMixed(p, 4, 4.2);
+    p.turn("S");
+    legAxis(p, 3, 4.2, 4, 1.2);
+    p.run(12);
+    p.finish();
+    return p.build("PRESSURE");
+  }
+  function L12() {
+    const p = Path2([0, 8]).saw(4.6);
+    legMixed(p, 5, 4.1).gem(0.35, -1).gem(0.7, 1);
+    legCross(p, 1);
+    p.turn("E");
+    legCannons(p, 4, 4.1);
+    p.boost(0.5, 12);
+    p.turn("S");
+    legPits(p, 3, 4.1);
+    p.jump(0.5, 14);
+    p.turn("W");
+    legSpears(p, 4, 4.1);
+    p.turn("S");
+    legAxis(p, 4, 4.1, 4, 1.2);
+    p.turn("E");
+    legCubes(p, 3, 4.1, 1).gem(0.6, 0);
+    p.turn("S");
+    legCross(p, -1);
+    p.turn("W");
+    legMixed(p, 5, 4.1);
+    p.turn("S");
+    legCannons(p, 4, 4.1);
+    p.turn("E");
+    legSpears(p, 4, 4.1);
+    p.turn("S");
+    legAxis(p, 4, 4.1, 4, 1.2);
+    p.run(12);
+    p.finish();
+    return p.build("MARATHON");
+  }
+  function L13() {
+    const p = Path2([0, 8]).saw(5);
+    legMixed(p, 5, 4).gem(0.4, -0.9);
+    p.boost(0.5, 12);
+    legCross(p, 1);
+    p.turn("E");
+    legSpears(p, 4, 4);
+    p.turn("S");
+    legPits(p, 3, 4);
+    p.jump(0.5, 15);
+    p.turn("W");
+    legCannons(p, 4, 4);
+    p.turn("S");
+    legAxis(p, 4, 4, 4, 1.3);
+    p.boost(0.5, 13);
+    p.turn("E");
+    legCubes(p, 4, 4, 1).gem(0.6, 0);
+    p.turn("S");
+    legCross(p, -1);
+    p.turn("W");
+    legMixed(p, 5, 4);
+    p.turn("S");
+    legSpears(p, 4, 4).gem(0.5, 0.9);
+    p.turn("E");
+    legCannons(p, 4, 4);
+    p.turn("S");
+    legCross(p, 1);
+    p.turn("W");
+    legAxis(p, 4, 4, 4, 1.3);
+    p.turn("S");
+    legMixed(p, 5, 4);
+    p.run(12);
+    p.finish();
+    return p.build("MARBLE TRAP");
+  }
   var tAxis, tSpears, tCube, tCannon, tSaw, DV, LEVELS, LEVEL_COUNT;
   var init_levels = __esm({
     "js/levels.js"() {
@@ -27854,7 +28267,7 @@ void main() {
       tCannon = (x, z, dx, dz, period, speed, offset, random) => ({ type: "cannon", pos: [x, z], dir: [dx, dz], period, speed, offset: offset || 0, range: 30, random: !!random });
       tSaw = (x, z, speed, size) => ({ type: "chainsaw", start: [x, z], speed, size: size || 1.9 });
       DV = { S: [0, -1], E: [1, 0], W: [-1, 0] };
-      LEVELS = [L1(), L2(), L3(), L4(), L5(), L6(), L7(), L8()];
+      LEVELS = [L1(), L2(), L3(), L4(), L5(), L6(), L7(), L8(), L9(), L10(), L11(), L12(), L13()];
       LEVEL_COUNT = LEVELS.length;
     }
   });
@@ -27949,9 +28362,9 @@ void main() {
       init_three_module();
       MARBLE_RADIUS = 0.6;
       GRAVITY = 26;
-      ACCEL = 16;
-      AIR_ACCEL = 5;
-      MAX_SPEED = 9;
+      ACCEL = 22;
+      AIR_ACCEL = 6;
+      MAX_SPEED = 11;
       GROUND_DAMP = 1;
       AIR_DAMP = 0.03;
     }
@@ -28336,6 +28749,13 @@ void main() {
     const matGrassPit = flat(COL2.grass_pit);
     const matDirt = flat(COL2.dirt);
     const matDirtDark = flat(COL2.dirt_dark);
+    const matTuft = flat(COL2.tuft);
+    const matTuftDark = flat(COL2.tuft_dark);
+    const tuftGeo = new ConeGeometry(0.16, 0.6, 5);
+    const h01 = (n) => {
+      const s = Math.sin(n * 91.7 + 13.3) * 43758.5;
+      return s - Math.floor(s);
+    };
     for (const p of level.platforms) {
       const [w, h, d] = p.size;
       const tile = new Group();
@@ -28363,6 +28783,21 @@ void main() {
             -d / 2 + (ri + 0.5) * cr
           );
           tile.add(sq);
+        }
+      }
+      if (!isPit) {
+        const area = w * d;
+        const n = Math.min(10, Math.floor(area / 26));
+        for (let t = 0; t < n; t++) {
+          const seed = p.pos[0] * 7.1 + p.pos[2] * 3.7 + t * 17.3;
+          const gx = (h01(seed) - 0.5) * (w - 1.2);
+          const gz = (h01(seed + 5.5) - 0.5) * (d - 1.2);
+          const tuft = new Mesh(tuftGeo, h01(seed + 9.9) > 0.5 ? matTuft : matTuftDark);
+          const sc = 0.7 + h01(seed + 2.2) * 0.7;
+          tuft.scale.set(sc, sc, sc);
+          tuft.position.set(gx, yTop + 0.3 * sc, gz);
+          tuft.rotation.y = h01(seed + 3.3) * Math.PI;
+          tile.add(tuft);
         }
       }
       group.add(tile);
@@ -28437,14 +28872,106 @@ void main() {
   function buildEnvironment(scene) {
     scene.background = new Color(2736063);
     scene.fog = null;
-    scene.add(new AmbientLight(16777215, 0.75));
-    const sun = new DirectionalLight(16774624, 1.3);
+    scene.add(new AmbientLight(16777215, 0.78));
+    const sun = new DirectionalLight(16774624, 1.25);
     sun.position.set(12, 28, 14);
     scene.add(sun);
     const fill = new DirectionalLight(13164528, 0.35);
     fill.position.set(-8, 10, -6);
     scene.add(fill);
-    return {};
+    const SEA_Y = -18;
+    const SEG = 80;
+    const SIZE = 1600;
+    const oceanGeo = new PlaneGeometry(SIZE, SIZE, SEG, SEG);
+    oceanGeo.rotateX(-Math.PI / 2);
+    const pos = oceanGeo.attributes.position;
+    const baseX = new Float32Array(pos.count);
+    const baseZ = new Float32Array(pos.count);
+    for (let i = 0; i < pos.count; i++) {
+      baseX[i] = pos.getX(i);
+      baseZ[i] = pos.getZ(i);
+    }
+    const colCount = pos.count * 3;
+    const oceanColors = new Float32Array(colCount);
+    oceanGeo.setAttribute("color", new BufferAttribute(oceanColors, 3));
+    const seaCol = new Color(COL2.sea), seaLo = new Color(COL2.sea_lo), foamCol = new Color(COL2.foam);
+    const ocean = new Mesh(
+      oceanGeo,
+      new MeshLambertMaterial({ vertexColors: true, side: DoubleSide })
+    );
+    ocean.position.y = SEA_Y;
+    ocean.frustumCulled = false;
+    scene.add(ocean);
+    const clouds = new Group();
+    const cloudMat = new MeshLambertMaterial({ color: COL2.cloud, transparent: true, opacity: 0.92 });
+    const ch = (n) => {
+      const s = Math.sin(n * 53.7 + 7.1) * 9281.3;
+      return s - Math.floor(s);
+    };
+    for (let i = 0; i < 16; i++) {
+      const puff = new Group();
+      const blobs = 3 + Math.floor(ch(i) * 3);
+      for (let b = 0; b < blobs; b++) {
+        const r = 3 + ch(i * 3 + b) * 4;
+        const s = new Mesh(new SphereGeometry(r, 8, 6), cloudMat);
+        s.position.set((ch(i + b) - 0.5) * 14, (ch(i * 2 + b) - 0.5) * 3, (ch(i * 5 + b) - 0.5) * 8);
+        s.scale.y = 0.6;
+        puff.add(s);
+      }
+      puff.position.set((ch(i) - 0.5) * 460, 48 + ch(i * 7) * 36, -60 - ch(i * 9) * 420);
+      puff.userData.speed = 2 + ch(i * 11) * 3;
+      clouds.add(puff);
+    }
+    scene.add(clouds);
+    const islands = new Group();
+    const grassMat = new MeshLambertMaterial({ color: COL2.island_grass });
+    const dirtMat = new MeshLambertMaterial({ color: COL2.island_dirt });
+    const ih = (n) => {
+      const s = Math.sin(n * 71.3 + 19.7) * 3771.9;
+      return s - Math.floor(s);
+    };
+    for (let i = 0; i < 10; i++) {
+      const isle = new Group();
+      const r = 8 + ih(i) * 16;
+      const base = new Mesh(new ConeGeometry(r, r * 1.3, 7), dirtMat);
+      base.position.y = -r * 0.2;
+      isle.add(base);
+      const cap = new Mesh(new SphereGeometry(r * 0.92, 8, 6, 0, Math.PI * 2, 0, Math.PI / 2), grassMat);
+      cap.position.y = r * 0.34;
+      isle.add(cap);
+      const ang = i / 10 * Math.PI * 2 + ih(i * 2);
+      const dist = 230 + ih(i * 3) * 180;
+      isle.position.set(Math.cos(ang) * dist, SEA_Y + r * 0.6, -120 + Math.sin(ang) * dist);
+      islands.add(isle);
+    }
+    scene.add(islands);
+    let t = 0;
+    return {
+      ocean,
+      clouds,
+      islands,
+      update(dt) {
+        t += dt;
+        for (let i = 0; i < pos.count; i++) {
+          const x = baseX[i], z = baseZ[i];
+          const h = Math.sin(x * 0.045 + t * 1.6) * 1.5 + Math.cos(z * 0.05 + t * 1.2) * 1.5 + Math.sin((x + z) * 0.08 + t * 2.3) * 0.8;
+          pos.setY(i, h);
+          const f = Math.min(1, Math.max(0, (h + 1.3) / 3.8));
+          const c = seaLo.clone().lerp(seaCol, Math.min(1, f * 1.5));
+          if (f > 0.78) c.lerp(foamCol, (f - 0.78) / 0.22);
+          oceanColors[i * 3] = c.r;
+          oceanColors[i * 3 + 1] = c.g;
+          oceanColors[i * 3 + 2] = c.b;
+        }
+        pos.needsUpdate = true;
+        oceanGeo.attributes.color.needsUpdate = true;
+        oceanGeo.computeVertexNormals();
+        for (const puff of clouds.children) {
+          puff.position.x += puff.userData.speed * dt;
+          if (puff.position.x > 320) puff.position.x = -320;
+        }
+      }
+    };
   }
   function makeParticles(scene, max = 180) {
     const positions = new Float32Array(max * 3);
@@ -28562,6 +29089,89 @@ void main() {
       }
     };
   }
+  function buildGems(level) {
+    const group = new Group();
+    const items = [];
+    const gemGeo = new OctahedronGeometry(0.55, 0);
+    const coreGeo = new OctahedronGeometry(0.24, 0);
+    for (const g of level.gems || []) {
+      const mesh = new Group();
+      const shell = new Mesh(gemGeo, new MeshLambertMaterial({
+        color: COL2.gem,
+        transparent: true,
+        opacity: 0.85,
+        emissive: new Color(COL2.gem),
+        emissiveIntensity: 0.25
+      }));
+      const core = new Mesh(coreGeo, flat(COL2.gem_core));
+      mesh.add(shell);
+      mesh.add(core);
+      mesh.position.set(g[0], g[1], g[2]);
+      group.add(mesh);
+      items.push({ pos: [g[0], g[1], g[2]], mesh, baseY: g[1] });
+    }
+    return { group, items };
+  }
+  function buildBoostPads(level) {
+    const group = new Group();
+    const items = [];
+    for (const b of level.boosts || []) {
+      const pad = new Group();
+      const [x, z] = b.pos, [dx, dz] = b.dir;
+      const base = new Mesh(new BoxGeometry(3, 0.12, 3.4), flat(COL2.boost_edge));
+      base.position.y = 0.06;
+      pad.add(base);
+      for (let i = 0; i < 3; i++) {
+        const chev = new Mesh(new BoxGeometry(2, 0.08, 0.5), flat(COL2.boost));
+        chev.position.set(0, 0.14, -0.9 + i * 0.9);
+        pad.add(chev);
+      }
+      pad.position.set(x, 0.02, z);
+      pad.rotation.y = Math.atan2(dx, dz);
+      pad.userData.spinY = 0;
+      group.add(pad);
+      items.push({ def: b, mesh: pad });
+    }
+    return { group, items };
+  }
+  function buildRamps(level) {
+    const group = new Group();
+    const items = [];
+    for (const r of level.ramps || []) {
+      const [x, z] = r.pos, [dx, dz] = r.dir;
+      const ramp = new Group();
+      const wedge = new Mesh(new BoxGeometry(3.2, 0.4, 3.4), flat(COL2.ramp));
+      wedge.rotation.x = -0.5;
+      wedge.position.y = 0.7;
+      ramp.add(wedge);
+      const lip = new Mesh(new BoxGeometry(3.2, 0.18, 0.4), flat(COL2.ramp_edge));
+      lip.position.set(0, 1.35, -1.5);
+      ramp.add(lip);
+      ramp.position.set(x, 0, z);
+      ramp.rotation.y = Math.atan2(dx, dz);
+      group.add(ramp);
+      items.push({ def: r, mesh: ramp });
+    }
+    return { group, items };
+  }
+  function buildGhostMarble() {
+    const group = new Group();
+    const ghostMat = new MeshLambertMaterial({
+      color: 10480127,
+      transparent: true,
+      opacity: 0.32,
+      depthWrite: false
+    });
+    const ball = new Mesh(new SphereGeometry(MARBLE_RADIUS, 20, 20), ghostMat);
+    group.add(ball);
+    const band = new Mesh(
+      new TorusGeometry(MARBLE_RADIUS * 1.002, MARBLE_RADIUS * 0.28, 6, 24),
+      new MeshLambertMaterial({ color: 4896511, transparent: true, opacity: 0.32, depthWrite: false })
+    );
+    group.add(band);
+    group.visible = false;
+    return group;
+  }
   var COL2;
   var init_builder = __esm({
     "js/builder.js"() {
@@ -28581,7 +29191,28 @@ void main() {
         trap_spike: 8947865,
         marble_whi: 16777215,
         marble_blu: 3833813,
-        marble_red: 14492194
+        marble_red: 14492194,
+        tuft: 7324234,
+        // bright grass tuft
+        tuft_dark: 5216818,
+        gem: 3793151,
+        // cyan collectible gem
+        gem_core: 16777215,
+        boost: 16765501,
+        // yellow speed pad
+        boost_edge: 16747038,
+        ramp: 11581124,
+        // light gray launch ramp
+        ramp_edge: 16765501,
+        cloud: 16777215,
+        island_grass: 5747262,
+        island_dirt: 10119740,
+        sea: 2078408,
+        // deep turquoise water
+        sea_lo: 1546926,
+        // trough shade
+        foam: 16777215
+        // whitecap
       };
     }
   });
@@ -28613,7 +29244,25 @@ void main() {
   function unlock(i) {
     if (i > getUnlocked()) localStorage.setItem(UNLOCK_KEY, JSON.stringify(i));
   }
-  var BEST_KEY, UNLOCK_KEY, World;
+  function setGemsBest(i, count) {
+    const all = readJSON(GEMS_KEY, {});
+    if (count > (all[i] ?? 0)) {
+      all[i] = count;
+      localStorage.setItem(GEMS_KEY, JSON.stringify(all));
+    }
+  }
+  function getGhost(i) {
+    return readJSON(GHOST_KEY, {})[i] ?? null;
+  }
+  function setGhost(i, path) {
+    const all = readJSON(GHOST_KEY, {});
+    all[i] = path;
+    try {
+      localStorage.setItem(GHOST_KEY, JSON.stringify(all));
+    } catch {
+    }
+  }
+  var BEST_KEY, UNLOCK_KEY, GHOST_KEY, GEMS_KEY, GHOST_DT, World;
   var init_game = __esm({
     "js/game.js"() {
       init_three_module();
@@ -28623,6 +29272,9 @@ void main() {
       init_builder();
       BEST_KEY = "brennan_best_v1";
       UNLOCK_KEY = "brennan_unlocked_v1";
+      GHOST_KEY = "brennan_ghost_v1";
+      GEMS_KEY = "brennan_gems_v1";
+      GHOST_DT = 0.05;
       World = class {
         constructor(scene) {
           this.scene = scene;
@@ -28637,6 +29289,14 @@ void main() {
           this.marble = null;
           this.time = 0;
           this.status = "playing";
+          this.gems = [];
+          this.gemCount = 0;
+          this.boosts = [];
+          this.ramps = [];
+          this.ghostGroup = null;
+          this.ghostPath = null;
+          this.recordPath = [];
+          this._recAcc = 0;
         }
         load(index) {
           this.dispose();
@@ -28662,6 +29322,21 @@ void main() {
               this.root.add(t.group);
             }
           }
+          const gemBuild = buildGems(level);
+          this.root.add(gemBuild.group);
+          this.gems = gemBuild.items.map((g) => ({ ...g, collected: false }));
+          this.gemCount = 0;
+          const boostBuild = buildBoostPads(level);
+          this.root.add(boostBuild.group);
+          this.boosts = boostBuild.items;
+          const rampBuild = buildRamps(level);
+          this.root.add(rampBuild.group);
+          this.ramps = rampBuild.items.map((r) => ({ ...r, cool: 0 }));
+          this.ghostGroup = buildGhostMarble();
+          this.root.add(this.ghostGroup);
+          this.ghostPath = getGhost(index);
+          this.recordPath = [];
+          this._recAcc = 0;
           this.marbleGroup = buildMarble();
           this.root.add(this.marbleGroup);
           this.marble = makeMarble(level.start, level.killY);
@@ -28675,6 +29350,15 @@ void main() {
           this._splashed = false;
           this.marble = makeMarble(level.start, level.killY);
           for (const t of this.traps) t.reset();
+          for (const g of this.gems) {
+            g.collected = false;
+            g.mesh.visible = true;
+          }
+          this.gemCount = 0;
+          for (const r of this.ramps) r.cool = 0;
+          this.recordPath = [];
+          this._recAcc = 0;
+          if (this.ghostGroup) this.ghostGroup.visible = false;
           this._syncMarble();
         }
         _syncMarble() {
@@ -28685,10 +29369,14 @@ void main() {
           if (this.status !== "playing") return this.status;
           this.time += dt;
           const { fell } = stepMarble(this.marble, input, this.platforms, this.time, dt);
+          this._applyPads(dt);
           for (const t of this.traps) t.update(dt, this.time, this.marble.pos);
           for (const pt of this.pitTiles) pt.mesh.position.y = pt.def.pos[1] + platformDropY(pt.def, this.time);
           if (this.finishGroup?.userData.spin) this.finishGroup.userData.spin.rotation.y += dt * 1.5;
           this._syncMarble();
+          this._collectGems();
+          this._updateGhost();
+          this._recordSample(dt);
           if (fell && !this._splashed) {
             this._splashed = true;
             this._splashTimer = 0.7;
@@ -28745,6 +29433,11 @@ void main() {
           for (const t of this.traps) t.update(dt, this.time, null);
           for (const pt of this.pitTiles) pt.mesh.position.y = pt.def.pos[1] + platformDropY(pt.def, this.time);
           if (this.finishGroup?.userData.spin) this.finishGroup.userData.spin.rotation.y += dt * 1.5;
+          for (const g of this.gems) {
+            g.mesh.rotation.y += 0.04;
+            g.mesh.position.y = g.baseY + Math.sin(this.time * 2 + g.pos[0]) * 0.18;
+          }
+          this._updateGhost();
         }
         _rollMarble(dt) {
           const v = this.marble.vel;
@@ -28756,6 +29449,85 @@ void main() {
           for (const mesh of this.marbleGroup.userData.spin) {
             mesh.quaternion.premultiply(q);
           }
+        }
+        // ---- boost pads (forward surge) + jump ramps (launch) ----
+        _applyPads(dt) {
+          const m = this.marble;
+          for (const b of this.boosts) {
+            const dx = m.pos.x - b.def.pos[0], dz = m.pos.z - b.def.pos[1];
+            if (dx * dx + dz * dz < 2 * 2 && m.grounded) {
+              const [ux, uz] = b.def.dir, s = b.def.strength;
+              const along = m.vel.x * ux + m.vel.z * uz;
+              if (along < s) {
+                m.vel.x = ux * s;
+                m.vel.z = uz * s;
+              }
+            }
+          }
+          for (const r of this.ramps) {
+            if (r.cool > 0) r.cool -= dt;
+            const dx = m.pos.x - r.def.pos[0], dz = m.pos.z - r.def.pos[1];
+            const [ux, uz] = r.def.dir;
+            const along = m.vel.x * ux + m.vel.z * uz;
+            if (r.cool <= 0 && dx * dx + dz * dz < 2.2 * 2.2 && m.grounded && along > 1) {
+              m.vel.y = r.def.power;
+              m.vel.x += ux * 3;
+              m.vel.z += uz * 3;
+              r.cool = 0.8;
+            }
+          }
+        }
+        // ---- gems: spin/bob + collect on contact ----
+        _collectGems() {
+          const m = this.marble, R = 0.6 + 0.7;
+          for (const g of this.gems) {
+            g.mesh.rotation.y += 0.04;
+            g.mesh.position.y = g.baseY + Math.sin(this.time * 2 + g.pos[0]) * 0.18;
+            if (g.collected) continue;
+            const dx = m.pos.x - g.pos[0], dy = m.pos.y - g.pos[1], dz = m.pos.z - g.pos[2];
+            if (dx * dx + dy * dy + dz * dz < R * R) {
+              g.collected = true;
+              g.mesh.visible = false;
+              this.gemCount++;
+            }
+          }
+        }
+        // ---- ghost replay: position the translucent marble along the saved best path ----
+        _updateGhost() {
+          const gp = this.ghostPath;
+          if (!gp || !gp.pts || !gp.pts.length) {
+            if (this.ghostGroup) this.ghostGroup.visible = false;
+            return;
+          }
+          const dt = gp.dt || GHOST_DT;
+          const f = this.time / dt;
+          const i = Math.floor(f);
+          if (i >= gp.pts.length - 1) {
+            this.ghostGroup.visible = false;
+            return;
+          }
+          const a = gp.pts[i], b = gp.pts[i + 1], k = f - i;
+          this.ghostGroup.visible = true;
+          this.ghostGroup.position.set(
+            a[0] + (b[0] - a[0]) * k,
+            a[1] + (b[1] - a[1]) * k,
+            a[2] + (b[2] - a[2]) * k
+          );
+          this.ghostGroup.rotation.y += 0.05;
+        }
+        // ---- record the current run so a new best can be saved as the ghost ----
+        _recordSample(dt) {
+          this._recAcc += dt;
+          if (this._recAcc < GHOST_DT) return;
+          this._recAcc -= GHOST_DT;
+          if (this.recordPath.length < 2e3) {
+            const p = this.marble.pos;
+            this.recordPath.push([Math.round(p.x * 100) / 100, Math.round(p.y * 100) / 100, Math.round(p.z * 100) / 100]);
+          }
+        }
+        // snapshot of the run path in ghost-storage format (called by main.js on a new best)
+        getRunPath() {
+          return { dt: GHOST_DT, pts: this.recordPath.slice() };
         }
         dispose() {
           while (this.root.children.length) {
@@ -29008,6 +29780,12 @@ void main() {
         uiClick() {
           if (!ensureCtx() || ctx.state !== "running") return;
           blip(sfxGain, 660, ctx.currentTime, 0.06, "square", 0.06);
+        },
+        gem() {
+          if (!ensureCtx() || ctx.state !== "running") return;
+          const t = ctx.currentTime;
+          blip(sfxGain, 880, t, 0.12, "triangle", 0.1, 1318.5);
+          blip(sfxGain, 1318.5, t + 0.07, 0.16, "triangle", 0.08);
         }
       };
     }
@@ -29033,7 +29811,7 @@ void main() {
       renderer.setClearColor(2736063, 1);
       mount.appendChild(renderer.domElement);
       var composer = null;
-      buildEnvironment(scene);
+      var env = buildEnvironment(scene);
       var world = new World(scene);
       var particles = makeParticles(scene);
       var trail = makeTrail(scene);
@@ -29046,6 +29824,9 @@ void main() {
         hudTime: el("hud-time"),
         hudBest: el("hud-best"),
         hudDeaths: el("hud-deaths"),
+        hudTotal: el("hud-total"),
+        hudGems: el("hud-gems"),
+        completeGems: el("complete-gems"),
         menu: el("overlay-menu"),
         complete: el("overlay-complete"),
         dead: el("overlay-dead"),
@@ -29071,6 +29852,7 @@ void main() {
       var currentLevel = 0;
       var deaths = 0;
       var runTotal = 0;
+      var lastGemCount = 0;
       function fmt(s) {
         return s.toFixed(2);
       }
@@ -29130,6 +29912,7 @@ void main() {
       function startLevel(i) {
         currentLevel = i;
         deaths = 0;
+        lastGemCount = 0;
         world.load(i);
         state = STATE.PLAYING;
         hideOverlays();
@@ -29159,6 +29942,7 @@ void main() {
       }
       function retryLevel() {
         deaths += 1;
+        lastGemCount = 0;
         _splashFired = false;
         audio.rollStop();
         shakeAmt = 0;
@@ -29177,7 +29961,11 @@ void main() {
         audio.win();
         runTotal += t;
         const record = setBest(currentLevel, t);
+        if (record) setGhost(currentLevel, world.getRunPath());
+        setGemsBest(currentLevel, world.gemCount);
         unlock(Math.min(currentLevel + 1, LEVEL_COUNT - 1));
+        const totalGems = (world.level?.gems || []).length;
+        const perfect = totalGems > 0 && world.gemCount >= totalGems;
         if (currentLevel >= LEVEL_COUNT - 1) {
           state = STATE.FINISH;
           showHud(false);
@@ -29190,6 +29978,7 @@ void main() {
           hideOverlays();
           ui.completeTime.textContent = fmt(t);
           ui.completeBest.textContent = fmt(getBest(currentLevel));
+          if (ui.completeGems) ui.completeGems.textContent = (perfect ? "\u2605 PERFECT \u2605  " : "") + "\u{1F48E} " + world.gemCount + " / " + totalGems;
           ui.completeRecord.classList.toggle("hidden", !record);
           ui.complete.classList.remove("hidden");
         }
@@ -29218,9 +30007,12 @@ void main() {
       }
       function updateHud() {
         ui.hudLevel.textContent = currentLevel + 1;
+        if (ui.hudTotal) ui.hudTotal.textContent = "/ " + LEVEL_COUNT;
         const best = getBest(currentLevel);
         ui.hudBest.textContent = best != null ? fmt(best) + "s" : "\u2014";
         ui.hudDeaths.textContent = "DEATHS: " + deaths;
+        const total = (world.level?.gems || []).length;
+        if (ui.hudGems) ui.hudGems.textContent = "\u{1F48E} " + world.gemCount + "/" + total;
       }
       function readInput() {
         let x = 0, z = 0;
@@ -29281,6 +30073,12 @@ void main() {
           followCamera(dt);
           trail.update(world.marble.pos);
           audio.roll(Math.hypot(world.marble.vel.x, world.marble.vel.z));
+          if (world.gemCount > lastGemCount) {
+            lastGemCount = world.gemCount;
+            particles.burst(world.marble.pos, 3793151, 24, 6);
+            audio.gem();
+            updateHud();
+          }
           if (status === "won") onWin();
           else if (status === "splash") onSplash();
           else if (status === "dead") onDead();
@@ -29294,6 +30092,7 @@ void main() {
           followCamera(dt);
         }
         particles.update(dt);
+        env.update(dt);
         if (composer) composer.render();
         else renderer.render(scene, camera);
         requestAnimationFrame(loop);
