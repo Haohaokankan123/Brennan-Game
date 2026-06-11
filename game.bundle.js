@@ -582,7 +582,7 @@ var BrennanGame = (() => {
     }
     throw new Error(`Unknown texture type ${type}.`);
   }
-  var REVISION, CullFaceNone, CullFaceBack, CullFaceFront, PCFShadowMap, PCFSoftShadowMap, VSMShadowMap, FrontSide, BackSide, DoubleSide, NoBlending, NormalBlending, AdditiveBlending, SubtractiveBlending, MultiplyBlending, CustomBlending, AddEquation, SubtractEquation, ReverseSubtractEquation, MinEquation, MaxEquation, ZeroFactor, OneFactor, SrcColorFactor, OneMinusSrcColorFactor, SrcAlphaFactor, OneMinusSrcAlphaFactor, DstAlphaFactor, OneMinusDstAlphaFactor, DstColorFactor, OneMinusDstColorFactor, SrcAlphaSaturateFactor, ConstantColorFactor, OneMinusConstantColorFactor, ConstantAlphaFactor, OneMinusConstantAlphaFactor, NeverDepth, AlwaysDepth, LessDepth, LessEqualDepth, EqualDepth, GreaterEqualDepth, GreaterDepth, NotEqualDepth, MultiplyOperation, MixOperation, AddOperation, NoToneMapping, LinearToneMapping, ReinhardToneMapping, CineonToneMapping, ACESFilmicToneMapping, CustomToneMapping, AgXToneMapping, NeutralToneMapping, UVMapping, CubeReflectionMapping, CubeRefractionMapping, EquirectangularReflectionMapping, EquirectangularRefractionMapping, CubeUVReflectionMapping, RepeatWrapping, ClampToEdgeWrapping, MirroredRepeatWrapping, NearestFilter, NearestMipmapNearestFilter, NearestMipmapLinearFilter, LinearFilter, LinearMipmapNearestFilter, LinearMipmapLinearFilter, UnsignedByteType, ByteType, ShortType, UnsignedShortType, IntType, UnsignedIntType, FloatType, HalfFloatType, UnsignedShort4444Type, UnsignedShort5551Type, UnsignedInt248Type, UnsignedInt5999Type, UnsignedInt101111Type, AlphaFormat, RGBFormat, RGBAFormat, DepthFormat, DepthStencilFormat, RedFormat, RedIntegerFormat, RGFormat, RGIntegerFormat, RGBAIntegerFormat, RGB_S3TC_DXT1_Format, RGBA_S3TC_DXT1_Format, RGBA_S3TC_DXT3_Format, RGBA_S3TC_DXT5_Format, RGB_PVRTC_4BPPV1_Format, RGB_PVRTC_2BPPV1_Format, RGBA_PVRTC_4BPPV1_Format, RGBA_PVRTC_2BPPV1_Format, RGB_ETC1_Format, RGB_ETC2_Format, RGBA_ETC2_EAC_Format, R11_EAC_Format, SIGNED_R11_EAC_Format, RG11_EAC_Format, SIGNED_RG11_EAC_Format, RGBA_ASTC_4x4_Format, RGBA_ASTC_5x4_Format, RGBA_ASTC_5x5_Format, RGBA_ASTC_6x5_Format, RGBA_ASTC_6x6_Format, RGBA_ASTC_8x5_Format, RGBA_ASTC_8x6_Format, RGBA_ASTC_8x8_Format, RGBA_ASTC_10x5_Format, RGBA_ASTC_10x6_Format, RGBA_ASTC_10x8_Format, RGBA_ASTC_10x10_Format, RGBA_ASTC_12x10_Format, RGBA_ASTC_12x12_Format, RGBA_BPTC_Format, RGB_BPTC_SIGNED_Format, RGB_BPTC_UNSIGNED_Format, RED_RGTC1_Format, SIGNED_RED_RGTC1_Format, RED_GREEN_RGTC2_Format, SIGNED_RED_GREEN_RGTC2_Format, InterpolateDiscrete, InterpolateLinear, InterpolateSmooth, InterpolateBezier, ZeroCurvatureEnding, ZeroSlopeEnding, WrapAroundEnding, BasicDepthPacking, TangentSpaceNormalMap, ObjectSpaceNormalMap, NoColorSpace, SRGBColorSpace, LinearSRGBColorSpace, LinearTransfer, SRGBTransfer, KeepStencilOp, AlwaysStencilFunc, NeverCompare, LessCompare, EqualCompare, LessEqualCompare, GreaterCompare, NotEqualCompare, GreaterEqualCompare, AlwaysCompare, StaticDrawUsage, GLSL3, WebGLCoordinateSystem, WebGPUCoordinateSystem, _cache, _setConsoleFunction, ReversedDepthFuncs, EventDispatcher, _lut, DEG2RAD, RAD2DEG, Vector2, Quaternion, Vector3, _vector$c, _quaternion$5, Matrix3, _m3, LINEAR_REC709_TO_XYZ, XYZ_TO_LINEAR_REC709, ColorManagement, _canvas, ImageUtils, _sourceId, Source, _textureId, _tempVec3, Texture, Vector4, RenderTarget, WebGLRenderTarget, DataArrayTexture, Data3DTexture, Matrix4, _v1$7, _m1$2, _zero, _one, _x, _y, _z, _matrix$2, _quaternion$4, Euler, Layers, _object3DId, _v1$6, _q1, _m1$1, _target, _position$4, _scale$3, _quaternion$3, _xAxis, _yAxis, _zAxis, _addedEvent, _removedEvent, _childaddedEvent, _childremovedEvent, Object3D, Group, _moveEvent, WebXRController, _colorKeywords, _hslA, _hslB, Color, _color, Fog, Scene, _v0$2, _v1$5, _v2$4, _v3$2, _vab, _vac, _vbc, _vap, _vbp, _vcp, _v40, _v41, _v42, Triangle, Box3, _points, _vector$b, _box$4, _v0$1, _v1$4, _v2$3, _f0, _f1, _f2, _center, _extents, _triangleNormal, _testAxis, _vector$a, _vector2$1, _id$2, BufferAttribute, Uint16BufferAttribute, Uint32BufferAttribute, Float32BufferAttribute, _box$3, _v1$3, _v2$2, Sphere, _id$1, _m1, _obj, _offset, _box$2, _boxMorphTargets, _vector$9, BufferGeometry, _materialId, Material, _vector$7, _segCenter, _segDir, _diff, _edge1, _edge2, _normal$1, Ray, MeshBasicMaterial, _inverseMatrix$3, _ray$3, _sphere$6, _sphereHitAt, _vA, _vB, _vC, _tempA, _morphA, _intersectionPoint, _intersectionPointWorld, Mesh, DataTexture, _vector1, _vector2, _normalMatrix, Plane, _sphere$3, _defaultSpriteCenter, _vector$6, Frustum, LineBasicMaterial, _vStart, _vEnd, _inverseMatrix$1, _ray$1, _sphere$1, _intersectPointOnRay, _intersectPointOnSegment, Line, _start, _end, LineSegments, PointsMaterial, _inverseMatrix, _ray, _sphere, _position$3, Points, CubeTexture, DepthTexture, CubeDepthTexture, ExternalTexture, BoxGeometry, CylinderGeometry, ConeGeometry, PlaneGeometry, SphereGeometry, TorusGeometry, UniformsUtils, default_vertex, default_fragment, ShaderMaterial, RawShaderMaterial, MeshStandardMaterial, MeshDepthMaterial, MeshDistanceMaterial, Interpolant, CubicInterpolant, LinearInterpolant, DiscreteInterpolant, BezierInterpolant, KeyframeTrack, BooleanKeyframeTrack, ColorKeyframeTrack, NumberKeyframeTrack, QuaternionLinearInterpolant, QuaternionKeyframeTrack, StringKeyframeTrack, VectorKeyframeTrack, LoadingManager, DefaultLoadingManager, Loader, Light, _projScreenMatrix, _lightPositionWorld, _lookTarget, LightShadow, _position$2, _quaternion$2, _scale$2, Camera, _v3$1, _minTarget, _maxTarget, PerspectiveCamera, PointLightShadow, PointLight, OrthographicCamera, DirectionalLightShadow, DirectionalLight, AmbientLight, fov, aspect, CubeCamera, ArrayCamera, Timer, _RESERVED_CHARS_RE, _reservedRe, _wordChar, _wordCharOrDot, _directoryRe, _nodeRe, _objectRe, _propertyRe, _trackRe, _supportedObjectNames, Composite, PropertyBinding, _controlInterpolantsResultBuffer, Matrix2, GridHelper;
+  var REVISION, CullFaceNone, CullFaceBack, CullFaceFront, PCFShadowMap, PCFSoftShadowMap, VSMShadowMap, FrontSide, BackSide, DoubleSide, NoBlending, NormalBlending, AdditiveBlending, SubtractiveBlending, MultiplyBlending, CustomBlending, AddEquation, SubtractEquation, ReverseSubtractEquation, MinEquation, MaxEquation, ZeroFactor, OneFactor, SrcColorFactor, OneMinusSrcColorFactor, SrcAlphaFactor, OneMinusSrcAlphaFactor, DstAlphaFactor, OneMinusDstAlphaFactor, DstColorFactor, OneMinusDstColorFactor, SrcAlphaSaturateFactor, ConstantColorFactor, OneMinusConstantColorFactor, ConstantAlphaFactor, OneMinusConstantAlphaFactor, NeverDepth, AlwaysDepth, LessDepth, LessEqualDepth, EqualDepth, GreaterEqualDepth, GreaterDepth, NotEqualDepth, MultiplyOperation, MixOperation, AddOperation, NoToneMapping, LinearToneMapping, ReinhardToneMapping, CineonToneMapping, ACESFilmicToneMapping, CustomToneMapping, AgXToneMapping, NeutralToneMapping, UVMapping, CubeReflectionMapping, CubeRefractionMapping, EquirectangularReflectionMapping, EquirectangularRefractionMapping, CubeUVReflectionMapping, RepeatWrapping, ClampToEdgeWrapping, MirroredRepeatWrapping, NearestFilter, NearestMipmapNearestFilter, NearestMipmapLinearFilter, LinearFilter, LinearMipmapNearestFilter, LinearMipmapLinearFilter, UnsignedByteType, ByteType, ShortType, UnsignedShortType, IntType, UnsignedIntType, FloatType, HalfFloatType, UnsignedShort4444Type, UnsignedShort5551Type, UnsignedInt248Type, UnsignedInt5999Type, UnsignedInt101111Type, AlphaFormat, RGBFormat, RGBAFormat, DepthFormat, DepthStencilFormat, RedFormat, RedIntegerFormat, RGFormat, RGIntegerFormat, RGBAIntegerFormat, RGB_S3TC_DXT1_Format, RGBA_S3TC_DXT1_Format, RGBA_S3TC_DXT3_Format, RGBA_S3TC_DXT5_Format, RGB_PVRTC_4BPPV1_Format, RGB_PVRTC_2BPPV1_Format, RGBA_PVRTC_4BPPV1_Format, RGBA_PVRTC_2BPPV1_Format, RGB_ETC1_Format, RGB_ETC2_Format, RGBA_ETC2_EAC_Format, R11_EAC_Format, SIGNED_R11_EAC_Format, RG11_EAC_Format, SIGNED_RG11_EAC_Format, RGBA_ASTC_4x4_Format, RGBA_ASTC_5x4_Format, RGBA_ASTC_5x5_Format, RGBA_ASTC_6x5_Format, RGBA_ASTC_6x6_Format, RGBA_ASTC_8x5_Format, RGBA_ASTC_8x6_Format, RGBA_ASTC_8x8_Format, RGBA_ASTC_10x5_Format, RGBA_ASTC_10x6_Format, RGBA_ASTC_10x8_Format, RGBA_ASTC_10x10_Format, RGBA_ASTC_12x10_Format, RGBA_ASTC_12x12_Format, RGBA_BPTC_Format, RGB_BPTC_SIGNED_Format, RGB_BPTC_UNSIGNED_Format, RED_RGTC1_Format, SIGNED_RED_RGTC1_Format, RED_GREEN_RGTC2_Format, SIGNED_RED_GREEN_RGTC2_Format, InterpolateDiscrete, InterpolateLinear, InterpolateSmooth, InterpolateBezier, ZeroCurvatureEnding, ZeroSlopeEnding, WrapAroundEnding, BasicDepthPacking, TangentSpaceNormalMap, ObjectSpaceNormalMap, NoColorSpace, SRGBColorSpace, LinearSRGBColorSpace, LinearTransfer, SRGBTransfer, KeepStencilOp, AlwaysStencilFunc, NeverCompare, LessCompare, EqualCompare, LessEqualCompare, GreaterCompare, NotEqualCompare, GreaterEqualCompare, AlwaysCompare, StaticDrawUsage, GLSL3, WebGLCoordinateSystem, WebGPUCoordinateSystem, _cache, _setConsoleFunction, ReversedDepthFuncs, EventDispatcher, _lut, DEG2RAD, RAD2DEG, Vector2, Quaternion, Vector3, _vector$c, _quaternion$5, Matrix3, _m3, LINEAR_REC709_TO_XYZ, XYZ_TO_LINEAR_REC709, ColorManagement, _canvas, ImageUtils, _sourceId, Source, _textureId, _tempVec3, Texture, Vector4, RenderTarget, WebGLRenderTarget, DataArrayTexture, Data3DTexture, Matrix4, _v1$7, _m1$2, _zero, _one, _x, _y, _z, _matrix$2, _quaternion$4, Euler, Layers, _object3DId, _v1$6, _q1, _m1$1, _target, _position$4, _scale$3, _quaternion$3, _xAxis, _yAxis, _zAxis, _addedEvent, _removedEvent, _childaddedEvent, _childremovedEvent, Object3D, Group, _moveEvent, WebXRController, _colorKeywords, _hslA, _hslB, Color, _color, Scene, _v0$2, _v1$5, _v2$4, _v3$2, _vab, _vac, _vbc, _vap, _vbp, _vcp, _v40, _v41, _v42, Triangle, Box3, _points, _vector$b, _box$4, _v0$1, _v1$4, _v2$3, _f0, _f1, _f2, _center, _extents, _triangleNormal, _testAxis, _vector$a, _vector2$1, _id$2, BufferAttribute, Uint16BufferAttribute, Uint32BufferAttribute, Float32BufferAttribute, _box$3, _v1$3, _v2$2, Sphere, _id$1, _m1, _obj, _offset, _box$2, _boxMorphTargets, _vector$9, BufferGeometry, _materialId, Material, _vector$7, _segCenter, _segDir, _diff, _edge1, _edge2, _normal$1, Ray, MeshBasicMaterial, _inverseMatrix$3, _ray$3, _sphere$6, _sphereHitAt, _vA, _vB, _vC, _tempA, _morphA, _intersectionPoint, _intersectionPointWorld, Mesh, DataTexture, _vector1, _vector2, _normalMatrix, Plane, _sphere$3, _defaultSpriteCenter, _vector$6, Frustum, LineBasicMaterial, _vStart, _vEnd, _inverseMatrix$1, _ray$1, _sphere$1, _intersectPointOnRay, _intersectPointOnSegment, Line, PointsMaterial, _inverseMatrix, _ray, _sphere, _position$3, Points, CubeTexture, DepthTexture, CubeDepthTexture, ExternalTexture, BoxGeometry, CylinderGeometry, ConeGeometry, PlaneGeometry, SphereGeometry, TorusGeometry, UniformsUtils, default_vertex, default_fragment, ShaderMaterial, RawShaderMaterial, MeshStandardMaterial, MeshLambertMaterial, MeshDepthMaterial, MeshDistanceMaterial, Interpolant, CubicInterpolant, LinearInterpolant, DiscreteInterpolant, BezierInterpolant, KeyframeTrack, BooleanKeyframeTrack, ColorKeyframeTrack, NumberKeyframeTrack, QuaternionLinearInterpolant, QuaternionKeyframeTrack, StringKeyframeTrack, VectorKeyframeTrack, LoadingManager, DefaultLoadingManager, Loader, Light, _projScreenMatrix, _lightPositionWorld, _lookTarget, LightShadow, _position$2, _quaternion$2, _scale$2, Camera, _v3$1, _minTarget, _maxTarget, PerspectiveCamera, PointLightShadow, PointLight, OrthographicCamera, DirectionalLightShadow, DirectionalLight, AmbientLight, fov, aspect, CubeCamera, ArrayCamera, Timer, _RESERVED_CHARS_RE, _reservedRe, _wordChar, _wordCharOrDot, _directoryRe, _nodeRe, _objectRe, _propertyRe, _trackRe, _supportedObjectNames, Composite, PropertyBinding, _controlInterpolantsResultBuffer, Matrix2;
   var init_three_core = __esm({
     "node_modules/three/build/three.core.js"() {
       REVISION = "184";
@@ -8360,45 +8360,6 @@ var BrennanGame = (() => {
       };
       _color = /* @__PURE__ */ new Color();
       Color.NAMES = _colorKeywords;
-      Fog = class _Fog {
-        /**
-         * Constructs a new fog.
-         *
-         * @param {number|Color} color - The fog's color.
-         * @param {number} [near=1] - The minimum distance to start applying fog.
-         * @param {number} [far=1000] - The maximum distance at which fog stops being calculated and applied.
-         */
-        constructor(color, near = 1, far = 1e3) {
-          this.isFog = true;
-          this.name = "";
-          this.color = new Color(color);
-          this.near = near;
-          this.far = far;
-        }
-        /**
-         * Returns a new fog with copied values from this instance.
-         *
-         * @return {Fog} A clone of this instance.
-         */
-        clone() {
-          return new _Fog(this.color, this.near, this.far);
-        }
-        /**
-         * Serializes the fog into JSON.
-         *
-         * @param {?(Object|string)} meta - An optional value holding meta information about the serialization.
-         * @return {Object} A JSON object representing the serialized fog
-         */
-        toJSON() {
-          return {
-            type: "Fog",
-            name: this.name,
-            color: this.color.getHex(),
-            near: this.near,
-            far: this.far
-          };
-        }
-      };
       Scene = class extends Object3D {
         /**
          * Constructs a new scene.
@@ -12516,38 +12477,6 @@ var BrennanGame = (() => {
           }
         }
       };
-      _start = /* @__PURE__ */ new Vector3();
-      _end = /* @__PURE__ */ new Vector3();
-      LineSegments = class extends Line {
-        /**
-         * Constructs a new line segments.
-         *
-         * @param {BufferGeometry} [geometry] - The line geometry.
-         * @param {Material|Array<Material>} [material] - The line material.
-         */
-        constructor(geometry, material) {
-          super(geometry, material);
-          this.isLineSegments = true;
-          this.type = "LineSegments";
-        }
-        computeLineDistances() {
-          const geometry = this.geometry;
-          if (geometry.index === null) {
-            const positionAttribute = geometry.attributes.position;
-            const lineDistances = [];
-            for (let i = 0, l = positionAttribute.count; i < l; i += 2) {
-              _start.fromBufferAttribute(positionAttribute, i);
-              _end.fromBufferAttribute(positionAttribute, i + 1);
-              lineDistances[i] = i === 0 ? 0 : lineDistances[i - 1];
-              lineDistances[i + 1] = lineDistances[i] + _start.distanceTo(_end);
-            }
-            geometry.setAttribute("lineDistance", new Float32BufferAttribute(lineDistances, 1));
-          } else {
-            warn("LineSegments.computeLineDistances(): Computation only possible with non-indexed BufferGeometry.");
-          }
-          return this;
-        }
-      };
       PointsMaterial = class extends Material {
         /**
          * Constructs a new points material.
@@ -13539,6 +13468,89 @@ var BrennanGame = (() => {
           this.envMap = source.envMap;
           this.envMapRotation.copy(source.envMapRotation);
           this.envMapIntensity = source.envMapIntensity;
+          this.wireframe = source.wireframe;
+          this.wireframeLinewidth = source.wireframeLinewidth;
+          this.wireframeLinecap = source.wireframeLinecap;
+          this.wireframeLinejoin = source.wireframeLinejoin;
+          this.flatShading = source.flatShading;
+          this.fog = source.fog;
+          return this;
+        }
+      };
+      MeshLambertMaterial = class extends Material {
+        /**
+         * Constructs a new mesh lambert material.
+         *
+         * @param {Object} [parameters] - An object with one or more properties
+         * defining the material's appearance. Any property of the material
+         * (including any property from inherited materials) can be passed
+         * in here. Color values can be passed any type of value accepted
+         * by {@link Color#set}.
+         */
+        constructor(parameters) {
+          super();
+          this.isMeshLambertMaterial = true;
+          this.type = "MeshLambertMaterial";
+          this.color = new Color(16777215);
+          this.map = null;
+          this.lightMap = null;
+          this.lightMapIntensity = 1;
+          this.aoMap = null;
+          this.aoMapIntensity = 1;
+          this.emissive = new Color(0);
+          this.emissiveIntensity = 1;
+          this.emissiveMap = null;
+          this.bumpMap = null;
+          this.bumpScale = 1;
+          this.normalMap = null;
+          this.normalMapType = TangentSpaceNormalMap;
+          this.normalScale = new Vector2(1, 1);
+          this.displacementMap = null;
+          this.displacementScale = 1;
+          this.displacementBias = 0;
+          this.specularMap = null;
+          this.alphaMap = null;
+          this.envMap = null;
+          this.envMapRotation = new Euler();
+          this.combine = MultiplyOperation;
+          this.reflectivity = 1;
+          this.envMapIntensity = 1;
+          this.refractionRatio = 0.98;
+          this.wireframe = false;
+          this.wireframeLinewidth = 1;
+          this.wireframeLinecap = "round";
+          this.wireframeLinejoin = "round";
+          this.flatShading = false;
+          this.fog = true;
+          this.setValues(parameters);
+        }
+        copy(source) {
+          super.copy(source);
+          this.color.copy(source.color);
+          this.map = source.map;
+          this.lightMap = source.lightMap;
+          this.lightMapIntensity = source.lightMapIntensity;
+          this.aoMap = source.aoMap;
+          this.aoMapIntensity = source.aoMapIntensity;
+          this.emissive.copy(source.emissive);
+          this.emissiveMap = source.emissiveMap;
+          this.emissiveIntensity = source.emissiveIntensity;
+          this.bumpMap = source.bumpMap;
+          this.bumpScale = source.bumpScale;
+          this.normalMap = source.normalMap;
+          this.normalMapType = source.normalMapType;
+          this.normalScale.copy(source.normalScale);
+          this.displacementMap = source.displacementMap;
+          this.displacementScale = source.displacementScale;
+          this.displacementBias = source.displacementBias;
+          this.specularMap = source.specularMap;
+          this.alphaMap = source.alphaMap;
+          this.envMap = source.envMap;
+          this.envMapRotation.copy(source.envMapRotation);
+          this.combine = source.combine;
+          this.reflectivity = source.reflectivity;
+          this.envMapIntensity = source.envMapIntensity;
+          this.refractionRatio = source.refractionRatio;
           this.wireframe = source.wireframe;
           this.wireframeLinewidth = source.wireframeLinewidth;
           this.wireframeLinecap = source.wireframeLinecap;
@@ -16077,51 +16089,6 @@ var BrennanGame = (() => {
           te[1] = n21;
           te[3] = n22;
           return this;
-        }
-      };
-      GridHelper = class extends LineSegments {
-        /**
-         * Constructs a new grid helper.
-         *
-         * @param {number} [size=10] - The size of the grid.
-         * @param {number} [divisions=10] - The number of divisions across the grid.
-         * @param {number|Color|string} [color1=0x444444] - The color of the center line.
-         * @param {number|Color|string} [color2=0x888888] - The color of the lines of the grid.
-         */
-        constructor(size = 10, divisions = 10, color1 = 4473924, color2 = 8947848) {
-          color1 = new Color(color1);
-          color2 = new Color(color2);
-          const center = divisions / 2;
-          const step2 = size / divisions;
-          const halfSize = size / 2;
-          const vertices = [], colors = [];
-          for (let i = 0, j = 0, k = -halfSize; i <= divisions; i++, k += step2) {
-            vertices.push(-halfSize, 0, k, halfSize, 0, k);
-            vertices.push(k, 0, -halfSize, k, 0, halfSize);
-            const color = i === center ? color1 : color2;
-            color.toArray(colors, j);
-            j += 3;
-            color.toArray(colors, j);
-            j += 3;
-            color.toArray(colors, j);
-            j += 3;
-            color.toArray(colors, j);
-            j += 3;
-          }
-          const geometry = new BufferGeometry();
-          geometry.setAttribute("position", new Float32BufferAttribute(vertices, 3));
-          geometry.setAttribute("color", new Float32BufferAttribute(colors, 3));
-          const material = new LineBasicMaterial({ vertexColors: true, toneMapped: false });
-          super(geometry, material);
-          this.type = "GridHelper";
-        }
-        /**
-         * Frees the GPU-related resources allocated by this instance. Call this
-         * method whenever this instance is no longer used in your app.
-         */
-        dispose() {
-          this.geometry.dispose();
-          this.material.dispose();
         }
       };
       if (typeof __THREE_DEVTOOLS__ !== "undefined") {
@@ -29074,12 +29041,12 @@ void main() {
     "js/physics.js"() {
       init_three_module();
       MARBLE_RADIUS = 0.6;
-      GRAVITY = 42;
-      ACCEL = 70;
-      AIR_ACCEL = 22;
-      MAX_SPEED = 15;
-      GROUND_DAMP = 2.2;
-      AIR_DAMP = 0.15;
+      GRAVITY = 28;
+      ACCEL = 28;
+      AIR_ACCEL = 8;
+      MAX_SPEED = 12;
+      GROUND_DAMP = 1.4;
+      AIR_DAMP = 0.05;
     }
   });
 
@@ -29120,18 +29087,18 @@ void main() {
     const group = new Group();
     group.position.set(x, FLOOR + 0.6, z);
     const cross = !!def.cross;
-    const beam = new Mesh(new BoxGeometry(length, 1.1, thickness), mat(COL.magenta));
+    const beam = new Mesh(new BoxGeometry(length, 1.1, thickness), mat(COL.trap, 0.4));
     group.add(beam);
     if (cross) {
-      const beam2 = new Mesh(new BoxGeometry(length, 1.1, thickness), mat(COL.magenta));
+      const beam2 = new Mesh(new BoxGeometry(length, 1.1, thickness), mat(COL.trap, 0.4));
       beam2.rotation.y = Math.PI / 2;
       group.add(beam2);
     }
-    const hub = new Mesh(new CylinderGeometry(0.45, 0.45, 1.4, 12), mat(COL.purple, 1.6));
+    const hub = new Mesh(new CylinderGeometry(0.45, 0.45, 1.4, 12), mat(COL.purple, 0.5));
     group.add(hub);
     const caps = cross ? [[-1, 0], [1, 0], [0, -1], [0, 1]] : [[-1, 0], [1, 0]];
     for (const [sx, sz] of caps) {
-      const cap = new Mesh(new SphereGeometry(0.45, 12, 12), mat(COL.cyan, 1.6));
+      const cap = new Mesh(new SphereGeometry(0.45, 12, 12), mat(COL.spike, 0.3));
       cap.position.set(sx * length / 2, 0, sz * length / 2);
       group.add(cap);
     }
@@ -29184,7 +29151,7 @@ void main() {
     const [w, d] = area;
     const group = new Group();
     group.position.set(x, 0, z);
-    const pad = new Mesh(new BoxGeometry(w, 0.12, d), mat(COL.purple, 0.7));
+    const pad = new Mesh(new BoxGeometry(w, 0.12, d), mat(COL.trap, 0.3));
     pad.position.y = FLOOR + 0.06;
     group.add(pad);
     const cols = Math.max(2, Math.round(w / 0.9));
@@ -29192,7 +29159,7 @@ void main() {
     const cones = [];
     for (let i = 0; i < cols; i++) {
       for (let j = 0; j < rows; j++) {
-        const c = spikeCone(COL.cyan, 0.8, 0.2);
+        const c = spikeCone(COL.spike, 0.8, 0.2);
         c.position.x = -w / 2 + (i + 0.5) * (w / cols);
         c.position.z = -d / 2 + (j + 0.5) * (d / rows);
         group.add(c);
@@ -29235,10 +29202,10 @@ void main() {
     const { from, to, speed, size, offset } = def;
     const half = size / 2;
     const group = new Group();
-    const body = new Mesh(new BoxGeometry(size, size, size), mat(COL.orange, 1.3));
+    const body = new Mesh(new BoxGeometry(size, size, size), mat(COL.trap, 0.4));
     group.add(body);
     for (const [ax, az, ry] of [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0]]) {
-      const sp = spikeCone(COL.magenta, 0.6, 0.25);
+      const sp = spikeCone(COL.spike, 0.6, 0.25);
       sp.position.set(ax * half, 0, az * half);
       sp.rotation.z = ax !== 0 ? -ax * Math.PI / 2 : 0;
       sp.rotation.x = az !== 0 ? az * Math.PI / 2 : 0;
@@ -29279,7 +29246,7 @@ void main() {
     const len = Math.hypot(dir[0], dir[1]) || 1;
     const dx = dir[0] / len, dz = dir[1] / len;
     const group = new Group();
-    const barrel = new Mesh(new CylinderGeometry(0.5, 0.6, 1.4, 12), mat(COL.purple, 1.2));
+    const barrel = new Mesh(new CylinderGeometry(0.5, 0.6, 1.4, 12), mat(COL.trap, 0.4));
     barrel.position.set(x, FLOOR + 0.7, z);
     barrel.rotation.z = Math.PI / 2;
     barrel.rotation.y = Math.atan2(dx, dz);
@@ -29295,7 +29262,7 @@ void main() {
     function getMesh() {
       let m = pool.pop();
       if (!m) {
-        m = new Mesh(new SphereGeometry(bulletR, 12, 12), mat(COL.magenta, 1.8));
+        m = new Mesh(new SphereGeometry(bulletR, 12, 12), mat(COL.red, 0.8));
         group.add(m);
       }
       m.visible = true;
@@ -29431,80 +29398,66 @@ void main() {
         roughness: 0.4
       });
       COL = {
-        magenta: 15757360,
-        // warm orange
-        cyan: 4890367,
-        // soft blue
-        purple: 8934877,
-        // muted violet
-        yellow: 16767334,
-        // soft gold
-        red: 16737877,
-        // softer coral red
-        orange: 15757360
-        // warm orange
+        magenta: 13382434,
+        // dark red (cannon bullets, cube spikes)
+        cyan: 4491468,
+        // steel blue (spear cones)
+        purple: 4473958,
+        // dark gray-purple (cannon barrel, axis hub)
+        yellow: 16766720,
+        // gold (unused but kept)
+        red: 13382434,
+        orange: 14509602,
+        // Marble Trap style: traps are dark angular machines
+        trap: 2763322,
+        // very dark gray body
+        spike: 10066602
+        // light gray spikes
       };
     }
   });
 
   // js/builder.js
-  function neon(color, intensity = 1) {
-    return new MeshStandardMaterial({
-      color,
-      emissive: new Color(color),
-      emissiveIntensity: intensity,
-      metalness: 0.2,
-      roughness: 0.5
-    });
+  function flat(color) {
+    return new MeshLambertMaterial({ color });
   }
   function buildPlatforms(level) {
     const group = new Group();
     const pitTiles = [];
+    const matGrass = flat(COL2.grass);
+    const matGrassDark = flat(COL2.grass_dark);
+    const matGrassPit = flat(COL2.grass_pit);
+    const matDirt = flat(COL2.dirt);
+    const matDirtDark = flat(COL2.dirt_dark);
     for (const p of level.platforms) {
       const [w, h, d] = p.size;
       const tile = new Group();
       tile.position.set(p.pos[0], p.pos[1], p.pos[2]);
       const isPit = !!p.drop;
-      const edgeCol = isPit ? COL2.magenta : COL2.cyan;
       const body = new Mesh(
         new BoxGeometry(w - 0.04, h, d - 0.04),
-        new MeshStandardMaterial({
-          color: isPit ? 2755110 : 787750,
-          emissive: new Color(isPit ? 3803688 : 656162),
-          emissiveIntensity: 0.5,
-          metalness: 0.4,
-          roughness: 0.55
-        })
+        isPit ? matDirtDark : matDirt
       );
       tile.add(body);
-      const surfMat = new MeshStandardMaterial({
-        color: isPit ? 6952256 : 1056842,
-        emissive: new Color(edgeCol),
-        emissiveIntensity: isPit ? 0.18 : 0.12,
-        metalness: 0.3,
-        roughness: 0.4,
-        polygonOffset: true,
-        polygonOffsetFactor: -1,
-        polygonOffsetUnits: -1
-      });
-      const surf = new Mesh(new PlaneGeometry(w - 0.08, d - 0.08), surfMat);
-      surf.rotation.x = -Math.PI / 2;
-      surf.position.y = h / 2 + 0.012;
-      tile.add(surf);
-      const bw = 0.12;
-      const inset = 0.04;
-      const yTop = h / 2 + 0.02;
-      const barMat = neon(edgeCol, 0.9);
-      const addBar = (bx, bz, lx, lz) => {
-        const bar = new Mesh(new BoxGeometry(lx, 0.08, lz), barMat);
-        bar.position.set(bx, yTop, bz);
-        tile.add(bar);
-      };
-      const innerW = w - inset * 2, innerD = d - inset * 2;
-      addBar(0, innerD / 2 - bw / 2, innerW, bw);
-      addBar(0, -innerD / 2 + bw / 2, innerW, bw);
-      addBar(innerW / 2 - bw / 2, 0, bw, innerD);
-      addBar(-innerW / 2 + bw / 2, 0, bw, innerD);
+      const cols = Math.max(1, Math.round(w));
+      const rows = Math.max(1, Math.round(d));
+      const cw = w / cols, cr = d / rows;
+      const topMat0 = isPit ? matGrassPit : matGrass;
+      const topMat1 = isPit ? flat(10510384) : matGrassDark;
+      const yTop = h / 2 + 5e-3;
+      for (let ci = 0; ci < cols; ci++) {
+        for (let ri = 0; ri < rows; ri++) {
+          const m = (ci + ri) % 2 === 0 ? topMat0 : topMat1;
+          const sq = new Mesh(new PlaneGeometry(cw - 0.02, cr - 0.02), m);
+          sq.rotation.x = -Math.PI / 2;
+          sq.position.set(
+            -w / 2 + (ci + 0.5) * cw,
+            yTop,
+            -d / 2 + (ri + 0.5) * cr
+          );
+          tile.add(sq);
+        }
+      }
       group.add(tile);
       if (isPit) pitTiles.push({ def: p, mesh: tile });
     }
@@ -29515,29 +29468,35 @@ void main() {
     const [x, , z] = level.finish;
     group.position.set(x, 0, z);
     const pad = new Mesh(
-      new CylinderGeometry(2.4, 2.4, 0.2, 36),
-      neon(COL2.yellow, 1.7)
+      new CylinderGeometry(2.4, 2.4, 0.22, 36),
+      flat(COL2.finish_grn)
     );
     pad.position.y = 0.12;
     group.add(pad);
     const ring = new Mesh(
-      new TorusGeometry(2.7, 0.18, 12, 40),
-      neon(COL2.cyan, 2.2)
+      new TorusGeometry(2.7, 0.2, 12, 40),
+      flat(COL2.finish_yel)
     );
     ring.rotation.x = Math.PI / 2;
-    ring.position.y = 0.2;
+    ring.position.y = 0.22;
     group.add(ring);
     for (const s of [-1, 1]) {
-      const post = new Mesh(new BoxGeometry(0.34, 4.2, 0.34), neon(COL2.cyan, 1.9));
-      post.position.set(s * 2.6, 2.1, 0);
+      const post = new Mesh(
+        new BoxGeometry(0.34, 4.4, 0.34),
+        flat(COL2.white)
+      );
+      post.position.set(s * 2.6, 2.2, 0);
       group.add(post);
     }
-    for (const ay of [4, 4.6]) {
-      const arch = new Mesh(new BoxGeometry(5.6, 0.3, 0.3), neon(COL2.magenta, 1.9));
+    for (const ay of [4.1, 4.7]) {
+      const arch = new Mesh(
+        new BoxGeometry(5.6, 0.3, 0.3),
+        flat(COL2.finish_yel)
+      );
       arch.position.y = ay;
       group.add(arch);
     }
-    const light = new PointLight(COL2.yellow, 26, 22, 2);
+    const light = new PointLight(16766720, 6, 18, 2);
     light.position.set(0, 2.5, 0);
     group.add(light);
     group.userData.spin = pad;
@@ -29546,49 +29505,39 @@ void main() {
   function buildMarble() {
     const group = new Group();
     const ball = new Mesh(
-      new SphereGeometry(MARBLE_RADIUS, 32, 32),
+      new SphereGeometry(MARBLE_RADIUS, 28, 28),
       new MeshStandardMaterial({
-        color: 15400959,
-        emissive: new Color(COL2.cyan),
-        emissiveIntensity: 0.55,
-        metalness: 0.85,
-        roughness: 0.12
+        color: COL2.marble_whi,
+        metalness: 0.05,
+        roughness: 0.35
       })
     );
     group.add(ball);
-    const ringMat = new MeshBasicMaterial({ color: COL2.magenta });
-    for (const rot of [0, Math.PI / 2]) {
-      const ring = new Mesh(
-        new TorusGeometry(MARBLE_RADIUS * 1.004, 0.035, 8, 40),
-        ringMat
-      );
-      ring.rotation.y = rot;
-      group.add(ring);
-    }
-    const glow = new PointLight(COL2.cyan, 9, 9, 2);
-    group.add(glow);
-    group.userData.spin = [ball, ...group.children.filter((c) => c.geometry?.type === "TorusGeometry")];
+    const blue = new Mesh(
+      new TorusGeometry(MARBLE_RADIUS * 1.002, MARBLE_RADIUS * 0.32, 8, 36),
+      new MeshLambertMaterial({ color: COL2.marble_blu })
+    );
+    group.add(blue);
+    const red = new Mesh(
+      new TorusGeometry(MARBLE_RADIUS * 1.002, MARBLE_RADIUS * 0.13, 8, 36),
+      new MeshLambertMaterial({ color: COL2.marble_red })
+    );
+    red.rotation.z = Math.PI / 4;
+    group.add(red);
+    group.userData.spin = [ball, blue, red];
     return group;
   }
   function buildEnvironment(scene) {
-    scene.fog = new Fog(656416, 34, 130);
-    const grid = new GridHelper(600, 120, COL2.magenta, COL2.purple);
-    grid.position.y = -14;
-    grid.material.opacity = 0.28;
-    grid.material.transparent = true;
-    grid.material.depthWrite = false;
-    scene.add(grid);
-    const grid2 = new GridHelper(600, 60, COL2.cyan, 2228292);
-    grid2.position.y = -14.06;
-    grid2.material.opacity = 0.15;
-    grid2.material.transparent = true;
-    grid2.material.depthWrite = false;
-    scene.add(grid2);
-    scene.add(new AmbientLight(6702250, 0.7));
-    const key = new DirectionalLight(16777215, 0.6);
-    key.position.set(10, 30, 10);
-    scene.add(key);
-    return { grid, grid2 };
+    scene.background = new Color(8900331);
+    scene.fog = null;
+    scene.add(new AmbientLight(16777215, 0.75));
+    const sun = new DirectionalLight(16774624, 1.3);
+    sun.position.set(12, 28, 14);
+    scene.add(sun);
+    const fill = new DirectionalLight(13164528, 0.35);
+    fill.position.set(-8, 10, -6);
+    scene.add(fill);
+    return {};
   }
   function makeParticles(scene, max = 180) {
     const positions = new Float32Array(max * 3);
@@ -29658,7 +29607,7 @@ void main() {
       }
     };
   }
-  function makeTrail(scene, len = 24, colorHex = COL2.cyan) {
+  function makeTrail(scene, len = 24, colorHex = 16777215) {
     const positions = new Float32Array(len * 3);
     const colors = new Float32Array(len * 3);
     const geo = new BufferGeometry();
@@ -29712,16 +29661,20 @@ void main() {
       init_three_module();
       init_physics();
       COL2 = {
-        magenta: 15757360,
-        // warm orange (replaces eye-searing magenta)
-        cyan: 4890367,
-        // soft electric blue (replaces blinding cyan)
-        purple: 8934877,
-        // muted violet
-        yellow: 16767334,
-        // soft gold
-        deep: 790560
-        // dark navy
+        grass: 5942076,
+        grass_dark: 4887088,
+        grass_pit: 12613690,
+        // reddish-brown top on pit tiles (danger signal)
+        dirt: 9133628,
+        dirt_dark: 7029795,
+        white: 16777215,
+        finish_grn: 4045629,
+        finish_yel: 16766720,
+        trap_body: 3355460,
+        trap_spike: 8947865,
+        marble_whi: 16777215,
+        marble_blu: 3833813,
+        marble_red: 14492194
       };
     }
   });
@@ -30153,7 +30106,7 @@ void main() {
       init_audio();
       var mount = document.getElementById("scene");
       var scene = new Scene();
-      scene.background = new Color(656416);
+      scene.background = new Color(8900331);
       var camera = new PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 600);
       camera.position.set(0, 16, 22);
       var renderer = new WebGLRenderer({ antialias: true, powerPreference: "high-performance" });

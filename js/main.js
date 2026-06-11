@@ -14,7 +14,7 @@ import { World, getBest, setBest, getUnlocked, unlock } from "./game.js";
 // ---------------- Three.js setup ----------------
 const mount = document.getElementById("scene");
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x0a0420);
+scene.background = new THREE.Color(0x87CEEB); // set here; buildEnvironment will also set it
 
 const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 600);
 camera.position.set(0, 16, 22);

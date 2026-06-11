@@ -7,12 +7,12 @@ import * as THREE from "three";
 export const MARBLE_RADIUS = 0.6;
 
 // Tuning constants (units are world-units and seconds).
-const GRAVITY = 42;       // downward acceleration
-const ACCEL = 70;         // input acceleration on the ground
-const AIR_ACCEL = 22;     // weaker control while airborne
-const MAX_SPEED = 15;     // horizontal speed cap
-const GROUND_DAMP = 2.2;  // velocity decay/sec when grounded with no input
-const AIR_DAMP = 0.15;    // tiny horizontal drag in the air
+const GRAVITY = 28;       // softer gravity (was 42) — marble feels weightier, less floaty
+const ACCEL = 28;         // slow initial acceleration (was 70) — builds up like a real ball
+const AIR_ACCEL = 8;      // weaker air control (was 22)
+const MAX_SPEED = 12;     // slightly lower top speed (was 15)
+const GROUND_DAMP = 1.4;  // gentler braking (was 2.2) — momentum carries more
+const AIR_DAMP = 0.05;    // almost no air drag (was 0.15) — ball arcs naturally
 
 // Returns true if a pit-trap platform is solid right now (false = gap is open).
 export function platformSolid(p, time) {

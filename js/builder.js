@@ -1,39 +1,42 @@
-// Builds the visible 3D world for a level: neon platforms (with glowing edges),
-// the finish gate, the marble, and the synthwave environment (grid + sun).
+// Builds the visible 3D world: platforms (grass top / dirt sides), finish gate,
+// marble, and environment. Visual style matches Marble Trap — clean low-poly,
+// bright daylight, no neon glow or bloom.
 
 import * as THREE from "three";
 import { MARBLE_RADIUS } from "./physics.js";
 
-const COL = {
-  magenta: 0xf07030,  // warm orange (replaces eye-searing magenta)
-  cyan:    0x4a9eff,  // soft electric blue (replaces blinding cyan)
-  purple:  0x8855dd,  // muted violet
-  yellow:  0xffd966,  // soft gold
-  deep:    0x0c1020,  // dark navy
-};
-
-function neon(color, intensity = 1.0) {
-  return new THREE.MeshStandardMaterial({
-    color,
-    emissive: new THREE.Color(color),
-    emissiveIntensity: intensity,
-    metalness: 0.2,
-    roughness: 0.5,
-  });
+// Flat Lambert material — fast, no bloom bleed, matches Marble Trap's look
+function flat(color) {
+  return new THREE.MeshLambertMaterial({ color });
 }
 
-// Build all platform meshes. Pit-trap tiles get a reference back to their def so
-// main.js can sink them visually when the gap opens.
-//
-// Graphics notes (fixing the "glitchy stripes"):
-//  - The dark stripe artifacts were z-fighting: adjacent tiles share an exact
-//    boundary plane at the same Y, so their top faces and edge lines overlapped.
-//  - Fix: the solid body sits slightly BELOW y=0 (top face at y=0), and the glowing
-//    surface is a single thin plane rendered with polygonOffset so it never fights
-//    the body. Edge frames use a tube-like inset so neighboring tiles don't overlap.
+const COL = {
+  grass:      0x5aab3c,
+  grass_dark: 0x4a9230,
+  grass_pit:  0xc0783a,  // reddish-brown top on pit tiles (danger signal)
+  dirt:       0x8B5E3C,
+  dirt_dark:  0x6b4423,
+  white:      0xffffff,
+  finish_grn: 0x3dbb3d,
+  finish_yel: 0xffd700,
+  trap_body:  0x333344,
+  trap_spike: 0x888899,
+  marble_whi: 0xffffff,
+  marble_blu: 0x3a7fd5,
+  marble_red: 0xdd2222,
+};
+
+// Build all platform meshes.
 export function buildPlatforms(level) {
   const group = new THREE.Group();
   const pitTiles = [];
+
+  // shared materials (reused across all tiles for draw-call efficiency)
+  const matGrass     = flat(COL.grass);
+  const matGrassDark = flat(COL.grass_dark);
+  const matGrassPit  = flat(COL.grass_pit);
+  const matDirt      = flat(COL.dirt);
+  const matDirtDark  = flat(COL.dirt_dark);
 
   for (const p of level.platforms) {
     const [w, h, d] = p.size;
@@ -41,53 +44,35 @@ export function buildPlatforms(level) {
     tile.position.set(p.pos[0], p.pos[1], p.pos[2]);
 
     const isPit = !!p.drop;
-    const edgeCol = isPit ? COL.magenta : COL.cyan;
 
-    // solid body (slightly shrunk in X/Z so adjacent tiles never share a face)
+    // --- sides: one box the full size, using dirt material ---
     const body = new THREE.Mesh(
       new THREE.BoxGeometry(w - 0.04, h, d - 0.04),
-      new THREE.MeshStandardMaterial({
-        color: isPit ? 0x2a0a26 : 0x0c0526,
-        emissive: new THREE.Color(isPit ? 0x3a0a28 : 0x0a0322),
-        emissiveIntensity: 0.5,
-        metalness: 0.4,
-        roughness: 0.55,
-      })
+      isPit ? matDirtDark : matDirt
     );
     tile.add(body);
 
-    // glowing top surface: one flat plane just above the body's top face.
-    // polygonOffset pushes it in depth so it can't z-fight with the body.
-    const surfMat = new THREE.MeshStandardMaterial({
-      color: isPit ? 0x6a1540 : 0x10204a,
-      emissive: new THREE.Color(edgeCol),
-      emissiveIntensity: isPit ? 0.18 : 0.12,
-      metalness: 0.3,
-      roughness: 0.4,
-      polygonOffset: true,
-      polygonOffsetFactor: -1,
-      polygonOffsetUnits: -1,
-    });
-    const surf = new THREE.Mesh(new THREE.PlaneGeometry(w - 0.08, d - 0.08), surfMat);
-    surf.rotation.x = -Math.PI / 2;
-    surf.position.y = h / 2 + 0.012;
-    tile.add(surf);
+    // --- top: checkerboard of small quads ---
+    const cols = Math.max(1, Math.round(w));
+    const rows = Math.max(1, Math.round(d));
+    const cw = w / cols, cr = d / rows;
+    const topMat0 = isPit ? matGrassPit : matGrass;
+    const topMat1 = isPit ? flat(0xa06030) : matGrassDark;
+    const yTop = h / 2 + 0.005;
 
-    // bright neon border framing the surface (4 thin glowing bars, inset)
-    const bw = 0.12;                  // bar thickness
-    const inset = 0.04;
-    const yTop = h / 2 + 0.02;
-    const barMat = neon(edgeCol, 0.9);
-    const addBar = (bx, bz, lx, lz) => {
-      const bar = new THREE.Mesh(new THREE.BoxGeometry(lx, 0.08, lz), barMat);
-      bar.position.set(bx, yTop, bz);
-      tile.add(bar);
-    };
-    const innerW = w - inset * 2, innerD = d - inset * 2;
-    addBar(0, innerD / 2 - bw / 2, innerW, bw);   // far edge
-    addBar(0, -innerD / 2 + bw / 2, innerW, bw);  // near edge
-    addBar(innerW / 2 - bw / 2, 0, bw, innerD);   // right edge
-    addBar(-innerW / 2 + bw / 2, 0, bw, innerD);  // left edge
+    for (let ci = 0; ci < cols; ci++) {
+      for (let ri = 0; ri < rows; ri++) {
+        const m = (ci + ri) % 2 === 0 ? topMat0 : topMat1;
+        const sq = new THREE.Mesh(new THREE.PlaneGeometry(cw - 0.02, cr - 0.02), m);
+        sq.rotation.x = -Math.PI / 2;
+        sq.position.set(
+          -w / 2 + (ci + 0.5) * cw,
+          yTop,
+          -d / 2 + (ri + 0.5) * cr
+        );
+        tile.add(sq);
+      }
+    }
 
     group.add(tile);
     if (isPit) pitTiles.push({ def: p, mesh: tile });
@@ -96,43 +81,51 @@ export function buildPlatforms(level) {
   return { group, pitTiles };
 }
 
-// The finish gate: a glowing ring/pad you roll into.
+// The finish gate: a bright flag-style goal marker.
 export function buildFinish(level) {
   const group = new THREE.Group();
   const [x, , z] = level.finish;
   group.position.set(x, 0, z);
 
-  // big glowing landing disc you roll onto
+  // spinning green pad
   const pad = new THREE.Mesh(
-    new THREE.CylinderGeometry(2.4, 2.4, 0.2, 36),
-    neon(COL.yellow, 1.7)
+    new THREE.CylinderGeometry(2.4, 2.4, 0.22, 36),
+    flat(COL.finish_grn)
   );
   pad.position.y = 0.12;
   group.add(pad);
 
-  // a bright ring around the disc so it reads as the goal from far away
+  // yellow ring
   const ring = new THREE.Mesh(
-    new THREE.TorusGeometry(2.7, 0.18, 12, 40),
-    neon(COL.cyan, 2.2)
+    new THREE.TorusGeometry(2.7, 0.2, 12, 40),
+    flat(COL.finish_yel)
   );
   ring.rotation.x = Math.PI / 2;
-  ring.position.y = 0.2;
+  ring.position.y = 0.22;
   group.add(ring);
 
-  // two tall glowing posts + a double arch (a clear gateway)
+  // two white posts
   for (const s of [-1, 1]) {
-    const post = new THREE.Mesh(new THREE.BoxGeometry(0.34, 4.2, 0.34), neon(COL.cyan, 1.9));
-    post.position.set(s * 2.6, 2.1, 0);
+    const post = new THREE.Mesh(
+      new THREE.BoxGeometry(0.34, 4.4, 0.34),
+      flat(COL.white)
+    );
+    post.position.set(s * 2.6, 2.2, 0);
     group.add(post);
   }
-  for (const ay of [4.0, 4.6]) {
-    const arch = new THREE.Mesh(new THREE.BoxGeometry(5.6, 0.3, 0.3), neon(COL.magenta, 1.9));
+
+  // yellow arch beams
+  for (const ay of [4.1, 4.7]) {
+    const arch = new THREE.Mesh(
+      new THREE.BoxGeometry(5.6, 0.3, 0.3),
+      flat(COL.finish_yel)
+    );
     arch.position.y = ay;
     group.add(arch);
   }
 
-  // a strong point light so the goal glows as "the destination"
-  const light = new THREE.PointLight(COL.yellow, 26, 22, 2);
+  // soft point light so the goal is readable at a distance
+  const light = new THREE.PointLight(0xffd700, 6, 18, 2);
   light.position.set(0, 2.5, 0);
   group.add(light);
 
@@ -140,74 +133,62 @@ export function buildFinish(level) {
   return group;
 }
 
-// The player's marble — emissive so it glows, with a wireframe overlay so spin reads.
+// The player's marble — Marble Trap style: white with blue and red stripes.
 export function buildMarble() {
   const group = new THREE.Group();
 
-  // glossy chrome-neon core
+  // white base sphere
   const ball = new THREE.Mesh(
-    new THREE.SphereGeometry(MARBLE_RADIUS, 32, 32),
+    new THREE.SphereGeometry(MARBLE_RADIUS, 28, 28),
     new THREE.MeshStandardMaterial({
-      color: 0xeaffff,
-      emissive: new THREE.Color(COL.cyan),
-      emissiveIntensity: 0.55,
-      metalness: 0.85,
-      roughness: 0.12,
+      color: COL.marble_whi,
+      metalness: 0.05,
+      roughness: 0.35,
     })
   );
   group.add(ball);
 
-  // a couple of clean banding rings (read spin without the noisy full wireframe)
-  const ringMat = new THREE.MeshBasicMaterial({ color: COL.magenta });
-  for (const rot of [0, Math.PI / 2]) {
-    const ring = new THREE.Mesh(
-      new THREE.TorusGeometry(MARBLE_RADIUS * 1.004, 0.035, 8, 40),
-      ringMat
-    );
-    ring.rotation.y = rot;
-    group.add(ring);
-  }
+  // blue equatorial band
+  const blue = new THREE.Mesh(
+    new THREE.TorusGeometry(MARBLE_RADIUS * 1.002, MARBLE_RADIUS * 0.32, 8, 36),
+    new THREE.MeshLambertMaterial({ color: COL.marble_blu })
+  );
+  group.add(blue);
 
-  const glow = new THREE.PointLight(COL.cyan, 9, 9, 2);
-  group.add(glow);
+  // red stripe (tilted 45°)
+  const red = new THREE.Mesh(
+    new THREE.TorusGeometry(MARBLE_RADIUS * 1.002, MARBLE_RADIUS * 0.13, 8, 36),
+    new THREE.MeshLambertMaterial({ color: COL.marble_red })
+  );
+  red.rotation.z = Math.PI / 4;
+  group.add(red);
 
-  // meshes that should visibly roll (the point light should NOT)
-  group.userData.spin = [ball, ...group.children.filter((c) => c.geometry?.type === "TorusGeometry")];
+  // meshes that should visibly roll
+  group.userData.spin = [ball, blue, red];
   return group;
 }
 
-// The synthwave backdrop: ground grid, horizon sun, and fog. Added once, reused.
+// Daylight environment — bright sky, sun, directional light. No neon, no fog.
 export function buildEnvironment(scene) {
-  scene.fog = new THREE.Fog(0x0a0420, 34, 130);
+  // clear sky background
+  scene.background = new THREE.Color(0x87CEEB);
+  scene.fog = null;
 
-  // big neon grid far below the track (deep enough that it never overlaps the path)
-  const grid = new THREE.GridHelper(600, 120, COL.magenta, COL.purple);
-  grid.position.y = -14;
-  grid.material.opacity = 0.28;
-  grid.material.transparent = true;
-  grid.material.depthWrite = false;
-  scene.add(grid);
+  // bright daylight: strong ambient + angled sun
+  scene.add(new THREE.AmbientLight(0xffffff, 0.75));
+  const sun = new THREE.DirectionalLight(0xfff5e0, 1.3);
+  sun.position.set(12, 28, 14);
+  scene.add(sun);
 
-  // a second grid for depth
-  const grid2 = new THREE.GridHelper(600, 60, COL.cyan, 0x220044);
-  grid2.position.y = -14.06;
-  grid2.material.opacity = 0.15;
-  grid2.material.transparent = true;
-  grid2.material.depthWrite = false;
-  scene.add(grid2);
+  // soft fill from the opposite side (avoids pitch-black shadows)
+  const fill = new THREE.DirectionalLight(0xc8dff0, 0.35);
+  fill.position.set(-8, 10, -6);
+  scene.add(fill);
 
-
-  // ambient + key light so standard materials are visible
-  scene.add(new THREE.AmbientLight(0x6644aa, 0.7));
-  const key = new THREE.DirectionalLight(0xffffff, 0.6);
-  key.position.set(10, 30, 10);
-  scene.add(key);
-
-  return { grid, grid2 };
+  return {};
 }
 
 // ---------------------------------------------------------------- Juice: particles
-// A pooled additive point cloud for death/win bursts. burst() spawns, update() ages.
 export function makeParticles(scene, max = 180) {
   const positions = new Float32Array(max * 3);
   const colors = new Float32Array(max * 3);
@@ -265,8 +246,7 @@ export function makeParticles(scene, max = 180) {
 }
 
 // ---------------------------------------------------------------- Juice: marble trail
-// A fading additive streak that follows the marble.
-export function makeTrail(scene, len = 24, colorHex = COL.cyan) {
+export function makeTrail(scene, len = 24, colorHex = 0xffffff) {
   const positions = new Float32Array(len * 3);
   const colors = new Float32Array(len * 3);
   const geo = new THREE.BufferGeometry();

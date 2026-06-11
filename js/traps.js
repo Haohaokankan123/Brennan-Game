@@ -20,12 +20,15 @@ const mat = (color, emissiveBoost = 1.4) =>
   });
 
 const COL = {
-  magenta: 0xf07030,  // warm orange
-  cyan:    0x4a9eff,  // soft blue
-  purple:  0x8855dd,  // muted violet
-  yellow:  0xffd966,  // soft gold
-  red:     0xff6655,  // softer coral red
-  orange:  0xf07030,  // warm orange
+  magenta: 0xcc3322,  // dark red (cannon bullets, cube spikes)
+  cyan:    0x4488cc,  // steel blue (spear cones)
+  purple:  0x444466,  // dark gray-purple (cannon barrel, axis hub)
+  yellow:  0xffd700,  // gold (unused but kept)
+  red:     0xcc3322,
+  orange:  0xdd6622,
+  // Marble Trap style: traps are dark angular machines
+  trap:    0x2a2a3a,  // very dark gray body
+  spike:   0x999aaa,  // light gray spikes
 };
 
 function spikeCone(color, h = 0.7, rad = 0.22) {
@@ -83,20 +86,20 @@ function makeAxis(def) {
 
   const cross = !!def.cross; // a second perpendicular beam (4-arm "cross axe")
 
-  const beam = new THREE.Mesh(new THREE.BoxGeometry(length, 1.1, thickness), mat(COL.magenta));
+  const beam = new THREE.Mesh(new THREE.BoxGeometry(length, 1.1, thickness), mat(COL.trap, 0.4));
   group.add(beam);
   if (cross) {
-    const beam2 = new THREE.Mesh(new THREE.BoxGeometry(length, 1.1, thickness), mat(COL.magenta));
+    const beam2 = new THREE.Mesh(new THREE.BoxGeometry(length, 1.1, thickness), mat(COL.trap, 0.4));
     beam2.rotation.y = Math.PI / 2;
     group.add(beam2);
   }
-  // glowing hub
-  const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.45, 1.4, 12), mat(COL.purple, 1.6));
+  // dark hub
+  const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.45, 1.4, 12), mat(COL.purple, 0.5));
   group.add(hub);
-  // end caps (all 4 arm tips when cross)
+  // light gray end caps
   const caps = cross ? [[-1, 0], [1, 0], [0, -1], [0, 1]] : [[-1, 0], [1, 0]];
   for (const [sx, sz] of caps) {
-    const cap = new THREE.Mesh(new THREE.SphereGeometry(0.45, 12, 12), mat(COL.cyan, 1.6));
+    const cap = new THREE.Mesh(new THREE.SphereGeometry(0.45, 12, 12), mat(COL.spike, 0.3));
     cap.position.set(sx * length / 2, 0, sz * length / 2);
     group.add(cap);
   }
@@ -157,7 +160,7 @@ function makeSpears(def) {
   group.position.set(x, 0, z);
 
   // base pad so the field is visible even when spikes are down
-  const pad = new THREE.Mesh(new THREE.BoxGeometry(w, 0.12, d), mat(COL.purple, 0.7));
+  const pad = new THREE.Mesh(new THREE.BoxGeometry(w, 0.12, d), mat(COL.trap, 0.3));
   pad.position.y = FLOOR + 0.06;
   group.add(pad);
 
@@ -166,7 +169,7 @@ function makeSpears(def) {
   const cones = [];
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
-      const c = spikeCone(COL.cyan, 0.8, 0.2);
+      const c = spikeCone(COL.spike, 0.8, 0.2);
       c.position.x = -w / 2 + (i + 0.5) * (w / cols);
       c.position.z = -d / 2 + (j + 0.5) * (d / rows);
       group.add(c);
@@ -214,11 +217,11 @@ function makeCube(def) {
   const { from, to, speed, size, offset } = def;
   const half = size / 2;
   const group = new THREE.Group();
-  const body = new THREE.Mesh(new THREE.BoxGeometry(size, size, size), mat(COL.orange, 1.3));
+  const body = new THREE.Mesh(new THREE.BoxGeometry(size, size, size), mat(COL.trap, 0.4));
   group.add(body);
   // spikes on the 4 side faces
   for (const [ax, az, ry] of [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0]]) {
-    const sp = spikeCone(COL.magenta, 0.6, 0.25);
+    const sp = spikeCone(COL.spike, 0.6, 0.25);
     sp.position.set(ax * half, 0, az * half);
     sp.rotation.z = ax !== 0 ? -ax * Math.PI / 2 : 0;
     sp.rotation.x = az !== 0 ? az * Math.PI / 2 : 0;
@@ -264,7 +267,7 @@ function makeCannon(def) {
 
   const group = new THREE.Group();
   // barrel
-  const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.6, 1.4, 12), mat(COL.purple, 1.2));
+  const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.6, 1.4, 12), mat(COL.trap, 0.4));
   barrel.position.set(x, FLOOR + 0.7, z);
   barrel.rotation.z = Math.PI / 2;
   barrel.rotation.y = Math.atan2(dx, dz);
@@ -283,7 +286,7 @@ function makeCannon(def) {
   function getMesh() {
     let m = pool.pop();
     if (!m) {
-      m = new THREE.Mesh(new THREE.SphereGeometry(bulletR, 12, 12), mat(COL.magenta, 1.8));
+      m = new THREE.Mesh(new THREE.SphereGeometry(bulletR, 12, 12), mat(COL.red, 0.8));
       group.add(m);
     }
     m.visible = true;
