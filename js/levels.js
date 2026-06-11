@@ -1,8 +1,13 @@
 // Level definitions for Brennan Game (Marble Trap).
 // The track runs in the -Z direction (away from the camera). +X is right, -X is left.
 // All platforms are flat boxes with their TOP surface at y = 0 unless noted.
-// Difficulty escalates: wide & gentle (L1) -> narrow, fast, stacked traps (L8),
-// tuned to feel like the original Marble Trap's endgame (levels 20-24): hard but beatable.
+//
+// Difficulty tuning targets (so levels are hard but FAIR):
+//   - axis sweep: a point on the track is hit every PI/speed sec -> keep >= ~1.1s
+//   - spears: safe window = period - up  -> keep >= ~1.1s
+//   - pits: solid window = period - down -> keep >= ~1.1s
+//   - saws: slower than the marble, but fast enough to punish camping
+// Escalation comes from stacking traps and narrowing tracks, not impossible timing.
 
 // ---- small authoring helpers -------------------------------------------------
 
@@ -46,9 +51,9 @@ export const LEVELS = [
     killY: -12,
     platforms: [ tile(0, -22, 8, 60) ],
     traps: [
-      axis(0, -10, 7.4, 1.8, 0),
+      axis(0, -10, 7.4, 0.9, 0),
       cube(-3, -26, 3, -26, 3.0, 1.5),
-      axis(0, -40, 7.4, -2.0, 1.1),
+      axis(0, -40, 7.4, -0.6, 0),
     ],
   },
 
@@ -60,10 +65,10 @@ export const LEVELS = [
     killY: -12,
     platforms: [ tile(0, -25, 6, 66) ],
     traps: [
-      spears(0, -12, 5.4, 4, 1.8, 0.8, 0.0),
-      axis(0, -24, 5.6, 2.4, 0),
-      spears(0, -34, 5.4, 4, 1.6, 0.7, 0.5),
-      spears(0, -48, 5.4, 5, 1.5, 0.7, 0.9),
+      spears(0, -12, 5.4, 4, 2.0, 0.7, 0.0),
+      axis(0, -24, 5.6, 2.2, 0),
+      spears(0, -34, 5.4, 4, 1.9, 0.65, 0.5),
+      spears(0, -48, 5.4, 5, 1.8, 0.65, 0.9),
     ],
   },
 
@@ -74,18 +79,18 @@ export const LEVELS = [
     finish: finishAt(0, -60),
     killY: -12,
     platforms: [
-      tile(0, 2, 6, 10),
-      pit(0, -8, 6, 6, 2.2, 1.0, 0.0),
-      tile(0, -16, 6, 6),
-      pit(0, -24, 6, 6, 2.0, 1.0, 0.6),
-      tile(0, -32, 6, 6),
-      pit(0, -40, 6, 6, 1.9, 1.0, 1.1),
-      tile(0, -52, 6, 16),
+      tile(0, 1, 6, 12),                  // z  7 .. -5 (flush with pit below)
+      pit(0, -8, 6, 6, 2.6, 0.8, 0.0),    // z -5 .. -11
+      tile(0, -16, 6, 10),                // z -11 .. -21 (flush, no gaps)
+      pit(0, -24, 6, 6, 2.6, 0.8, 0.6),   // z -21 .. -27
+      tile(0, -32, 6, 10),                // z -27 .. -37
+      pit(0, -40, 6, 6, 2.5, 0.8, 1.1),   // z -37 .. -43
+      tile(0, -52, 6, 18),                // z -43 .. -61
     ],
     traps: [
-      cannon(5, -16, -1, 0, 1.7, 9, 0.0),
-      cannon(-5, -32, 1, 0, 1.7, 9, 0.8),
-      cannon(5, -52, -1, 0, 1.4, 10, 0.3),
+      cannon(5, -16, -1, 0, 1.8, 8, 0.0),
+      cannon(-5, -32, 1, 0, 1.8, 8, 0.8),
+      cannon(5, -52, -1, 0, 1.7, 9, 0.3),
     ],
   },
 
@@ -96,16 +101,16 @@ export const LEVELS = [
     finish: finishAt(-26, -44),
     killY: -12,
     platforms: [
-      tile(0, -16, 5, 50),        // first leg (-Z)
-      tile(-14, -44, 28, 5),      // turn + second leg (-X)
+      tile(0, -16, 5, 50),        // first leg (-Z), ends at z = -41
+      tile(-13, -44, 30, 6),      // turn + second leg (-X), overlaps the corner fully
     ],
     traps: [
-      cannon(4.5, -8, -1, 0, 1.5, 10, 0.0),
-      cannon(-4.5, -20, 1, 0, 1.5, 10, 0.7),
-      cube(-2, -32, 2, -32, 3.6, 1.5),
-      cannon(4.5, -38, -1, 0, 1.4, 10, 0.4),
-      cube(-14, -46.5, -14, -41.5, 3.4, 1.5, 0.5),
-      cannon(-26, -36, 0, -1, 1.5, 10, 0.2),
+      cannon(4.5, -8, -1, 0, 1.8, 9, 0.0),
+      cannon(-4.5, -20, 1, 0, 1.8, 9, 0.7),
+      cube(-2, -32, 2, -32, 2.0, 1.5),
+      cannon(4.5, -38, -1, 0, 1.7, 9, 0.4),
+      cube(-14, -46.5, -14, -41.5, 3.2, 1.5, 0.5),
+      cannon(-26, -36, 0, -1, 1.8, 9, 0.2),
     ],
   },
 
@@ -117,11 +122,11 @@ export const LEVELS = [
     killY: -12,
     platforms: [ tile(0, -28, 5, 76) ],
     traps: [
-      saw(0, 19, 4.2, 1.9),
-      axis(0, -8, 4.8, 3.0, 0),
-      axis(0, -22, 4.8, -3.2, 0.7),
-      cube(-1.6, -36, 1.6, -36, 4.2, 1.4),
-      axis(0, -50, 4.8, 3.4, 0.3),
+      saw(0, 19, 3.2, 1.9),
+      axis(0, -8, 4.8, 0.5, 0),
+      axis(0, -22, 4.8, -0.6, 0.7),
+      cube(-1.6, -36, 1.6, -36, 3.6, 1.4),
+      axis(0, -50, 4.8, 0.9, 0.3),
     ],
   },
 
@@ -133,13 +138,13 @@ export const LEVELS = [
     killY: -12,
     platforms: [ tile(0, -31, 4.5, 80) ],
     traps: [
-      spears(0, -8, 4.0, 3.5, 1.4, 0.6, 0.0),
-      cube(-1.4, -18, 1.4, -18, 4.6, 1.4),
-      cannon(4, -28, -1, 0, 1.3, 11, 0.0),
-      cannon(-4, -28, 1, 0, 1.3, 11, 0.65),
-      axis(0, -40, 4.3, 3.6, 0),
-      spears(0, -52, 4.0, 4, 1.3, 0.6, 0.5),
-      cube(-1.4, -62, 1.4, -62, 5.0, 1.4, 0.4),
+      spears(0, -8, 4.0, 3.5, 1.8, 0.6, 0.0),
+      cube(-1.0, -18, 1.0, -18, 2.5, 1.4),
+      cannon(4, -28, -1, 0, 1.7, 10, 0.0),
+      cannon(-4, -28, 1, 0, 1.7, 10, 0.85),
+      axis(0, -40, 4.3, 1.5, 0),
+      spears(0, -52, 4.0, 4, 1.7, 0.6, 0.5),
+      cube(-1.4, -62, 1.4, -62, 4.2, 1.4, 0.4),
     ],
   },
 
@@ -151,18 +156,18 @@ export const LEVELS = [
     killY: -12,
     platforms: [
       tile(0, -6, 4.5, 32),
-      pit(0, -22, 4.5, 6, 1.7, 0.85, 0.0),
+      pit(0, -22, 4.5, 6, 2.6, 0.8, 0.0),
       tile(0, -34, 4.5, 18),
       tile(9, -44, 22, 4.5),        // jog right (+X)
       tile(18, -50, 4.5, 16),       // final leg (-Z)
     ],
     traps: [
-      saw(0, 20, 4.6, 1.9),
-      cannon(4, -10, -1, 0, 1.3, 11, 0.0),
-      cannon(-4, -16, 1, 0, 1.3, 11, 0.6),
-      cube(-1.4, -34, 1.4, -34, 5.2, 1.4),
-      cannon(9, -41.5, 0, -1, 1.2, 12, 0.3),
-      cube(16, -50, 20, -50, 5.0, 1.4, 0.4),
+      saw(0, 20, 3.5, 1.9),
+      cannon(4, -10, -1, 0, 1.7, 10, 0.0),
+      cannon(-4, -16, 1, 0, 1.7, 10, 0.6),
+      cube(-1.4, -34, 1.4, -34, 1.8, 1.4),
+      cannon(9, -41.5, 0, -1, 1.6, 10, 0.3),
+      cube(16, -50, 20, -50, 2.0, 1.4, 0.4),
     ],
   },
 
@@ -173,22 +178,22 @@ export const LEVELS = [
     finish: finishAt(0, -92),
     killY: -12,
     platforms: [
-      tile(0, -10, 4, 40),
-      pit(0, -32, 4, 6, 1.5, 0.8, 0.0),
-      tile(0, -52, 4, 36),
-      pit(0, -72, 4, 6, 1.4, 0.8, 0.5),
-      tile(0, -84, 4, 20),
+      tile(0, -10, 4.4, 40),
+      pit(0, -32, 4.4, 6, 2.4, 0.75, 0.0),
+      tile(0, -52, 4.4, 36),
+      pit(0, -72, 4.4, 6, 2.3, 0.75, 0.5),
+      tile(0, -84, 4.4, 20),
     ],
     traps: [
-      saw(0, 20, 5.0, 1.9),
-      spears(0, -8, 3.6, 3, 1.3, 0.55, 0.0),
-      axis(0, -18, 3.9, 4.0, 0),
-      cannon(3.6, -26, -1, 0, 1.2, 12, 0.0),
-      cannon(-3.6, -44, 1, 0, 1.2, 12, 0.5),
-      cube(-1.2, -52, 1.2, -52, 5.6, 1.3),
-      axis(0, -62, 3.9, -4.2, 0.4),
-      spears(0, -80, 3.6, 4, 1.2, 0.55, 0.3),
-      cube(-1.2, -86, 1.2, -86, 5.8, 1.3, 0.6),
+      saw(0, 20, 3.8, 1.9),
+      spears(0, -8, 3.6, 3, 1.7, 0.6, 0.0),
+      axis(0, -18, 3.9, 1.0, 0),
+      cannon(3.6, -26, -1, 0, 1.6, 10, 0.0),
+      cannon(-3.6, -44, 1, 0, 1.6, 10, 0.5),
+      cube(-1.0, -52, 1.0, -52, 2.0, 1.3),
+      axis(0, -62, 3.9, -1.6, 0.4),
+      spears(0, -80, 3.6, 4, 1.6, 0.6, 0.3),
+      cube(-1.0, -86, 1.0, -86, 2.2, 1.3, 0.6),
     ],
   },
 ];
