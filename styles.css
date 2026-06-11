@@ -55,7 +55,7 @@ html, body {
 
 #hint {
   position: fixed;
-  bottom: 14px; left: 0; right: 0;
+  bottom: 14px; left: 150px; right: 0;
   z-index: 10;
   text-align: center;
   font-size: 8px;
@@ -69,7 +69,7 @@ html, body {
 /* ===================== Corner pause button ===================== */
 .corner-btn {
   position: fixed;
-  top: 16px; left: 18px;
+  bottom: 16px; left: 18px;
   z-index: 15;
   font-family: var(--arcade);
   font-size: 10px;
