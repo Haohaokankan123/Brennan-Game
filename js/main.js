@@ -89,7 +89,7 @@ function buildLevelSelect() {
     if (best != null) b.classList.add("cleared");
     const locked = i > unlocked;
     b.disabled = locked;
-    b.innerHTML = `${i + 1}<span class="lock">${locked ? "🔒" : (best != null ? fmt(best) + "s" : lv.name)}</span>`;
+    b.innerHTML = `${i + 1}<span class="lock">${locked ? "LOCKED" : (best != null ? fmt(best) + "s" : lv.name)}</span>`;
     b.addEventListener("click", () => { runTotal = 0; startLevel(i); });
     ui.levelSelect.appendChild(b);
   });
@@ -226,7 +226,7 @@ function loop(now) {
 }
 
 // ---------------- wiring ----------------
-el("btn-start").addEventListener("click", () => { runTotal = 0; startLevel(Math.min(getUnlocked(), LEVEL_COUNT - 1) >= 0 ? 0 : 0); });
+el("btn-start").addEventListener("click", () => { runTotal = 0; startLevel(0); });
 el("btn-next").addEventListener("click", () => startLevel(currentLevel + 1));
 el("btn-retry").addEventListener("click", retryLevel);
 el("btn-retry-c").addEventListener("click", () => startLevel(currentLevel));
