@@ -3,9 +3,6 @@
 // with the camera, and wires the HTML overlays/buttons.
 
 import * as THREE from "three";
-import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
-import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
-import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
 
 import { keys, onAction } from "./input.js";
 import { LEVELS, LEVEL_COUNT } from "./levels.js";
@@ -14,7 +11,7 @@ import { World, getBest, setBest, getUnlocked, unlock } from "./game.js";
 // ---------------- Three.js setup ----------------
 const mount = document.getElementById("scene");
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x87CEEB); // set here; buildEnvironment will also set it
+scene.background = new THREE.Color(0x29bfbf); // turquoise water (Marble Trap style)
 
 const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 600);
 camera.position.set(0, 16, 22);
@@ -24,22 +21,8 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(window.innerWidth, window.innerHeight);
 mount.appendChild(renderer.domElement);
 
-// bloom post-processing (graceful fallback to plain render if it fails)
+// No bloom — Marble Trap uses plain rendering; bloom caused white washout on sky.
 let composer = null;
-try {
-  composer = new EffectComposer(renderer);
-  composer.addPass(new RenderPass(scene, camera));
-  const bloom = new UnrealBloomPass(
-    new THREE.Vector2(window.innerWidth, window.innerHeight),
-    0.35,  // strength (was 0.9 — too blinding)
-    0.4,   // radius
-    0.22   // threshold
-  );
-  composer.addPass(bloom);
-} catch (err) {
-  console.warn("Bloom unavailable, falling back to plain render:", err);
-  composer = null;
-}
 
 import { buildEnvironment, makeParticles, makeTrail } from "./builder.js";
 import { audio } from "./audio.js";

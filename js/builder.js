@@ -171,7 +171,7 @@ export function buildMarble() {
 // Daylight environment — bright sky, sun, directional light. No neon, no fog.
 export function buildEnvironment(scene) {
   // clear sky background
-  scene.background = new THREE.Color(0x87CEEB);
+  scene.background = new THREE.Color(0x29bfbf); // turquoise water (Marble Trap style)
   scene.fog = null;
 
   // bright daylight: strong ambient + angled sun
