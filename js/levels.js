@@ -124,11 +124,11 @@ export const LEVELS = [
       tile(0, -72, 6, 10),
       pit(0, -80, 6, 6, 2.5, 0.8, 0.9),
       tile(0, -92, 6, 18),            // arena before the turn
-      tile(-18, -100, 42, 6),         // turn left (-X)
-      pit(-36, -112, 6, 6, 2.4, 0.8, 0.2),
-      tile(-36, -120, 6, 10),
-      pit(-36, -128, 6, 6, 2.4, 0.8, 0.7),
-      tile(-36, -141, 6, 20),         // spans -131..-151, meets the pit edge
+      tile(-18, -100, 42, 6),         // turn left (-X): z -97..-103
+      pit(-36, -106, 6, 6, 2.4, 0.8, 0.2),   // -103..-109, meets turn tile
+      tile(-36, -114, 6, 10),                // -109..-119
+      pit(-36, -122, 6, 6, 2.4, 0.8, 0.7),   // -119..-125
+      tile(-36, -139, 6, 28),                // -125..-153, covers finish at -150
     ],
     traps: [
       cannon(5, -16, -1, 0, 1.8, 8, 0.0, true),
@@ -208,8 +208,8 @@ export const LEVELS = [
     finish: finishAt(-30, -200),
     killY: -12,
     platforms: [
-      leg(0, 9, 105, 4.5),            // narrow straight (covers spawn)
-      tile(-15, -100, 36, 4.5),       // jog left
+      leg(0, 9, 107, 4.5),            // narrow straight (covers spawn): 9..-98
+      tile(-15, -100, 36, 4.5),       // jog left: z -97.75..-102.25
       leg(-30, -100, 104, 4.5),       // narrow straight to finish
     ],
     traps: [
@@ -239,14 +239,14 @@ export const LEVELS = [
     finish: finishAt(40, -160),
     killY: -12,
     platforms: [
-      leg(0, 10, 64, 4.5),            // down (covers spawn)
-      pit(0, -56, 4.5, 6, 2.6, 0.8, 0.0),
-      leg(0, -62, 30, 4.5),           // down a bit more
+      leg(0, 10, 64, 4.5),            // down (covers spawn): 10..-54
+      pit(0, -56, 4.5, 6, 2.6, 0.8, 0.0),    // -53..-59
+      leg(0, -59, 33, 4.5),           // -59..-92, meets the pit edge
       tile(15, -92, 34, 4.5),         // jog right
       leg(30, -92, 30, 4.5),          // down
-      pit(30, -122, 4.5, 6, 2.5, 0.8, 0.4),
-      tile(35, -128, 14, 4.5),        // small jog right
-      leg(40, -128, 36, 4.5),         // final down
+      pit(30, -122, 4.5, 6, 2.5, 0.8, 0.4),  // -119..-125
+      tile(35, -126, 14, 9),          // jog right: z -121.5..-130.5, bridges pit + final leg
+      leg(40, -128, 36, 4.5),         // final down: -128..-164
     ],
     traps: [
       saw(0, 20, 3.65, 1.9),
@@ -271,9 +271,9 @@ export const LEVELS = [
     finish: finishAt(-40, -220),
     killY: -12,
     platforms: [
-      leg(0, 10, 94, 4.4),                      // leg 1 down (covers spawn)
-      pit(0, -84, 4.4, 6, 2.4, 0.75, 0.0),
-      leg(0, -90, 30, 4.4),
+      leg(0, 10, 94, 4.4),                      // leg 1 down (covers spawn): 10..-84
+      pit(0, -84, 4.4, 6, 2.4, 0.75, 0.0),      // -81..-87
+      leg(0, -87, 33, 4.4),                     // -87..-120, meets the pit edge
       tile(-20, -120, 44, 4.4),                 // turn left
       leg(-40, -120, 60, 4.4),                  // leg 2 down (left lane)
       pit(-40, -180, 4.4, 6, 2.3, 0.7, 0.3),
