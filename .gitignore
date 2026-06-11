@@ -2,3 +2,8 @@
 node_modules/
 *.log
 .playwright-mcp/
+
+brennan-live.png
+graphics-check.png
+js/game.bundle.js
+.playwright-mcp/
