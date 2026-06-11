@@ -66,6 +66,30 @@ html, body {
 #hint .dot { color: var(--magenta); margin: 0 8px; }
 #hud-deaths { color: var(--magenta); }
 
+/* ===================== Corner pause button ===================== */
+.corner-btn {
+  position: fixed;
+  top: 16px; left: 18px;
+  z-index: 15;
+  font-family: var(--arcade);
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--cyan);
+  background: rgba(10, 4, 32, 0.72);
+  border: 2px solid var(--cyan);
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+.corner-btn:hover {
+  transform: scale(1.05);
+  background: rgba(0, 240, 255, 0.15);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.7);
+}
+.corner-btn:active { transform: scale(0.97); }
+
 /* ===================== Overlays ===================== */
 .overlay {
   position: fixed;

@@ -24,6 +24,13 @@ function neon(color, intensity = 1.0) {
 
 // Build all platform meshes. Pit-trap tiles get a reference back to their def so
 // main.js can sink them visually when the gap opens.
+//
+// Graphics notes (fixing the "glitchy stripes"):
+//  - The dark stripe artifacts were z-fighting: adjacent tiles share an exact
+//    boundary plane at the same Y, so their top faces and edge lines overlapped.
+//  - Fix: the solid body sits slightly BELOW y=0 (top face at y=0), and the glowing
+//    surface is a single thin plane rendered with polygonOffset so it never fights
+//    the body. Edge frames use a tube-like inset so neighboring tiles don't overlap.
 export function buildPlatforms(level) {
   const group = new THREE.Group();
   const pitTiles = [];
@@ -33,28 +40,57 @@ export function buildPlatforms(level) {
     const tile = new THREE.Group();
     tile.position.set(p.pos[0], p.pos[1], p.pos[2]);
 
-    // solid dark top
-    const top = new THREE.Mesh(
-      new THREE.BoxGeometry(w, h, d),
+    const isPit = !!p.drop;
+    const edgeCol = isPit ? COL.magenta : COL.cyan;
+
+    // solid body (slightly shrunk in X/Z so adjacent tiles never share a face)
+    const body = new THREE.Mesh(
+      new THREE.BoxGeometry(w - 0.04, h, d - 0.04),
       new THREE.MeshStandardMaterial({
-        color: p.drop ? 0x3a1330 : COL.deep,
-        emissive: new THREE.Color(p.drop ? 0x551133 : 0x140428),
-        emissiveIntensity: 0.6,
-        metalness: 0.3,
-        roughness: 0.6,
+        color: isPit ? 0x2a0a26 : 0x0c0526,
+        emissive: new THREE.Color(isPit ? 0x3a0a28 : 0x0a0322),
+        emissiveIntensity: 0.5,
+        metalness: 0.4,
+        roughness: 0.55,
       })
     );
-    tile.add(top);
+    tile.add(body);
 
-    // glowing neon edge frame around the top surface
-    const edges = new THREE.LineSegments(
-      new THREE.EdgesGeometry(new THREE.BoxGeometry(w, h, d)),
-      new THREE.LineBasicMaterial({ color: p.drop ? COL.magenta : COL.cyan })
-    );
-    tile.add(edges);
+    // glowing top surface: one flat plane just above the body's top face.
+    // polygonOffset pushes it in depth so it can't z-fight with the body.
+    const surfMat = new THREE.MeshStandardMaterial({
+      color: isPit ? 0x6a1540 : 0x10204a,
+      emissive: new THREE.Color(edgeCol),
+      emissiveIntensity: isPit ? 0.28 : 0.22,
+      metalness: 0.3,
+      roughness: 0.4,
+      polygonOffset: true,
+      polygonOffsetFactor: -1,
+      polygonOffsetUnits: -1,
+    });
+    const surf = new THREE.Mesh(new THREE.PlaneGeometry(w - 0.08, d - 0.08), surfMat);
+    surf.rotation.x = -Math.PI / 2;
+    surf.position.y = h / 2 + 0.012;
+    tile.add(surf);
+
+    // bright neon border framing the surface (4 thin glowing bars, inset)
+    const bw = 0.12;                  // bar thickness
+    const inset = 0.04;
+    const yTop = h / 2 + 0.02;
+    const barMat = neon(edgeCol, 2.4);
+    const addBar = (bx, bz, lx, lz) => {
+      const bar = new THREE.Mesh(new THREE.BoxGeometry(lx, 0.08, lz), barMat);
+      bar.position.set(bx, yTop, bz);
+      tile.add(bar);
+    };
+    const innerW = w - inset * 2, innerD = d - inset * 2;
+    addBar(0, innerD / 2 - bw / 2, innerW, bw);   // far edge
+    addBar(0, -innerD / 2 + bw / 2, innerW, bw);  // near edge
+    addBar(innerW / 2 - bw / 2, 0, bw, innerD);   // right edge
+    addBar(-innerW / 2 + bw / 2, 0, bw, innerD);  // left edge
 
     group.add(tile);
-    if (p.drop) pitTiles.push({ def: p, mesh: tile });
+    if (isPit) pitTiles.push({ def: p, mesh: tile });
   }
 
   return { group, pitTiles };
@@ -95,48 +131,57 @@ export function buildFinish(level) {
 // The player's marble — emissive so it glows, with a wireframe overlay so spin reads.
 export function buildMarble() {
   const group = new THREE.Group();
+
+  // glossy chrome-neon core
   const ball = new THREE.Mesh(
-    new THREE.SphereGeometry(MARBLE_RADIUS, 28, 28),
+    new THREE.SphereGeometry(MARBLE_RADIUS, 32, 32),
     new THREE.MeshStandardMaterial({
-      color: 0xffffff,
+      color: 0xeaffff,
       emissive: new THREE.Color(COL.cyan),
-      emissiveIntensity: 0.9,
-      metalness: 0.6,
-      roughness: 0.15,
+      emissiveIntensity: 0.55,
+      metalness: 0.85,
+      roughness: 0.12,
     })
   );
   group.add(ball);
 
-  const wire = new THREE.Mesh(
-    new THREE.SphereGeometry(MARBLE_RADIUS * 1.02, 12, 8),
-    new THREE.MeshBasicMaterial({ color: COL.magenta, wireframe: true })
-  );
-  group.add(wire);
+  // a couple of clean banding rings (read spin without the noisy full wireframe)
+  const ringMat = new THREE.MeshBasicMaterial({ color: COL.magenta });
+  for (const rot of [0, Math.PI / 2]) {
+    const ring = new THREE.Mesh(
+      new THREE.TorusGeometry(MARBLE_RADIUS * 1.004, 0.035, 8, 40),
+      ringMat
+    );
+    ring.rotation.y = rot;
+    group.add(ring);
+  }
 
-  const glow = new THREE.PointLight(COL.cyan, 12, 10, 2);
+  const glow = new THREE.PointLight(COL.cyan, 9, 9, 2);
   group.add(glow);
 
   // meshes that should visibly roll (the point light should NOT)
-  group.userData.spin = [ball, wire];
+  group.userData.spin = [ball, ...group.children.filter((c) => c.geometry?.type === "TorusGeometry")];
   return group;
 }
 
 // The synthwave backdrop: ground grid, horizon sun, and fog. Added once, reused.
 export function buildEnvironment(scene) {
-  scene.fog = new THREE.Fog(0x0a0420, 30, 120);
+  scene.fog = new THREE.Fog(0x0a0420, 34, 130);
 
-  // big neon grid far below the track
-  const grid = new THREE.GridHelper(400, 100, COL.magenta, COL.purple);
-  grid.position.y = -12;
-  grid.material.opacity = 0.35;
+  // big neon grid far below the track (deep enough that it never overlaps the path)
+  const grid = new THREE.GridHelper(600, 120, COL.magenta, COL.purple);
+  grid.position.y = -14;
+  grid.material.opacity = 0.28;
   grid.material.transparent = true;
+  grid.material.depthWrite = false;
   scene.add(grid);
 
   // a second grid for depth
-  const grid2 = new THREE.GridHelper(400, 50, COL.cyan, 0x220044);
-  grid2.position.y = -12.05;
-  grid2.material.opacity = 0.2;
+  const grid2 = new THREE.GridHelper(600, 60, COL.cyan, 0x220044);
+  grid2.position.y = -14.06;
+  grid2.material.opacity = 0.15;
   grid2.material.transparent = true;
+  grid2.material.depthWrite = false;
   scene.add(grid2);
 
   // glowing "sun" on the horizon

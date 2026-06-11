@@ -18,6 +18,20 @@
     <div class="hud-item hud-right"><span class="hud-label">BEST</span><span id="hud-best">—</span></div>
   </div>
 
+  <!-- Pause / menu button (top-left, in-game) -->
+  <button id="btn-pause" class="corner-btn hidden" title="Pause (ESC)">⏸ MENU</button>
+
+  <!-- PAUSE overlay -->
+  <div id="overlay-pause" class="overlay hidden">
+    <div class="panel">
+      <h2 class="result-title">PAUSED</h2>
+      <p class="result-sub">Take a breath.</p>
+      <button id="btn-resume" class="btn btn-primary">▶ RESUME</button>
+      <button id="btn-restart-p" class="btn">RESTART LEVEL ↻</button>
+      <button id="btn-menu-p" class="btn btn-ghost">MAIN MENU</button>
+    </div>
+  </div>
+
   <!-- Death counter / hint -->
   <div id="hint" class="hidden">
     <span id="hud-deaths">DEATHS: 0</span>

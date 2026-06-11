@@ -39,6 +39,41 @@ function pingpong(t) {
   return x < 0.5 ? x * 2 : 2 - x * 2;
 }
 
+// Deterministic hash -> [0,1). Same input always gives the same output, so the
+// visual update() and the hits() test agree on "random" values frame to frame.
+function hash01(n) {
+  const s = Math.sin(n * 127.1 + 311.7) * 43758.5453;
+  return s - Math.floor(s);
+}
+
+// A randomized cycle clock. Splits `time` into back-to-back cycles whose individual
+// DURATIONS vary (between minDur and maxDur) and returns:
+//   { idx, local, dur, rnd }  where rnd is a stable per-cycle random in [0,1).
+// Because durations come from hash01(idx), this is fully deterministic from time.
+function randCycle(time, seed, minDur, maxDur) {
+  // walk forward cycle by cycle from t=0 until we pass `time`.
+  // cycles are short and levels are seconds long, so this loop is cheap.
+  let t = ((time % 100000) + 100000) % 100000; // guard against negatives
+  let idx = 0, start = 0;
+  // fast-forward using average duration to avoid long loops on big times
+  const avg = (minDur + maxDur) / 2;
+  const skip = Math.max(0, Math.floor(t / avg) - 2);
+  idx = skip;
+  // reconstruct start time for `skip` cycles (approx then correct by walking)
+  start = 0;
+  for (let k = 0; k < idx; k++) start += minDur + (maxDur - minDur) * hash01(seed + k * 7.13);
+  // walk to the real cycle containing t
+  for (let guard = 0; guard < 100000; guard++) {
+    const dur = minDur + (maxDur - minDur) * hash01(seed + idx * 7.13);
+    if (t < start + dur) {
+      return { idx, local: t - start, dur, rnd: hash01(seed + idx * 13.31) };
+    }
+    start += dur;
+    idx++;
+  }
+  return { idx, local: 0, dur: maxDur, rnd: 0.5 };
+}
+
 // ---------------------------------------------------------------- Rotating axis
 function makeAxis(def) {
   const { pos, length, thickness, speed, phase } = def;
@@ -58,23 +93,47 @@ function makeAxis(def) {
     group.add(cap);
   }
 
-  let angle = phase;
+  // randomized rotation: angle is a deterministic function of time so update()
+  // and hits() always agree. Each "cycle" is a quarter-ish sweep whose angular
+  // speed is randomized (sometimes whips fast, sometimes crawls).
+  const rnd = def.random;                 // { min, max } speed multipliers, or undefined
+  const seed = Math.abs(x * 12.9 + z * 78.2 + length * 3.7) + 1;
+
+  // total rotation angle at a given time (integral of the per-cycle speed).
+  function angleAt(time) {
+    if (!rnd) return phase + speed * time;
+    // each cycle lasts a base of ~0.9s; speed multiplier varies per cycle.
+    let a = phase, t = ((time % 100000) + 100000) % 100000, base = 0.9;
+    let idx = 0, acc = 0;
+    for (let guard = 0; guard < 100000; guard++) {
+      const mult = rnd.min + (rnd.max - rnd.min) * hash01(seed + idx * 5.17);
+      const dir = Math.sign(speed) || 1;
+      const dur = base;
+      if (t < acc + dur) { a += dir * Math.abs(speed) * mult * (t - acc); return a; }
+      a += dir * Math.abs(speed) * mult * dur;
+      acc += dur; idx++;
+    }
+    return a;
+  }
+
+  let curAngle = phase;
 
   return {
     group,
-    update(dt) {
-      angle += speed * dt;
-      group.rotation.y = angle;
+    update(dt, time) {
+      curAngle = angleAt(time);
+      group.rotation.y = curAngle;
     },
     hits(p, r) {
+      // world -> beam-local: rotate by -angle around Y (matches group.rotation.y)
       const dx = p.x - x, dz = p.z - z;
-      const c = Math.cos(-angle), s = Math.sin(-angle);
+      const c = Math.cos(curAngle), s = Math.sin(curAngle);
       const lx = dx * c - dz * s;          // along the beam
       const lz = dx * s + dz * c;          // across the beam
       return Math.abs(lx) < length / 2 + r * 0.5 &&
              Math.abs(lz) < thickness / 2 + r;
     },
-    reset() { angle = phase; group.rotation.y = angle; },
+    reset() { curAngle = phase; group.rotation.y = curAngle; },
   };
 }
 
@@ -106,17 +165,22 @@ function makeSpears(def) {
 
   let raised = 0; // 0 = hidden, 1 = fully up
 
+  const rnd = def.random;          // { } -> randomize period + up-time per cycle
+  const seed = Math.abs(x * 9.1 + z * 41.3 + w * 2.2) + 3;
+
   const compute = (time) => {
-    const t = (((time + offset) % period) + period) % period;
-    const upFrac = up / period;
-    // raise quickly, hold, then drop
-    if (t < upFrac) {
-      const k = t / upFrac;
-      raised = Math.min(1, k * 2);               // pops up fast
-    } else {
-      const k = (t - upFrac) / (1 - upFrac);
-      raised = Math.max(0, 1 - k * 1.6);          // sinks back
+    if (!rnd) {
+      const t = (((time + offset) % period) + period) % period;
+      if (t < up) raised = Math.min(1, t / 0.15);
+      else raised = Math.max(0, 1 - (t - up) / 0.3);
+      return;
     }
+    // randomized: cycle length varies; up-time varies within the cycle.
+    const cyc = randCycle(time + offset, seed, period * 0.7, period * 1.5);
+    const upDur = up * (0.7 + 0.9 * cyc.rnd);   // 0.7x .. 1.6x the base up-time
+    const t = cyc.local;
+    if (t < upDur) raised = Math.min(1, t / 0.15);
+    else raised = Math.max(0, 1 - (t - upDur) / 0.3);
   };
 
   return {
@@ -127,7 +191,7 @@ function makeSpears(def) {
       for (const c of cones) c.position.y = y;
     },
     hits(p, r) {
-      if (raised < 0.55) return false;
+      if (raised < 0.6) return false; // spikes must be visibly up to hurt
       return Math.abs(p.x - x) < w / 2 && Math.abs(p.z - z) < d / 2;
     },
     reset() { raised = 0; },
@@ -153,7 +217,8 @@ function makeCube(def) {
   let cx = from[0], cz = from[1];
 
   const place = (time) => {
-    const t = pingpong((time + offset) * speed / dist());
+    // pingpong has slope 2, so divide by 2*dist: authored speed = real units/sec
+    const t = pingpong((time + offset) * speed / (2 * dist()));
     cx = from[0] + (to[0] - from[0]) * t;
     cz = from[1] + (to[1] - from[1]) * t;
     group.position.set(cx, FLOOR + half, cz);
@@ -199,7 +264,10 @@ function makeCannon(def) {
   const meshes = [];  // reuse pool
   const pool = [];
 
+  const rnd = def.random;       // truthy -> randomize fire interval + bullet speed
   let lastFire = -1e9;
+  let nextGap = period;         // time until the next shot (re-rolled each fire)
+  let fireSeed = 0;
 
   function getMesh() {
     let m = pool.pop();
@@ -214,21 +282,29 @@ function makeCannon(def) {
   return {
     group,
     update(dt, time) {
-      // fire on schedule
-      const phase = (((time + offset) % period) + period) % period;
-      if (phase < dt && time - lastFire > period * 0.5) {
+      // fire on schedule. With randomness, the gap and the bullet speed vary shot to shot.
+      const due = rnd
+        ? (time - lastFire >= nextGap)
+        : (() => { const phase = (((time + offset) % period) + period) % period; return phase < dt && time - lastFire > period * 0.5; })();
+      if (due && time > 0.05) {
         lastFire = time;
+        if (rnd) {
+          fireSeed++;
+          nextGap = period * (0.55 + 1.1 * hash01(fireSeed * 3.7 + x + z)); // 0.55x .. 1.65x
+        }
         const m = getMesh();
-        const b = { x, z, dist: 0, mesh: m };
+        const bSpeed = rnd ? speed * (0.7 + 1.0 * hash01(fireSeed * 9.1 + 0.3)) : speed; // 0.7x .. 1.7x
+        const b = { x, z, dist: 0, mesh: m, sp: bSpeed };
         m.position.set(x + dx * 0.8, FLOOR + 0.7, z + dz * 0.8);
         bullets.push(b);
       }
       // move bullets
       for (let i = bullets.length - 1; i >= 0; i--) {
         const b = bullets[i];
-        b.x += dx * speed * dt;
-        b.z += dz * speed * dt;
-        b.dist += speed * dt;
+        const sp = b.sp || speed;
+        b.x += dx * sp * dt;
+        b.z += dz * sp * dt;
+        b.dist += sp * dt;
         b.mesh.position.set(b.x, FLOOR + 0.7, b.z);
         if (b.dist > range) {
           b.mesh.visible = false;
@@ -249,6 +325,8 @@ function makeCannon(def) {
       for (const b of bullets) { b.mesh.visible = false; pool.push(b.mesh); }
       bullets.length = 0;
       lastFire = -1e9;
+      nextGap = period;
+      fireSeed = 0;
     },
   };
 }
@@ -281,12 +359,15 @@ function makeSaw(def) {
   return {
     group,
     update(dt, time, marblePos) {
-      // home toward the marble on the x-z plane at a steady speed
+      // home toward the marble on the x-z plane. Speed pulses gently over time so
+      // it sometimes surges (adds pressure) and sometimes eases — never stops.
       if (marblePos) {
         const dx = marblePos.x - cx, dz = marblePos.z - cz;
         const dlen = Math.hypot(dx, dz);
         if (dlen > 1e-3) {
-          const step = Math.min(speed * dt, dlen);
+          // 0.85x .. 1.25x smooth speed pulse via layered sines (deterministic)
+          const pulse = 1.05 + 0.2 * Math.sin(time * 1.7) * Math.cos(time * 0.6 + 1.1);
+          const step = Math.min(speed * pulse * dt, dlen);
           cx += (dx / dlen) * step;
           cz += (dz / dlen) * step;
         }

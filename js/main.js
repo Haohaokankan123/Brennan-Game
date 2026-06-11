@@ -52,6 +52,7 @@ const ui = {
   hud: el("hud"), hint: el("hint"),
   hudLevel: el("hud-level"), hudTime: el("hud-time"), hudBest: el("hud-best"), hudDeaths: el("hud-deaths"),
   menu: el("overlay-menu"), complete: el("overlay-complete"), dead: el("overlay-dead"), finish: el("overlay-finish"),
+  pause: el("overlay-pause"), btnPause: el("btn-pause"),
   levelSelect: el("level-select"),
   completeTime: el("complete-time"), completeBest: el("complete-best"), completeRecord: el("complete-record"),
   deadReason: el("dead-reason"), finishTotal: el("finish-total"),
@@ -59,7 +60,7 @@ const ui = {
 };
 
 // ---------------- game state ----------------
-const STATE = { MENU: "menu", PLAYING: "playing", COMPLETE: "complete", DEAD: "dead", FINISH: "finish" };
+const STATE = { MENU: "menu", PLAYING: "playing", COMPLETE: "complete", DEAD: "dead", FINISH: "finish", PAUSED: "paused" };
 let state = STATE.MENU;
 let currentLevel = 0;
 let deaths = 0;
@@ -72,11 +73,28 @@ function hideOverlays() {
   ui.complete.classList.add("hidden");
   ui.dead.classList.add("hidden");
   ui.finish.classList.add("hidden");
+  ui.pause.classList.add("hidden");
 }
 
 function showHud(show) {
   ui.hud.classList.toggle("hidden", !show);
   ui.hint.classList.toggle("hidden", !show);
+  ui.btnPause.classList.toggle("hidden", !show);
+}
+
+function pauseGame() {
+  if (state !== STATE.PLAYING) return;
+  state = STATE.PAUSED;
+  ui.btnPause.classList.add("hidden");
+  ui.pause.classList.remove("hidden");
+}
+
+function resumeGame() {
+  if (state !== STATE.PAUSED) return;
+  state = STATE.PLAYING;
+  ui.pause.classList.add("hidden");
+  ui.btnPause.classList.remove("hidden");
+  last = performance.now(); // avoid a huge dt jump after the pause
 }
 
 function buildLevelSelect() {
@@ -214,6 +232,9 @@ function loop(now) {
   } else if (state === STATE.MENU) {
     world.idleUpdate(dt);
     menuCamera(dt);
+  } else if (state === STATE.PAUSED) {
+    // freeze the world; just hold the camera steady on the marble
+    followCamera(dt);
   } else {
     // overlays up (complete/dead/finish): keep traps animating, hold camera
     world.idleUpdate(dt);
@@ -235,9 +256,19 @@ el("btn-menu-d").addEventListener("click", goMenu);
 el("btn-menu-f").addEventListener("click", goMenu);
 el("btn-replay").addEventListener("click", () => { runTotal = 0; startLevel(0); });
 
+// pause button + pause overlay
+ui.btnPause.addEventListener("click", pauseGame);
+el("btn-resume").addEventListener("click", resumeGame);
+el("btn-restart-p").addEventListener("click", () => { hideOverlays(); startLevel(currentLevel); });
+el("btn-menu-p").addEventListener("click", goMenu);
+
 // keyboard actions
 onAction("restart", () => { if (state === STATE.PLAYING) retryLevel(); });
-onAction("menu", () => { if (state !== STATE.MENU) goMenu(); });
+onAction("menu", () => {
+  if (state === STATE.PLAYING) pauseGame();
+  else if (state === STATE.PAUSED) resumeGame();
+  else if (state !== STATE.MENU) goMenu();
+});
 onAction("confirm", () => {
   if (state === STATE.DEAD) retryLevel();
   else if (state === STATE.COMPLETE) startLevel(currentLevel + 1);
