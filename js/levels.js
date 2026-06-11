@@ -27,7 +27,7 @@ function pit(cx, cz, w, d, period, downTime, offset = 0) {
 
 const axis = (x, z, length, speed, phase = 0, random = false) =>
   ({ type: "axis", pos: [x, z], length, thickness: 0.7, speed, phase,
-     random: random ? { min: 0.6, max: 1.9 } : null });
+     random: random ? { min: 0.75, max: 1.4 } : null });
 
 const spears = (x, z, w, d, period, up, offset = 0, random = false) =>
   ({ type: "spears", pos: [x, z], area: [w, d], period, up, offset, random });
@@ -54,7 +54,7 @@ export const LEVELS = [
     killY: -12,
     platforms: [ tile(0, -48, 8, 116) ],
     traps: [
-      axis(0, -10, 7.4, 0.9, 0, true),
+      axis(0, -10, 7.4, 0.9, 0, false),   // first obstacle: steady, true warm-up
       cube(-3, -26, 3, -26, 3.0, 1.5),
       axis(0, -40, 7.4, -0.7, 0, true),
       cube(-3, -56, 3, -56, 3.2, 1.5, 0.4),

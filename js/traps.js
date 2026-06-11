@@ -290,10 +290,10 @@ function makeCannon(def) {
         lastFire = time;
         if (rnd) {
           fireSeed++;
-          nextGap = period * (0.55 + 1.1 * hash01(fireSeed * 3.7 + x + z)); // 0.55x .. 1.65x
+          nextGap = period * (0.7 + 0.9 * hash01(fireSeed * 3.7 + x + z)); // 0.7x .. 1.6x
         }
         const m = getMesh();
-        const bSpeed = rnd ? speed * (0.7 + 1.0 * hash01(fireSeed * 9.1 + 0.3)) : speed; // 0.7x .. 1.7x
+        const bSpeed = rnd ? speed * (0.8 + 0.6 * hash01(fireSeed * 9.1 + 0.3)) : speed; // 0.8x .. 1.4x
         const b = { x, z, dist: 0, mesh: m, sp: bSpeed };
         m.position.set(x + dx * 0.8, FLOOR + 0.7, z + dz * 0.8);
         bullets.push(b);
