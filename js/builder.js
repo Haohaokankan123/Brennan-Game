@@ -196,19 +196,6 @@ export function buildEnvironment(scene) {
   grid2.material.depthWrite = false;
   scene.add(grid2);
 
-  // glowing "sun" on the horizon
-  const sun = new THREE.Mesh(
-    new THREE.CircleGeometry(40, 48),
-    new THREE.MeshBasicMaterial({ color: 0xff5fa2 })
-  );
-  sun.position.set(0, 8, -160);
-  scene.add(sun);
-  const sun2 = new THREE.Mesh(
-    new THREE.CircleGeometry(55, 48),
-    new THREE.MeshBasicMaterial({ color: 0x6a1f6a, transparent: true, opacity: 0.4 })
-  );
-  sun2.position.set(0, 8, -161);
-  scene.add(sun2);
 
   // ambient + key light so standard materials are visible
   scene.add(new THREE.AmbientLight(0x6644aa, 0.7));
