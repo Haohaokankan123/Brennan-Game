@@ -29205,15 +29205,15 @@ void main() {
     const compute = (time) => {
       if (!rnd) {
         const t2 = ((time + offset) % period + period) % period;
-        if (t2 < up) raised = Math.min(1, t2 / 0.15);
-        else raised = Math.max(0, 1 - (t2 - up) / 0.3);
+        if (t2 < up) raised = Math.min(1, t2 / 0.45);
+        else raised = Math.max(0, 1 - (t2 - up) / 0.5);
         return;
       }
       const cyc = randCycle(time + offset, seed, period * 0.7, period * 1.5);
       const upDur = up * (0.7 + 0.9 * cyc.rnd);
       const t = cyc.local;
-      if (t < upDur) raised = Math.min(1, t / 0.15);
-      else raised = Math.max(0, 1 - (t - upDur) / 0.3);
+      if (t < upDur) raised = Math.min(1, t / 0.45);
+      else raised = Math.max(0, 1 - (t - upDur) / 0.5);
     };
     return {
       group,
@@ -29431,12 +29431,18 @@ void main() {
         roughness: 0.4
       });
       COL = {
-        magenta: 16723592,
-        cyan: 61695,
-        purple: 11684863,
-        yellow: 16770669,
-        red: 16724821,
-        orange: 16747069
+        magenta: 15757360,
+        // warm orange
+        cyan: 4890367,
+        // soft blue
+        purple: 8934877,
+        // muted violet
+        yellow: 16767334,
+        // soft gold
+        red: 16737877,
+        // softer coral red
+        orange: 15757360
+        // warm orange
       };
     }
   });
@@ -29474,7 +29480,7 @@ void main() {
       const surfMat = new MeshStandardMaterial({
         color: isPit ? 6952256 : 1056842,
         emissive: new Color(edgeCol),
-        emissiveIntensity: isPit ? 0.28 : 0.22,
+        emissiveIntensity: isPit ? 0.18 : 0.12,
         metalness: 0.3,
         roughness: 0.4,
         polygonOffset: true,
@@ -29488,7 +29494,7 @@ void main() {
       const bw = 0.12;
       const inset = 0.04;
       const yTop = h / 2 + 0.02;
-      const barMat = neon(edgeCol, 2.4);
+      const barMat = neon(edgeCol, 0.9);
       const addBar = (bx, bz, lx, lz) => {
         const bar = new Mesh(new BoxGeometry(lx, 0.08, lz), barMat);
         bar.position.set(bx, yTop, bz);
@@ -29706,11 +29712,16 @@ void main() {
       init_three_module();
       init_physics();
       COL2 = {
-        magenta: 16723592,
-        cyan: 61695,
-        purple: 11684863,
-        yellow: 16770669,
-        deep: 1706554
+        magenta: 15757360,
+        // warm orange (replaces eye-searing magenta)
+        cyan: 4890367,
+        // soft electric blue (replaces blinding cyan)
+        purple: 8934877,
+        // muted violet
+        yellow: 16767334,
+        // soft gold
+        deep: 790560
+        // dark navy
       };
     }
   });
@@ -30155,11 +30166,11 @@ void main() {
         composer.addPass(new RenderPass(scene, camera));
         const bloom = new UnrealBloomPass(
           new Vector2(window.innerWidth, window.innerHeight),
-          0.9,
-          // strength
-          0.6,
+          0.35,
+          // strength (was 0.9 — too blinding)
+          0.4,
           // radius
-          0.15
+          0.22
           // threshold
         );
         composer.addPass(bloom);

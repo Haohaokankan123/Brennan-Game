@@ -31,9 +31,9 @@ try {
   composer.addPass(new RenderPass(scene, camera));
   const bloom = new UnrealBloomPass(
     new THREE.Vector2(window.innerWidth, window.innerHeight),
-    0.9,   // strength
-    0.6,   // radius
-    0.15   // threshold
+    0.35,  // strength (was 0.9 — too blinding)
+    0.4,   // radius
+    0.22   // threshold
   );
   composer.addPass(bloom);
 } catch (err) {

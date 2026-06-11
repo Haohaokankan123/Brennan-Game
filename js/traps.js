@@ -20,12 +20,12 @@ const mat = (color, emissiveBoost = 1.4) =>
   });
 
 const COL = {
-  magenta: 0xff2e88,
-  cyan: 0x00f0ff,
-  purple: 0xb24bff,
-  yellow: 0xffe66d,
-  red: 0xff3355,
-  orange: 0xff8a3d,
+  magenta: 0xf07030,  // warm orange
+  cyan:    0x4a9eff,  // soft blue
+  purple:  0x8855dd,  // muted violet
+  yellow:  0xffd966,  // soft gold
+  red:     0xff6655,  // softer coral red
+  orange:  0xf07030,  // warm orange
 };
 
 function spikeCone(color, h = 0.7, rad = 0.22) {
@@ -182,16 +182,16 @@ function makeSpears(def) {
   const compute = (time) => {
     if (!rnd) {
       const t = (((time + offset) % period) + period) % period;
-      if (t < up) raised = Math.min(1, t / 0.15);
-      else raised = Math.max(0, 1 - (t - up) / 0.3);
+      if (t < up) raised = Math.min(1, t / 0.45);
+      else raised = Math.max(0, 1 - (t - up) / 0.5);
       return;
     }
     // randomized: cycle length varies; up-time varies within the cycle.
     const cyc = randCycle(time + offset, seed, period * 0.7, period * 1.5);
     const upDur = up * (0.7 + 0.9 * cyc.rnd);   // 0.7x .. 1.6x the base up-time
     const t = cyc.local;
-    if (t < upDur) raised = Math.min(1, t / 0.15);
-    else raised = Math.max(0, 1 - (t - upDur) / 0.3);
+    if (t < upDur) raised = Math.min(1, t / 0.45);
+    else raised = Math.max(0, 1 - (t - upDur) / 0.5);
   };
 
   return {

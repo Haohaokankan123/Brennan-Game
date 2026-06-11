@@ -5,11 +5,11 @@ import * as THREE from "three";
 import { MARBLE_RADIUS } from "./physics.js";
 
 const COL = {
-  magenta: 0xff2e88,
-  cyan: 0x00f0ff,
-  purple: 0xb24bff,
-  yellow: 0xffe66d,
-  deep: 0x1a0a3a,
+  magenta: 0xf07030,  // warm orange (replaces eye-searing magenta)
+  cyan:    0x4a9eff,  // soft electric blue (replaces blinding cyan)
+  purple:  0x8855dd,  // muted violet
+  yellow:  0xffd966,  // soft gold
+  deep:    0x0c1020,  // dark navy
 };
 
 function neon(color, intensity = 1.0) {
@@ -61,7 +61,7 @@ export function buildPlatforms(level) {
     const surfMat = new THREE.MeshStandardMaterial({
       color: isPit ? 0x6a1540 : 0x10204a,
       emissive: new THREE.Color(edgeCol),
-      emissiveIntensity: isPit ? 0.28 : 0.22,
+      emissiveIntensity: isPit ? 0.18 : 0.12,
       metalness: 0.3,
       roughness: 0.4,
       polygonOffset: true,
@@ -77,7 +77,7 @@ export function buildPlatforms(level) {
     const bw = 0.12;                  // bar thickness
     const inset = 0.04;
     const yTop = h / 2 + 0.02;
-    const barMat = neon(edgeCol, 2.4);
+    const barMat = neon(edgeCol, 0.9);
     const addBar = (bx, bz, lx, lz) => {
       const bar = new THREE.Mesh(new THREE.BoxGeometry(lx, 0.08, lz), barMat);
       bar.position.set(bx, yTop, bz);
