@@ -29142,7 +29142,7 @@ void main() {
       let a = phase, t = (time % 1e5 + 1e5) % 1e5, base = 0.9;
       let idx = 0, acc = 0;
       for (let guard = 0; guard < 1e5; guard++) {
-        const mult = rnd.min + (rnd.max - rnd.min) * hash01(seed + idx * 5.17);
+        const mult = 0.85 + 0.3 * hash01(seed + idx * 5.17);
         const dir = Math.sign(speed) || 1;
         const dur = base;
         if (t < acc + dur) {
@@ -29209,8 +29209,8 @@ void main() {
         else raised = Math.max(0, 1 - (t2 - up) / 0.5);
         return;
       }
-      const cyc = randCycle(time + offset, seed, period * 0.7, period * 1.5);
-      const upDur = up * (0.7 + 0.9 * cyc.rnd);
+      const cyc = randCycle(time + offset, seed, period * 0.85, period * 1.2);
+      const upDur = up * (0.85 + 0.3 * cyc.rnd);
       const t = cyc.local;
       if (t < upDur) raised = Math.min(1, t / 0.45);
       else raised = Math.max(0, 1 - (t - upDur) / 0.5);
@@ -29312,10 +29312,10 @@ void main() {
           lastFire = time;
           if (rnd) {
             fireSeed++;
-            nextGap = period * (0.7 + 0.9 * hash01(fireSeed * 3.7 + x + z));
+            nextGap = period * (0.85 + 0.35 * hash01(fireSeed * 3.7 + x + z));
           }
           const m = getMesh();
-          const bSpeed = rnd ? speed * (0.8 + 0.6 * hash01(fireSeed * 9.1 + 0.3)) : speed;
+          const bSpeed = rnd ? speed * (0.9 + 0.25 * hash01(fireSeed * 9.1 + 0.3)) : speed;
           const b = { x, z, dist: 0, mesh: m, sp: bSpeed };
           m.position.set(x + dx * 0.8, FLOOR + 0.7, z + dz * 0.8);
           bullets.push(b);

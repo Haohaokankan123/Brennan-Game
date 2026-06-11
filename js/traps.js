@@ -114,7 +114,7 @@ function makeAxis(def) {
     let a = phase, t = ((time % 100000) + 100000) % 100000, base = 0.9;
     let idx = 0, acc = 0;
     for (let guard = 0; guard < 100000; guard++) {
-      const mult = rnd.min + (rnd.max - rnd.min) * hash01(seed + idx * 5.17);
+      const mult = 0.85 + 0.30 * hash01(seed + idx * 5.17); // 0.85–1.15× (was rnd.min–rnd.max, too wide)
       const dir = Math.sign(speed) || 1;
       const dur = base;
       if (t < acc + dur) { a += dir * Math.abs(speed) * mult * (t - acc); return a; }
@@ -187,8 +187,8 @@ function makeSpears(def) {
       return;
     }
     // randomized: cycle length varies; up-time varies within the cycle.
-    const cyc = randCycle(time + offset, seed, period * 0.7, period * 1.5);
-    const upDur = up * (0.7 + 0.9 * cyc.rnd);   // 0.7x .. 1.6x the base up-time
+    const cyc = randCycle(time + offset, seed, period * 0.85, period * 1.2);
+    const upDur = up * (0.85 + 0.30 * cyc.rnd);  // 0.85–1.15× (was 0.7–1.6×, too wide)
     const t = cyc.local;
     if (t < upDur) raised = Math.min(1, t / 0.45);
     else raised = Math.max(0, 1 - (t - upDur) / 0.5);
@@ -301,10 +301,10 @@ function makeCannon(def) {
         lastFire = time;
         if (rnd) {
           fireSeed++;
-          nextGap = period * (0.7 + 0.9 * hash01(fireSeed * 3.7 + x + z)); // 0.7x .. 1.6x
+          nextGap = period * (0.85 + 0.35 * hash01(fireSeed * 3.7 + x + z)); // 0.85–1.2× (was 0.7–1.6×)
         }
         const m = getMesh();
-        const bSpeed = rnd ? speed * (0.8 + 0.6 * hash01(fireSeed * 9.1 + 0.3)) : speed; // 0.8x .. 1.4x
+        const bSpeed = rnd ? speed * (0.9 + 0.25 * hash01(fireSeed * 9.1 + 0.3)) : speed; // 0.9–1.15× (was 0.8–1.4×)
         const b = { x, z, dist: 0, mesh: m, sp: bSpeed };
         m.position.set(x + dx * 0.8, FLOOR + 0.7, z + dz * 0.8);
         bullets.push(b);
