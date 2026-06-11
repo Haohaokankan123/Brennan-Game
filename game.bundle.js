@@ -28645,6 +28645,8 @@ void main() {
           this.level = level;
           this.time = 0;
           this.status = "playing";
+          this._splashTimer = -1;
+          this._splashed = false;
           const { group, pitTiles } = buildPlatforms(level);
           this.root.add(group);
           this._platformGroup = group;
@@ -28669,6 +28671,8 @@ void main() {
           const level = this.level;
           this.time = 0;
           this.status = "playing";
+          this._splashTimer = -1;
+          this._splashed = false;
           this.marble = makeMarble(level.start, level.killY);
           for (const t of this.traps) t.reset();
           this._syncMarble();
@@ -28685,10 +28689,20 @@ void main() {
           for (const pt of this.pitTiles) pt.mesh.position.y = pt.def.pos[1] + platformDropY(pt.def, this.time);
           if (this.finishGroup?.userData.spin) this.finishGroup.userData.spin.rotation.y += dt * 1.5;
           this._syncMarble();
-          if (fell) {
-            this.status = "dead";
-            this.deathReason = "You fell into the void!";
-            return this.status;
+          if (fell && !this._splashed) {
+            this._splashed = true;
+            this._splashTimer = 0.7;
+            this.status = "splash";
+            return "splash";
+          }
+          if (this._splashTimer > 0) {
+            this._splashTimer -= dt;
+            if (this._splashTimer <= 0) {
+              this.status = "dead";
+              this.deathReason = "You fell into the water!";
+              return "dead";
+            }
+            return "splash";
           }
           for (const t of this.traps) {
             if (t.hits(this.marble.pos, MARBLE_RADIUS)) {
@@ -29016,6 +29030,7 @@ void main() {
       var renderer = new WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setClearColor(2736063, 1);
       mount.appendChild(renderer.domElement);
       var composer = null;
       buildEnvironment(scene);
@@ -29144,6 +29159,7 @@ void main() {
       }
       function retryLevel() {
         deaths += 1;
+        _splashFired = false;
         audio.rollStop();
         shakeAmt = 0;
         world.respawn();
@@ -29178,7 +29194,17 @@ void main() {
           ui.complete.classList.remove("hidden");
         }
       }
+      var _splashFired = false;
+      function onSplash() {
+        if (_splashFired) return;
+        _splashFired = true;
+        particles.burst(world.marble.pos, 2736063, 55, 7);
+        particles.burst(world.marble.pos, 16777215, 25, 5);
+        audio.rollStop();
+        audio.drop();
+      }
       function onDead() {
+        _splashFired = false;
         state = STATE.DEAD;
         particles.burst(world.marble.pos, 16723592, 64, 10);
         addShake(1.1);
@@ -29256,6 +29282,7 @@ void main() {
           trail.update(world.marble.pos);
           audio.roll(Math.hypot(world.marble.vel.x, world.marble.vel.z));
           if (status === "won") onWin();
+          else if (status === "splash") onSplash();
           else if (status === "dead") onDead();
         } else if (state === STATE.MENU) {
           world.idleUpdate(dt);

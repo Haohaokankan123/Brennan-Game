@@ -19,6 +19,7 @@ camera.position.set(0, 16, 22);
 const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x29bfbf, 1); // turquoise water — belt-and-suspenders with scene.background
 mount.appendChild(renderer.domElement);
 
 // No bloom — Marble Trap uses plain rendering; bloom caused white washout on sky.
@@ -157,6 +158,7 @@ function flash() {
 
 function retryLevel() {
   deaths += 1;
+  _splashFired = false;
   audio.rollStop();
   shakeAmt = 0;
   world.respawn();
@@ -194,7 +196,19 @@ function onWin() {
   }
 }
 
+let _splashFired = false;
+function onSplash() {
+  if (_splashFired) return; // only burst once per fall
+  _splashFired = true;
+  // blue-white water splash at the marble's current position
+  particles.burst(world.marble.pos, 0x29bfbf, 55, 7);
+  particles.burst(world.marble.pos, 0xffffff, 25, 5);
+  audio.rollStop();
+  audio.drop(); // splash sound
+}
+
 function onDead() {
+  _splashFired = false; // reset for next fall
   state = STATE.DEAD;
   particles.burst(world.marble.pos, 0xff2e88, 64, 10); // magenta splat
   addShake(1.1);
@@ -287,6 +301,7 @@ function loop(now) {
     trail.update(world.marble.pos);
     audio.roll(Math.hypot(world.marble.vel.x, world.marble.vel.z));
     if (status === "won") onWin();
+    else if (status === "splash") onSplash();
     else if (status === "dead") onDead();
   } else if (state === STATE.MENU) {
     world.idleUpdate(dt);

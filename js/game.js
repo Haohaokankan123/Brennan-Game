@@ -61,6 +61,8 @@ export class World {
     this.level = level;
     this.time = 0;
     this.status = "playing";
+    this._splashTimer = -1;
+    this._splashed = false;
 
     // platforms
     const { group, pitTiles } = buildPlatforms(level);
@@ -91,6 +93,8 @@ export class World {
     const level = this.level;
     this.time = 0;
     this.status = "playing";
+    this._splashTimer = -1;
+    this._splashed = false;
     this.marble = makeMarble(level.start, level.killY);
     for (const t of this.traps) t.reset();
     this._syncMarble();
@@ -120,8 +124,22 @@ export class World {
     // so death/win particle bursts spawn exactly where the marble is shown.
     this._syncMarble();
 
-    // death checks
-    if (fell) { this.status = "dead"; this.deathReason = "You fell into the void!"; return this.status; }
+    // death checks — falling into water: splash first, die after 0.7s
+    if (fell && !this._splashed) {
+      this._splashed = true;
+      this._splashTimer = 0.7;
+      this.status = "splash"; // signal main.js to show water particles
+      return "splash";
+    }
+    if (this._splashTimer > 0) {
+      this._splashTimer -= dt;
+      if (this._splashTimer <= 0) {
+        this.status = "dead";
+        this.deathReason = "You fell into the water!";
+        return "dead";
+      }
+      return "splash"; // still sinking
+    }
     for (const t of this.traps) {
       if (t.hits(this.marble.pos, MARBLE_RADIUS)) {
         this.status = "dead";
